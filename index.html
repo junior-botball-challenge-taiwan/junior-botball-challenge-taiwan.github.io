@@ -39,9 +39,17 @@
             text-shadow: 0 0 8px #bf00ff, 0 0 15px #bf00ff;
         }
 
-        /* 下拉選單優化：增加 padding 緩衝確保滑鼠移動時選單不消失 */
-        .dropdown { position: relative; padding-bottom: 10px; margin-bottom: -10px; }
-        .dropdown:hover .dropdown-menu { display: block; opacity: 1; pointer-events: auto; }
+        /* --- 下拉選單穩定性修正 --- */
+        .dropdown { position: relative; }
+        
+        /* 當滑鼠在父層或選單本身時都保持顯示 */
+        .dropdown:hover .dropdown-menu,
+        .dropdown-menu.show { 
+            display: block; 
+            opacity: 1; 
+            pointer-events: auto; 
+        }
+
         .dropdown-menu {
             display: none;
             opacity: 0;
@@ -50,10 +58,21 @@
             box-shadow: 0 0 20px rgba(191, 0, 255, 0.4);
             position: absolute;
             right: 0;
-            top: 100%;
+            top: 100%; /* 緊貼上方 */
             width: 180px;
             z-index: 200;
             transition: opacity 0.2s ease;
+        }
+
+        /* 關鍵：增加一個隱形的橋樑填補間隙 */
+        .dropdown-menu::before {
+            content: "";
+            position: absolute;
+            top: -20px; /* 向上延伸 20px 覆蓋間隙 */
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: transparent;
         }
 
         /* 右側懸浮按鈕 */
@@ -135,9 +154,9 @@
                 <a onclick="scrollToSection('rules')" class="nav-link">競賽規則</a>
                 <a onclick="scrollToSection('register')" class="nav-link">報名資訊</a>
                 
-                <div class="relative dropdown group">
+                <div class="relative dropdown group" id="competition-dropdown">
                     <span class="nav-link">各年度比賽 ▼</span>
-                    <div class="dropdown-menu mt-2 py-2">
+                    <div class="dropdown-menu py-2">
                         <a href="#" class="block px-4 py-3 text-xs text-white hover:bg-purple-600/40 transition">2024 年度比賽</a>
                         <a href="#" class="block px-4 py-3 text-xs text-white hover:bg-purple-600/40 transition border-t border-blue-900/30">2025 年度比賽</a>
                     </div>
@@ -229,7 +248,29 @@
                 window.history.pushState("", "", "/");
             }
         }
+
+        // --- JavaScript 修復選單閃爍邏輯 ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.getElementById('competition-dropdown');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            let timer;
+
+            dropdown.addEventListener('mouseenter', function() {
+                clearTimeout(timer);
+                menu.classList.add('show');
+            });
+
+            dropdown.addEventListener('mouseleave', function() {
+                // 延遲 300 毫秒才關閉，確保滑鼠有足夠時間移動到選單內容
+                timer = setTimeout(function() {
+                    menu.classList.remove('show');
+                }, 300);
+            });
+
+            menu.addEventListener('mouseenter', function() {
+                clearTimeout(timer);
+            });
+        });
     </script>
 </body>
 </html>
-
