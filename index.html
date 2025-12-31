@@ -167,7 +167,7 @@
                 <a onclick="scrollToSection('home')" class="nav-link">首頁</a>
                 <a onclick="scrollToSection('news')" class="nav-link">活動公告</a>
                 <a onclick="scrollToSection('rules')" class="nav-link">競賽規則</a>
-                <a onclick="scrollToSection('history')" class="nav-link">歷屆賽事</a>
+                <a onclick="scrollToSection('history')" class="nav-link">歷屆賽事回顧</a>
                 
                 <div class="relative dropdown group" id="competition-dropdown">
                     <span class="nav-link">快速連結 ▼</span>
@@ -277,24 +277,31 @@
 
     <section id="history" class="bg-[#050010] py-20 border-t border-purple-900/20">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-4xl font-bold neon-purple mb-12">歷屆賽事回顧 / HISTORY</h2>
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold neon-purple mb-4">歷屆賽事回顧 / HISTORY</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto italic">「每一段程式碼的背後，都是孩子解決問題的智慧；每一場賽事的瞬間，都是通往國際舞台的足跡。」</p>
+            </div>
             
             <div class="grid md:grid-cols-2 gap-10">
                 <div class="group relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gray-900/40 backdrop-blur-md">
                     <div class="aspect-video bg-purple-950/50 flex items-center justify-center overflow-hidden">
                         <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800" alt="2025 Recap" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-60">
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="text-white font-bold tracking-widest text-xl bg-black/40 px-4 py-2 rounded">2025 RECAP</span>
+                            <span class="text-white font-bold tracking-widest text-xl bg-black/40 px-4 py-2 rounded border border-purple-500">2025: 突破自我</span>
                         </div>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-bold text-white mb-2">2025 STEM 科技教育競賽</h3>
+                        <div class="flex items-center mb-4">
+                            <span class="w-8 h-1 bg-purple-500 mr-3"></span>
+                            <h3 class="text-2xl font-bold text-white">2025 STEM 科技教育競賽</h3>
+                        </div>
                         <p class="text-gray-400 text-sm mb-6 leading-relaxed">
-                            在葳格國際會議中心盛大舉行，見證無數隊伍獲得未來工程師認證。我們在現場捕捉了許多學生解決「神秘題」的驚艷瞬間，從結構設計到程式邏輯皆展現專業水平。
+                            <strong class="text-purple-400">【夢想啟航，進軍世界】</strong><br>
+                            在葳格國際會議中心的璀璨燈光下，超過百支隊伍挑戰極限。我們見證了學生如何在壓力下冷靜修正程式，完成高難度的道具搬運。這一屆，多支優秀隊伍成功獲得「未來工程師」國際認證，展現了台灣科技教育的實力！
                         </p>
                         <div class="flex space-x-4">
-                            <a href="https://www.facebook.com/watch/?v=1060979716010685" target="_blank" class="flex-1 text-center py-2 bg-transparent border border-purple-500 text-purple-400 rounded-lg hover:bg-purple-600 hover:text-white transition text-xs">FB 官方紀錄片</a>
-                            <a href="https://www.youtube.com/@Spark_Taiwan" target="_blank" class="flex-1 text-center py-2 bg-purple-900/30 text-white rounded-lg hover:bg-purple-800 transition text-xs">YouTube 回顧</a>
+                            <a href="https://www.facebook.com/watch/?v=1060979716010685" target="_blank" class="flex-1 text-center py-2 bg-transparent border border-purple-500 text-purple-400 rounded-lg hover:bg-purple-600 hover:text-white transition text-xs font-bold">觀看紀錄長片 (FB)</a>
+                            <a href="https://www.youtube.com/@Spark_Taiwan" target="_blank" class="flex-1 text-center py-2 bg-purple-900/30 text-white rounded-lg hover:bg-purple-800 transition text-xs font-bold">YouTube 精華頻道</a>
                         </div>
                     </div>
                 </div>
@@ -303,27 +310,31 @@
                     <div class="aspect-video bg-blue-950/50 flex items-center justify-center overflow-hidden">
                         <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800" alt="2024 Recap" class="w-full h-full object-cover transition duration-500 group-hover:scale-110 opacity-60">
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="text-white font-bold tracking-widest text-xl bg-black/40 px-4 py-2 rounded">2024 HIGHLIGHTS</span>
+                            <span class="text-white font-bold tracking-widest text-xl bg-black/40 px-4 py-2 rounded border border-blue-500">2024: 科技啟蒙</span>
                         </div>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-2xl font-bold text-white mb-2">2024 JBC 挑戰賽</h3>
+                        <div class="flex items-center mb-4">
+                            <span class="w-8 h-1 bg-blue-500 mr-3"></span>
+                            <h3 class="text-2xl font-bold text-white">2024 JBC 挑戰賽</h3>
+                        </div>
                         <p class="text-gray-400 text-sm mb-6 leading-relaxed">
-                            紮根 STEM 教育的關鍵一年。透過積動城市樂高機器人教室的專業帶領，許多初次參賽的小選手在啟蒙組與探索組中獲得啟發，開啟了科技探索的大門。
+                            <strong class="text-blue-400">【紮根創意，無限可能】</strong><br>
+                            作為許多選手的第一場機器人賽事，2024 年重點在於啟發與實作。從小選手對樂高結構的初次摸索，到成功寫出第一行指令，每一個成功的瞬間都被記錄在鏡頭下。快點擊下方影片，重溫那份最初的感動與熱血！
                         </p>
                         <div class="flex space-x-4">
-                            <a href="https://www.facebook.com/search/top?q=積動城市樂高機器人教室" target="_blank" class="flex-1 text-center py-2 bg-transparent border border-blue-500 text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition text-xs">FB 粉專回顧</a>
-                            <a href="https://www.youtube.com/watch?v=UHhmpgqMV48" target="_blank" class="flex-1 text-center py-2 bg-blue-900/30 text-white rounded-lg hover:bg-blue-800 transition text-xs">精彩影片連結</a>
+                            <a href="https://www.youtube.com/watch?v=JrTGKeoTHWk" target="_blank" class="flex-1 text-center py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition text-xs font-bold shadow-lg shadow-blue-500/20">🔥 2024 精彩影片回顧</a>
+                            <a href="https://www.facebook.com/search/top?q=積動城市樂高機器人教室" target="_blank" class="flex-1 text-center py-2 bg-blue-900/30 text-white rounded-lg hover:bg-blue-800 transition text-xs font-bold">粉專賽事報導</a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 text-center border-t border-white/10 pt-16">
-                <div><div class="text-3xl font-bold text-purple-500">200+</div><div class="text-[10px] text-gray-500 mt-1 uppercase">參賽隊伍</div></div>
-                <div><div class="text-3xl font-bold text-blue-500">500+</div><div class="text-[10px] text-gray-500 mt-1 uppercase">受訓選手</div></div>
-                <div><div class="text-3xl font-bold text-yellow-500">20+</div><div class="text-[10px] text-gray-500 mt-1 uppercase">國際認證隊</div></div>
-                <div><div class="text-3xl font-bold text-green-500">100%</div><div class="text-[10px] text-gray-500 mt-1 uppercase">成長滿意度</div></div>
+                <div><div class="text-3xl font-bold text-purple-500">200+</div><div class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">累積參賽隊伍</div></div>
+                <div><div class="text-3xl font-bold text-blue-500">500+</div><div class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">培訓選手數量</div></div>
+                <div><div class="text-3xl font-bold text-yellow-500">20+</div><div class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">國際認證獲獎</div></div>
+                <div><div class="text-3xl font-bold text-green-500">100%</div><div class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">教育熱忱投入</div></div>
             </div>
         </div>
     </section>
