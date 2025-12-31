@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junior Botball Taiwan | 2026 台中站</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Orbitron:wght@700&display=swap');
+        
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #000000; color: white; overflow-x: hidden; }
+        
+        .neon-purple {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px #bf00ff, 0 0 20px #bf00ff, 0 0 40px #bf00ff;
+        }
+
+        .gold-text {
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            letter-spacing: 0.1em;
+        }
+
+        /* LOGO 原色並增加紫色發光邊框 */
+        .logo-original-glow {
+            filter: drop-shadow(0 0 8px #bf00ff);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .nav-link:hover {
+            color: #bf00ff;
+            text-shadow: 0 0 8px #bf00ff, 0 0 15px #bf00ff;
+        }
+
+        /* 右側懸浮按鈕優化 */
+        .float-container {
+            position: fixed;
+            right: 0;
+            top: 55%;
+            transform: translateY(-50%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 85vh; /* 限制最高高度防止超出 */
+            justify-content: center;
+        }
+        .float-btn {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            padding: 25px 14px; /* 加大內距讓外框更有份量 */
+            font-size: 14px;    /* 加大字體 */
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 12px 0 0 12px;
+        }
+        .btn-purple { background: #2d004d; border: 2px solid #bf00ff; box-shadow: 0 0 12px #bf00ff; }
+        .btn-gold { background: #4d4500; border: 2px solid #FFD700; box-shadow: 0 0 12px #FFD700; color: #FFD700; }
+        .btn-black { background: #1a1a1a; border: 2px solid #ffffff; box-shadow: 0 0 12px rgba(255,255,255,0.3); }
+        .float-btn:hover { transform: translateX(-10px); filter: brightness(1.2); }
+
+        /* 首頁底圖適配處理 */
+        .hero-container {
+            position: relative;
+            width: 100%;
+            /* 讓高度隨圖片內容撐開，而非強制填滿螢幕導致變形或裁剪 */
+            height: auto; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;
+        }
+        .hero-img-full {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain; /* 完整呈現 */
+        }
+
+        .hero-content-box {
+            position: absolute;
+            left: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            backdrop-blur: 8px;
+            border-left: 4px solid #bf00ff;
+        }
+        
+        section { padding-top: 100px; padding-bottom: 80px; }
+    </style>
+</head>
+<body>
+
+    <div class="float-container">
+        <a href="#" class="float-btn btn-purple text-white">前往報名</a>
+        <a href="#" class="float-btn btn-black text-white">題庫專區</a>
+        <a href="#" class="float-btn btn-gold">活動簡章</a>
+        <a href="#" class="float-btn btn-purple text-white">匯款完成表單</a>
+        <a href="#" class="float-btn btn-gold">加入群組</a>
+    </div>
+
+    <nav class="fixed w-full z-[1100] bg-blue-950/95 backdrop-blur-md border-b border-blue-800/50">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                <img src="jbc-logo.png" alt="Logo" class="h-16 w-auto logo-original-glow">
+                <span class="text-xl font-bold tracking-tight text-white uppercase ml-2">Junior Botball Taiwan</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-8 text-sm font-medium tracking-widest uppercase items-center">
+                <a onclick="scrollToSection('home')" class="nav-link">首頁</a>
+                <a onclick="scrollToSection('news')" class="nav-link">活動公告</a>
+                <a onclick="scrollToSection('rules')" class="nav-link">競賽規則</a>
+                <a onclick="scrollToSection('register')" class="nav-link">報名資訊</a>
+                
+                <div class="relative dropdown">
+                    <span class="nav-link">各年度比賽 ▼</span>
+                    <div class="dropdown-menu mt-2 py-2">
+                        <a href="#" class="block px-4 py-3 text-xs hover:bg-blue-800/50 transition">2024 年度比賽</a>
+                        <a href="#" class="block px-4 py-3 text-xs hover:bg-blue-800/50 transition border-t border-blue-900/30">2025 年度比賽</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-container p-0">
+        <img src="unnamed.jpg" alt="Background" class="hero-img-full">
+        
+        <div class="hero-content-box hidden md:block">
+            <h1 class="text-5xl lg:text-7xl font-bold mb-6 neon-purple leading-tight">
+                Junior<br>Botball Challenge
+            </h1>
+            <div class="space-y-4">
+                <p class="text-2xl font-bold gold-text uppercase">2026 STEM 科技教育競賽</p>
+                <p class="text-lg text-blue-200 font-light">讓台灣的科技教育與國際接軌</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="news" class="bg-[#020510] border-t border-blue-900/20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold neon-purple mb-12">活動公告 / NEWS</h2>
+            <div class="grid gap-6">
+                <div class="bg-blue-900/10 border-l-4 border-purple-600 p-8 hover:bg-blue-900/20 transition">
+                    <p class="text-gold-500 mb-2 font-bold">2025.12.30</p>
+                    <h3 class="text-2xl font-bold text-white">2026 台中站競賽規程初步架構發佈</h3>
+                    <p class="text-gray-400 mt-4 leading-relaxed">正式內容即將更新，包含最新積木規格與場地任務圖，敬請各隊伍密切留意網站動態。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rules" class="bg-black">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-bold neon-purple mb-12">競賽規則 / RULES</h2>
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="border border-blue-900/50 p-8 rounded-xl bg-gradient-to-b from-blue-900/20 to-transparent">
+                    <h4 class="text-xl text-gold-500 font-bold mb-4 uppercase">基本組建準則</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        • 機器人必須使用指定模組化積木組建。<br>
+                        • 必須配備自主編程控制器，禁止遙控。<br>
+                        • 場地尺寸與任務點分佈將於簡章內詳述。
+                    </p>
+                </div>
+                <div class="border border-blue-900/50 p-8 rounded-xl">
+                    <h4 class="text-xl text-gold-500 font-bold mb-4 uppercase">賽場計分方式</h4>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        • 任務得分：根據完成之自動化任務分值加總。<br>
+                        • 獎勵加分：團隊合作解說、創意結構設計。<br>
+                        • 扣分項：機器人觸碰場外邊界、人工干預。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="register" class="bg-[#020510] text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-4xl font-bold neon-purple mb-12">報名資訊 / REGISTER</h2>
+            <div class="p-12 border-2 border-dashed border-blue-900/50 rounded-2xl bg-black/50">
+                <p class="text-gray-400 mb-8 text-lg">報名系統即將於 2026 年初正式開放。</p>
+                <div class="inline-block px-12 py-5 bg-gradient-to-r from-blue-700 to-purple-700 font-bold text-white rounded-sm shadow-[0_0_20px_rgba(191,0,255,0.6)] cursor-not-allowed">
+                    COMING SOON
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black py-16 border-t border-blue-900/30 text-center">
+        <img src="jbc-logo.png" alt="Logo" class="h-16 w-auto mx-auto logo-original-glow mb-6">
+        <p class="text-gray-600 text-xs tracking-[0.3em] uppercase">© 2025 JUNIOR BOTBALL TAIWAN. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <script>
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                const navHeight = 80; 
+                window.scrollTo({
+                    top: element.offsetTop - navHeight,
+                    behavior: 'smooth'
+                });
+                window.history.pushState("", "", "/");
+            }
+        }
+    </script>
+</body>
+</html>
