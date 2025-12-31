@@ -11,7 +11,6 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #000000; color: white; overflow-x: hidden; }
         
-        /* 紫色霓虹燈效果 */
         .neon-purple {
             font-family: 'Orbitron', sans-serif;
             color: #fff;
@@ -24,7 +23,6 @@
             letter-spacing: 0.1em;
         }
 
-        /* LOGO 效果 */
         .logo-original-glow {
             filter: drop-shadow(0 0 8px #bf00ff) drop-shadow(0 0 2px #bf00ff);
             transition: all 0.3s ease;
@@ -39,30 +37,20 @@
             text-shadow: 0 0 8px #bf00ff, 0 0 15px #bf00ff;
         }
 
-        /* 下拉選單 */
         .dropdown { position: relative; }
-        .dropdown:hover .dropdown-menu,
-        .dropdown-menu.show { 
-            display: block; 
-            opacity: 1; 
-            pointer-events: auto; 
-        }
+        .dropdown:hover .dropdown-menu { display: block; opacity: 1; }
 
         .dropdown-menu {
             display: none;
-            opacity: 0;
             background-color: rgba(0, 30, 60, 0.98);
             border: 1px solid #bf00ff;
-            box-shadow: 0 0 20px rgba(191, 0, 255, 0.4);
             position: absolute;
             right: 0;
             top: 100%;
             width: 200px;
             z-index: 200;
-            transition: opacity 0.2s ease;
         }
 
-        /* 右側懸浮按鈕 */
         .float-container {
             position: fixed;
             right: 0;
@@ -74,21 +62,19 @@
             gap: 0.8vh;
         }
         .float-btn {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             writing-mode: vertical-rl;
             text-orientation: mixed;
             padding: 1.8vh 12px;
             font-size: 13px;
             font-weight: 700;
-            letter-spacing: 1px;
             text-decoration: none;
+            transition: all 0.3s;
         }
-        .btn-purple { background: #2d004d; border: 1px solid #bf00ff; box-shadow: 0 0 10px #bf00ff; }
+        .btn-purple { background: #2d004d; border: 1px solid #bf00ff; box-shadow: 0 0 10px #bf00ff; color: white; }
         .btn-gold { background: #4d4500; border: 1px solid #FFD700; box-shadow: 0 0 10px #FFD700; color: #FFD700; }
-        .btn-black { background: #1a1a1a; border: 1px solid #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
-        .float-btn:hover { transform: translateX(-10px); box-shadow: 0 0 20px currentColor; }
+        .btn-black { background: #1a1a1a; border: 1px solid #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.3); color: white; }
+        .float-btn:hover { transform: translateX(-10px); }
 
-        /* 首頁區塊 */
         .hero-section {
             position: relative;
             width: 100%;
@@ -103,9 +89,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
             opacity: 0.5;
-            z-index: 0;
         }
 
         .hero-overlay {
@@ -113,7 +97,6 @@
             inset: 0;
             background: linear-gradient(0deg, rgba(0,0,0,1) 5%, rgba(0,0,0,0) 50%),
                         linear-gradient(90deg, rgba(2, 5, 16, 0.8) 0%, rgba(2, 5, 16, 0.2) 100%);
-            z-index: 1;
         }
 
         .info-box {
@@ -121,7 +104,6 @@
             border-left: 3px solid #bf00ff;
             padding: 10px 20px;
             margin-top: 25px;
-            backdrop-filter: blur(5px);
         }
 
         .rule-card {
@@ -129,13 +111,10 @@
             border: 1px solid rgba(191, 0, 255, 0.3);
             padding: 1.5rem;
             border-radius: 0.75rem;
-            transition: all 0.3s ease;
         }
-        .rule-card:hover { border-color: #bf00ff; background: rgba(15, 23, 42, 0.9); }
         
         section { padding-top: 80px; padding-bottom: 80px; }
 
-        /* 確保按鈕在最上層 */
         .clickable-btn {
             position: relative;
             z-index: 50;
@@ -146,10 +125,10 @@
 <body>
 
     <div class="float-container">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfCWdu1iHO9Pug2hOlTShbwxB-yet4KcqtIWsM9kNbu99OMbA/viewform" target="_blank" class="float-btn btn-purple rounded-l-lg text-white">前往報名</a>
-        <a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.24zxd1dnbc7u#heading=h.enjhjnwujonh" target="_blank" class="float-btn btn-black rounded-l-lg text-white">題庫專區</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfCWdu1iHO9Pug2hOlTShbwxB-yet4KcqtIWsM9kNbu99OMbA/viewform" target="_blank" class="float-btn btn-purple rounded-l-lg">前往報名</a>
+        <a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.24zxd1dnbc7u#heading=h.enjhjnwujonh" target="_blank" class="float-btn btn-black rounded-l-lg">題庫專區</a>
         <a href="https://drive.google.com/file/d/1VudJRDZ_wad32Aj7AVu6eWKcGRhvlxkp/view" target="_blank" class="float-btn btn-gold rounded-l-lg">報名簡章</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfxvytPSXD5RrHeSOaig1WIfgM60Aj111frdGtY8n-epb0Rjw/viewform" target="_blank" class="float-btn btn-purple rounded-l-lg text-white">匯款完成表單</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfxvytPSXD5RrHeSOaig1WIfgM60Aj111frdGtY8n-epb0Rjw/viewform" target="_blank" class="float-btn btn-purple rounded-l-lg">匯款完成表單</a>
         <a href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" class="float-btn btn-gold rounded-l-lg">加入群組</a>
     </div>
 
@@ -238,35 +217,19 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="rule-card">
                     <h4 class="text-lg text-purple-400 font-bold mb-3">01. 組隊級別</h4>
-                    <p class="text-gray-400 text-xs leading-relaxed">
-                        • 啟蒙級 (A/B/C): 6-8歲組隊。<br>
-                        • 探索級 (A/B): 8歲以下組隊。<br>
-                        • 入門級: 2-3人組隊挑戰。
-                    </p>
+                    <p class="text-gray-400 text-xs leading-relaxed">啟蒙級 (6-8歲組隊) / 探索級 (8歲以下組隊) / 入門級 (2-3人組隊)。</p>
                 </div>
                 <div class="rule-card">
                     <h4 class="text-lg text-purple-400 font-bold mb-3">02. 機器人規範</h4>
-                    <p class="text-gray-400 text-xs leading-relaxed">
-                        • 器材自備：建議使用樂高套件。<br>
-                        • 控制模式：自主或遙控。<br>
-                        • 符合各級別零件連結規定。
-                    </p>
+                    <p class="text-gray-400 text-xs leading-relaxed">器材自備（建議樂高套件），符合各級別零件規定。</p>
                 </div>
                 <div class="rule-card">
                     <h4 class="text-lg text-purple-400 font-bold mb-3">03. 現場挑戰</h4>
-                    <p class="text-gray-400 text-xs leading-relaxed">
-                        • 時限挑戰：90分鐘多次測驗。<br>
-                        • 神秘題：現場抽題考驗應變。<br>
-                        • 依 2026 年最新題庫。
-                    </p>
+                    <p class="text-gray-400 text-xs leading-relaxed">90分鐘多次測驗，包含現場抽題之「神秘題」。</p>
                 </div>
                 <div class="rule-card">
                     <h4 class="text-lg text-purple-400 font-bold mb-3">04. 成績判定</h4>
-                    <p class="text-gray-400 text-xs leading-relaxed">
-                        • 任務完成：依道具位置評分。<br>
-                        • 裁判終決：計分表簽名為準。<br>
-                        • 認證制度：達標獲國際證書。
-                    </p>
+                    <p class="text-gray-400 text-xs leading-relaxed">依任務完成道具評分，認證達標獲國際證書。</p>
                 </div>
             </div>
         </div>
@@ -298,7 +261,7 @@
                         </p>
                         <div class="flex space-x-4">
                             <a href="https://www.facebook.com/watch/?v=1060979716010685" target="_blank" class="clickable-btn flex-1 text-center py-2 bg-transparent border border-purple-500 text-purple-400 rounded-lg hover:bg-purple-600 hover:text-white transition text-xs font-bold">觀看紀錄長片 (FB)</a>
-                            <a href="https://www.youtube.com/@Spark_Taiwan" target="_blank" class="clickable-btn flex-1 text-center py-2 bg-purple-900/30 text-white rounded-lg hover:bg-purple-800 transition text-xs font-bold">YouTube 精華頻道</a>
+                            <a href="https://www.youtube.com/watch?v=Lj8neYq1m5g" target="_blank" class="clickable-btn flex-1 text-center py-2 bg-purple-900/30 text-white rounded-lg hover:bg-purple-800 transition text-xs font-bold">精華影片 (YouTube)</a>
                         </div>
                     </div>
                 </div>
@@ -321,7 +284,7 @@
                         </p>
                         <div class="flex space-x-4 relative z-50">
                             <a href="https://www.youtube.com/watch?v=JrTGKeoTHWk" target="_blank" class="clickable-btn flex-1 text-center py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition text-xs font-bold shadow-lg shadow-blue-500/20">🔥 2024 精彩影片回顧</a>
-                            <a href="https://www.facebook.com/search/top?q=積動城市樂高機器人教室" target="_blank" class="clickable-btn flex-1 text-center py-2 bg-blue-900/30 text-white rounded-lg hover:bg-blue-800 transition text-xs font-bold">粉專賽事報導</a>
+                            <a href="https://www.facebook.com/MBC.robot/posts/pfbid02nZoyioBi69f4ENCmAWmAtpwck1TjDVobm4iHpXh8LES24GqkhHRZL3UzLEzAzCQ1l" target="_blank" class="clickable-btn flex-1 text-center py-2 bg-blue-900/30 text-white rounded-lg hover:bg-blue-800 transition text-xs font-bold">粉專賽事報導</a>
                         </div>
                     </div>
                 </div>
@@ -350,13 +313,6 @@
                 window.history.pushState("", "", "/");
             }
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            const dropdown = document.querySelector('.dropdown');
-            const menu = document.querySelector('.dropdown-menu');
-            let timer;
-            dropdown.addEventListener('mouseenter', () => { clearTimeout(timer); menu.style.display = 'block'; menu.style.opacity = '1'; });
-            dropdown.addEventListener('mouseleave', () => { timer = setTimeout(() => { menu.style.display = 'none'; menu.style.opacity = '0'; }, 300); });
-        });
     </script>
 </body>
 </html>
