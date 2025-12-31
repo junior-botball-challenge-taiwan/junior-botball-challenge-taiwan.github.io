@@ -98,11 +98,11 @@
         .btn-black { background: #1a1a1a; border: 1px solid #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
         .float-btn:hover { transform: translateX(-10px); box-shadow: 0 0 20px currentColor; }
 
-        /* 首頁底圖區 */
+        /* 首頁資訊區 */
         .hero-section {
             position: relative;
             width: 100%;
-            height: 85vh; /* 稍微增加高度以容納更多資訊 */
+            height: 85vh;
             display: flex;
             align-items: center;
             background: #000;
@@ -126,14 +126,22 @@
             z-index: 1;
         }
 
-        /* 資訊區塊樣式 */
         .info-box {
             background: rgba(191, 0, 255, 0.1);
             border-left: 3px solid #bf00ff;
             padding: 10px 20px;
             margin-top: 25px;
-            backdrop-blur: 5px;
+            backdrop-filter: blur(5px);
         }
+
+        .rule-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(191, 0, 255, 0.3);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .rule-card:hover { border-color: #bf00ff; background: rgba(15, 23, 42, 0.9); }
         
         section { padding-top: 80px; padding-bottom: 80px; }
     </style>
@@ -176,16 +184,12 @@
         <div class="hero-overlay"></div>
         <div class="relative z-10 max-w-7xl mx-auto px-6 w-full">
             <div class="max-w-3xl bg-blue-950/20 p-8 md:p-12 rounded-2xl backdrop-blur-sm border border-white/10">
-                <h1 class="text-5xl md:text-7xl font-bold mb-4 neon-purple tracking-tighter leading-tight">
-                    Junior<br>Botball Challenge
-                </h1>
-                
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 neon-purple tracking-tighter leading-tight">Junior<br>Botball Challenge</h1>
                 <div class="mt-4">
                     <p class="text-xl md:text-3xl font-bold gold-text uppercase">2026 STEM 科技教育競賽</p>
                     <p class="text-lg md:text-xl text-blue-100 font-light italic mt-1">讓台灣的科技教育與國際接軌</p>
                 </div>
-
-                <div class="info-box animate-pulse-slow">
+                <div class="info-box">
                     <div class="flex items-start mb-2">
                         <span class="text-purple-400 font-bold mr-3">[ TIME ]</span>
                         <p class="text-white text-lg md:text-xl font-medium">2026年3月8日 (星期日)</p>
@@ -204,12 +208,29 @@
 
     <section id="news" class="bg-[#020510] border-t border-blue-900/20">
         <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-4xl font-bold neon-purple mb-12">活動公告 / NEWS</h2>
-            <div class="grid gap-6">
-                <div class="bg-blue-900/10 border-l-4 border-purple-600 p-8 hover:bg-blue-900/20 transition">
-                    <p class="text-gold-500 mb-2 font-bold">2025.12.30</p>
-                    <h3 class="text-2xl font-bold text-white">2026 台中站競賽規程初步架構發佈</h3>
-                    <p class="text-gray-400 mt-4 leading-relaxed">正式內容即將更新，包含最新積木規格與場地任務圖，敬請各隊伍密切留意網站動態。</p>
+            <h2 class="text-4xl font-bold neon-purple mb-8">活動公告 / NEWS</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-blue-900/10 border-l-4 border-purple-600 p-6 rounded-r-lg">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center">📅 2026/03/08 (日) 賽程安排</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between border-b border-blue-900/30 pb-2">
+                            <span class="text-purple-400 font-medium">09:00 - 12:15</span>
+                            <span class="text-gray-300 text-sm">國小、國中各組 (挑戰與頒獎)</span>
+                        </div>
+                        <div class="flex justify-between border-b border-blue-900/30 pb-2">
+                            <span class="text-purple-400 font-medium">13:30 - 17:30</span>
+                            <span class="text-gray-300 text-sm">啟蒙、入門、探索組 (挑戰與頒獎)</span>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">※ 詳細報到流程將於賽前兩週公告於 LINE 社群。</p>
+                    </div>
+                </div>
+                <div class="bg-blue-900/10 border-l-4 border-yellow-500 p-6 rounded-r-lg">
+                    <h3 class="text-xl font-bold text-white mb-4 flex items-center">🏆 國際認證與晉級</h3>
+                    <ul class="text-gray-300 text-sm space-y-2">
+                        <li>• <strong class="text-yellow-500">未來工程師認證</strong>：達標隊伍具備國際賽參賽資格。</li>
+                        <li>• <strong class="text-blue-400">GCER 世界賽</strong>：2026年7月於美國舉行，本賽為選拔管道。</li>
+                        <li>• <strong class="text-purple-400">能力評估</strong>：強調 STEM 素養培養，減少單純競技壓力。</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -218,23 +239,49 @@
     <section id="rules" class="bg-black">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-4xl font-bold neon-purple mb-12">競賽規則 / RULES</h2>
-            <div class="grid md:grid-cols-2 gap-10">
-                <div class="border border-blue-900/50 p-8 rounded-xl bg-gradient-to-b from-blue-900/20 to-transparent">
-                    <h4 class="text-xl text-gold-500 font-bold mb-4 uppercase">基本組建準則</h4>
-                    <p class="text-gray-400 leading-relaxed text-sm">
-                        • 機器人必須使用指定模組化積木組建。<br>
-                        • 必須配備自主編程控制器，禁止遙控。<br>
-                        • 場地尺寸與任務點分佈將於簡章內詳述。
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="rule-card">
+                    <h4 class="text-lg text-purple-400 font-bold mb-3">01. 組隊級別</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">
+                        • 啟蒙級 (A/B/C): 6-8歲組隊。<br>
+                        • 探索級 (A/B): 8歲以下組隊。<br>
+                        • 入門級: 國小學生，2-3人組隊。<br>
+                        • 國中組: 1-3人組隊挑戰。
                     </p>
                 </div>
-                <div class="border border-blue-900/50 p-8 rounded-xl">
-                    <h4 class="text-xl text-gold-500 font-bold mb-4 uppercase">賽場計分方式</h4>
-                    <p class="text-gray-400 leading-relaxed text-sm">
-                        • 任務得分：根據完成之自動化任務分值加總。<br>
-                        • 獎勵加分：團隊合作解說、創意結構設計。<br>
-                        • 扣分項：機器人觸碰場外邊界、人工干預。
+                <div class="rule-card">
+                    <h4 class="text-lg text-purple-400 font-bold mb-3">02. 機器人規範</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">
+                        • 器材自備：建議使用樂高套件。<br>
+                        • 控制模式：依組別分自主或遙控。<br>
+                        • 結構限制：須符合各級別零件連結規定。
                     </p>
                 </div>
+                <div class="rule-card">
+                    <h4 class="text-lg text-purple-400 font-bold mb-3">03. 現場挑戰</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">
+                        • 時限挑戰：90分鐘內多次測驗。<br>
+                        • 神秘題：現場抽題，測試應變能力。<br>
+                        • 題庫範圍：依 2026 年版題庫為準。
+                    </p>
+                </div>
+                <div class="rule-card">
+                    <h4 class="text-lg text-purple-400 font-bold mb-3">04. 成績判定</h4>
+                    <p class="text-gray-400 text-xs leading-relaxed">
+                        • 任務完成：依道具位置與路徑評分。<br>
+                        • 裁判終決：以現場計分表簽名為準。<br>
+                        • 認證制度：達標即獲頒國際證書。
+                    </p>
+                </div>
+            </div>
+            <div class="mt-10 p-6 bg-blue-900/10 border border-blue-800 rounded-lg">
+                <h5 class="text-white font-bold mb-2 italic">※ 選手重要須知：</h5>
+                <ul class="text-gray-400 text-xs grid md:grid-cols-2 gap-2">
+                    <li>• 比賽現場不提供插座，請自備充足電池。</li>
+                    <li>• 比賽期間教練不得進入場地進行指導操作。</li>
+                    <li>• 認證證書與獎項將於各組賽程結束後頒發。</li>
+                    <li>• 任何規則爭議請於挑戰當下向裁判提出。</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -249,10 +296,7 @@
             const element = document.getElementById(id);
             if (element) {
                 const navHeight = 80; 
-                window.scrollTo({
-                    top: element.offsetTop - navHeight,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: element.offsetTop - navHeight, behavior: 'smooth' });
                 window.history.pushState("", "", "/");
             }
         }
@@ -261,21 +305,9 @@
             const dropdown = document.getElementById('competition-dropdown');
             const menu = dropdown.querySelector('.dropdown-menu');
             let timer;
-
-            dropdown.addEventListener('mouseenter', function() {
-                clearTimeout(timer);
-                menu.classList.add('show');
-            });
-
-            dropdown.addEventListener('mouseleave', function() {
-                timer = setTimeout(function() {
-                    menu.classList.remove('show');
-                }, 300);
-            });
-
-            menu.addEventListener('mouseenter', function() {
-                clearTimeout(timer);
-            });
+            dropdown.addEventListener('mouseenter', function() { clearTimeout(timer); menu.classList.add('show'); });
+            dropdown.addEventListener('mouseleave', function() { timer = setTimeout(function() { menu.classList.remove('show'); }, 300); });
+            menu.addEventListener('mouseenter', function() { clearTimeout(timer); });
         });
     </script>
 </body>
