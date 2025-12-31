@@ -11,6 +11,7 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans TC', sans-serif; background-color: #000000; color: white; overflow-x: hidden; }
         
+        /* 紫色霓虹燈效果 */
         .neon-purple {
             font-family: 'Orbitron', sans-serif;
             color: #fff;
@@ -23,9 +24,9 @@
             letter-spacing: 0.1em;
         }
 
-        /* LOGO 原色並增加紫色發光邊框 */
+        /* LOGO 修正：紫色發光邊框 */
         .logo-original-glow {
-            filter: drop-shadow(0 0 8px #bf00ff);
+            filter: drop-shadow(0 0 8px #bf00ff) drop-shadow(0 0 2px #bf00ff);
             transition: all 0.3s ease;
         }
 
@@ -38,84 +39,92 @@
             text-shadow: 0 0 8px #bf00ff, 0 0 15px #bf00ff;
         }
 
-        /* 右側懸浮按鈕優化 */
+        /* 下拉選單 */
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu {
+            display: none;
+            background-color: rgba(0, 30, 60, 0.95);
+            border: 1px solid #bf00ff;
+            box-shadow: 0 0 15px rgba(191, 0, 255, 0.3);
+            position: absolute;
+            right: 0;
+            top: 100%;
+            width: 160px;
+            z-index: 200;
+        }
+
+        /* 右側懸浮按鈕 */
         .float-container {
             position: fixed;
             right: 0;
-            top: 55%;
+            top: 50%;
             transform: translateY(-50%);
             z-index: 2000;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            max-height: 85vh; /* 限制最高高度防止超出 */
-            justify-content: center;
+            gap: 0.8vh;
         }
         .float-btn {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             writing-mode: vertical-rl;
             text-orientation: mixed;
-            padding: 25px 14px; /* 加大內距讓外框更有份量 */
-            font-size: 14px;    /* 加大字體 */
+            padding: 1.8vh 12px;
+            font-size: 13px;
             font-weight: 700;
-            letter-spacing: 2px;
-            border-radius: 12px 0 0 12px;
+            letter-spacing: 1px;
         }
-        .btn-purple { background: #2d004d; border: 2px solid #bf00ff; box-shadow: 0 0 12px #bf00ff; }
-        .btn-gold { background: #4d4500; border: 2px solid #FFD700; box-shadow: 0 0 12px #FFD700; color: #FFD700; }
-        .btn-black { background: #1a1a1a; border: 2px solid #ffffff; box-shadow: 0 0 12px rgba(255,255,255,0.3); }
-        .float-btn:hover { transform: translateX(-10px); filter: brightness(1.2); }
+        .btn-purple { background: #2d004d; border: 1px solid #bf00ff; box-shadow: 0 0 10px #bf00ff; }
+        .btn-gold { background: #4d4500; border: 1px solid #FFD700; box-shadow: 0 0 10px #FFD700; color: #FFD700; }
+        .btn-black { background: #1a1a1a; border: 1px solid #ffffff; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .float-btn:hover { transform: translateX(-10px); box-shadow: 0 0 20px currentColor; }
 
-        /* 首頁底圖適配處理 */
-        .hero-container {
+        /* 首頁底圖區：設定為優雅的橫長方形 (70% 螢幕高度) */
+        .hero-section {
             position: relative;
             width: 100%;
-            /* 讓高度隨圖片內容撐開，而非強制填滿螢幕導致變形或裁剪 */
-            height: auto; 
-            min-height: 100vh;
+            height: 70vh; /* 調整為長方形比例 */
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow: hidden;
+            align-items: center;
             background: #000;
-        }
-        .hero-img-full {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: contain; /* 完整呈現 */
+            margin-top: 80px; /* 給導覽列空間 */
         }
 
-        .hero-content-box {
+        /* 圖片處理：若隱若現效果 */
+        .hero-img-full {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 填滿長方形且不變形 */
+            object-position: center;
+            opacity: 0.5; /* 若隱若現：50% 透明度 */
+            z-index: 0;
+        }
+
+        /* 漸層遮罩：讓圖片底端消失在背景中 */
+        .hero-overlay {
             position: absolute;
-            left: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 2.5rem;
-            border-radius: 1rem;
-            backdrop-blur: 8px;
-            border-left: 4px solid #bf00ff;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,1) 5%, rgba(0,0,0,0) 50%),
+                        linear-gradient(90deg, rgba(2, 5, 16, 0.8) 0%, rgba(2, 5, 16, 0.2) 100%);
+            z-index: 1;
         }
         
-        section { padding-top: 100px; padding-bottom: 80px; }
+        section { padding-top: 80px; padding-bottom: 80px; }
     </style>
 </head>
 <body>
 
     <div class="float-container">
-        <a href="#" class="float-btn btn-purple text-white">前往報名</a>
-        <a href="#" class="float-btn btn-black text-white">題庫專區</a>
-        <a href="#" class="float-btn btn-gold">活動簡章</a>
-        <a href="#" class="float-btn btn-purple text-white">匯款完成表單</a>
-        <a href="#" class="float-btn btn-gold">加入群組</a>
+        <a href="#" class="float-btn btn-purple rounded-l-lg text-white">前往報名</a>
+        <a href="#" class="float-btn btn-black rounded-l-lg text-white">題庫專區</a>
+        <a href="#" class="float-btn btn-gold rounded-l-lg">活動簡章</a>
+        <a href="#" class="float-btn btn-purple rounded-l-lg text-white">匯款完成表單</a>
+        <a href="#" class="float-btn btn-gold rounded-l-lg">加入群組</a>
     </div>
 
-    <nav class="fixed w-full z-[1100] bg-blue-950/95 backdrop-blur-md border-b border-blue-800/50">
+    <nav class="fixed w-full top-0 z-[1100] bg-blue-950/95 backdrop-blur-md border-b border-blue-800/50 shadow-lg shadow-blue-900/20">
         <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-4 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                <img src="jbc-logo.png" alt="Logo" class="h-16 w-auto logo-original-glow">
+                <img src="jbc-logo.png" alt="Logo" class="h-14 w-auto logo-original-glow">
                 <span class="text-xl font-bold tracking-tight text-white uppercase ml-2">Junior Botball Taiwan</span>
             </div>
             
@@ -136,16 +145,19 @@
         </div>
     </nav>
 
-    <section id="home" class="hero-container p-0">
+    <section id="home" class="hero-section p-0 overflow-hidden">
         <img src="unnamed.jpg" alt="Background" class="hero-img-full">
-        
-        <div class="hero-content-box hidden md:block">
-            <h1 class="text-5xl lg:text-7xl font-bold mb-6 neon-purple leading-tight">
-                Junior<br>Botball Challenge
-            </h1>
-            <div class="space-y-4">
-                <p class="text-2xl font-bold gold-text uppercase">2026 STEM 科技教育競賽</p>
-                <p class="text-lg text-blue-200 font-light">讓台灣的科技教育與國際接軌</p>
+        <div class="hero-overlay"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 w-full">
+            <div class="max-w-2xl bg-blue-950/20 p-8 rounded-2xl backdrop-blur-sm border border-white/10">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 neon-purple tracking-tighter leading-tight">
+                    Junior<br>Botball Challenge
+                </h1>
+                <div class="mt-6 space-y-2">
+                    <p class="text-xl md:text-3xl font-bold gold-text uppercase">2026 STEM 科技教育競賽</p>
+                    <p class="text-lg md:text-xl text-blue-100 font-light italic">讓台灣的科技教育與國際接軌</p>
+                </div>
             </div>
         </div>
     </section>
@@ -219,3 +231,4 @@
     </script>
 </body>
 </html>
+
