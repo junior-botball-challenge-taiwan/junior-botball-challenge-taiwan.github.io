@@ -130,6 +130,116 @@
             opacity: 1 !important;
             filter: drop-shadow(0 0 15px rgba(191, 0, 255, 0.6));
         }
+           /* --- 浮動動畫 --- */
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-25px); /* 向上漂浮的幅度 */
+    }
+}
+        /* 聯絡區塊基礎設置 */
+.contact-section {
+    padding: 80px 0;
+    text-align: center;
+    background: transparent;
+}
+
+/* 社群卡片容器 */
+.social-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    padding-top: 40px;
+}
+
+/* 高科技社群圖框 */
+.social-card {
+    text-decoration: none;
+    color: #fff;
+    perspective: 1000px;
+    /* 持續漂浮動畫，三個卡片給予不同的延遲時間讓動態更有層次 */
+    animation: floatingCard 4s ease-in-out infinite;
+}
+
+.social-card:nth-child(2) { animation-delay: 0.5s; }
+.social-card:nth-child(3) { animation-delay: 1s; }
+
+.card-inner {
+    width: 140px;
+    height: 160px;
+    background: rgba(15, 15, 25, 0.8);
+    border: 2px solid #00ffff; /* 初號機螢光藍邊框 */
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 圖框上方的掃描光束特效 */
+.card-inner::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+}
+
+/* 圖像框 */
+.icon-box {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icon {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+/* --- 觸碰動態回饋 (Hover) --- */
+.social-card:hover .card-inner {
+    transform: translateY(-10px) rotateX(10deg) scale(1.1);
+    border-color: #ff00ff; /* 觸碰時變為初號機紫/粉色系 */
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), inset 0 0 20px rgba(255, 0, 255, 0.4);
+}
+
+.social-card:hover .card-inner::after {
+    top: -50%;
+    left: -50%;
+}
+
+.social-card span {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* --- 動畫：持續漂浮 --- */
+@keyframes floatingCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* 平滑捲動 */
+html {
+    scroll-behavior: smooth;
+}
     </style>
 </head>
 <body>
@@ -154,6 +264,7 @@
                 <a onclick="scrollToSection('news')" class="nav-link">活動公告</a>
                 <a onclick="scrollToSection('rules')" class="nav-link">競賽規則</a>
                 <a onclick="scrollToSection('history')" class="nav-link">歷屆賽事回顧</a>
+                <a onclick="scrollToSection('history')" class="nav-link">聯絡我們</a>
                 
                 <div class="relative dropdown group">
                     <span class="nav-link">快速連結 ▼</span>
@@ -307,6 +418,37 @@
                 <div><div class="text-3xl font-bold text-green-500">100%</div><div class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest">教育熱忱投入</div></div>
             </div>
         </div>
+        <section id="contact" class="contact-section">
+    <div class="container">
+        <h2 class="section-title">聯絡我們</h2>
+        
+        <div class="social-container">
+            <a href="https://www.facebook.com/profile.php?id=61586288543256" target="_blank" class="social-card">
+                <div class="card-inner">
+                    <div class="icon-box">
+                        <img src="path-to-your-fb-icon.png" alt="Facebook" class="social-icon"> </div>
+                    <span>Facebook</span>
+                </div>
+            </a>
+
+            <a href="#" target="_blank" class="social-card">
+                <div class="card-inner">
+                    <div class="icon-box">
+                        <img src="path-to-your-ig-icon.png" alt="Instagram" class="social-icon"> </div>
+                    <span>Instagram</span>
+                </div>
+            </a>
+
+            <a href="#" target="_blank" class="social-card">
+                <div class="card-inner">
+                    <div class="icon-box">
+                        <img src="path-to-your-threads-icon.png" alt="Threads" class="social-icon"> </div>
+                    <span>Threads</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
     </section>
 
     <footer class="bg-black py-16 border-t border-blue-900/30 text-center">
