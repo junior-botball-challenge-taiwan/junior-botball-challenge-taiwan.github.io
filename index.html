@@ -216,10 +216,32 @@
         .social-icon { width: 100%; height: auto; filter: drop-shadow(0 0 5px rgba(255,255,255,0.3)); }
         .social-label { color: #ffffff; font-weight: bold; font-size: 1rem; letter-spacing: 1px; }
 
-        @media (max-width: 768px) {
-            .social-container { gap: 20px; }
-            .card-inner { width: 110px; }
-        }
+      /* 當螢幕寬度小於 768px 時執行 */
+@media (max-width: 768px) {
+    /* 隱藏原本的橫向文字選單 */
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        text-align: center;
+    }
+
+    /* 當選單被激活時顯示 (搭配 JS) */
+    .nav-links.active {
+        display: flex;
+    }
+
+    /* 顯示漢堡選單按鈕 (需在 HTML 加入此元素) */
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        padding: 15px;
+    }
+}
     </style>
 </head>
 <body>
