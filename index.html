@@ -271,24 +271,49 @@
     }
 }
 @media (max-width: 768px) {
-    /* 1. 針對直向手機進一步縮小導覽列標題，確保留出空間給漢堡按鈕 */
-    .nav-title, .logo-text, nav h1, .nav-container span {
-        font-size: 14px !important;
-        max-width: 55vw !important; /* 再縮小一點點到 55% */
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        display: block !important;
-        min-width: 0 !important; /* 重要：防止 flex 子元素撐開 */
+    /* 1. 強制導覽列容器不准換行，且兩端對齊 */
+    /* 這裡鎖定 nav 下方的第一個 div (也就是包含 logo 和按鈕的容器) */
+    nav > div {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important; /* 核心修正：禁止內容換行擠下按鈕 */
     }
 
-    /* 2. 縮小右側浮動按鈕 */
+    /* 2. 針對標題文字做嚴格寬度限制 */
+    /* 增加 .text-base 選擇器來蓋過 Tailwind 的設定 */
+    .nav-title, .logo-text, nav h1, nav span.text-base {
+        font-size: 13px !important; /* 字體再縮小一點點 */
+        max-width: 50vw !important; /* 限制寬度只佔螢幕一半 */
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important; /* 過長顯示 ... */
+        display: inline-block !important;
+        min-width: 0 !important; /* 防止彈性盒子被內容撐開 */
+        flex-shrink: 1 !important; /* 允許縮小以讓位給按鈕 */
+    }
+
+    /* 3. 確保漢堡按鈕絕對不准縮小或消失 */
+    #menu-toggle {
+        flex-shrink: 0 !important; /* 絕對不准被擠壓 */
+        margin-left: 10px !important;
+        display: flex !important; /* 確保它是可見的 */
+    }
+
+    /* 4. 縮小 Logo 高度以節省空間 */
+    nav img {
+        height: 32px !important; 
+        width: auto !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* --- 以下維持你原本的浮動按鈕與 Hero 設定 --- */
     .float-container {
         right: -5px !important;
         gap: 5px !important;
         transform: translateY(-50%) scale(0.85) !important;
         transform-origin: right center !important;
-        z-index: 999;
     }
     
     .float-btn {
@@ -296,35 +321,11 @@
         font-size: 11px !important;
     }
 
-    /* 3. 調整 Hero Section 文字大小 */
     .hero-section h1 {
-        font-size: 2.2rem !important; /* 再縮小一點點防止溢出 */
+        font-size: 2.2rem !important;
         line-height: 1.1 !important;
     }
 }
-
-/* 漢堡按鈕動畫樣式 */
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: white;
-    margin: 5px 0;
-    transition: 0.3s;
-}
-.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.hamburger.active span:nth-child(2) { opacity: 0; }
-.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-        #nav-menu {
-    transition: right 0.3s ease-in-out;
-}
-
-/* 漢堡按鈕變形微調 */
-.rotate-45 { transform: rotate(45deg); }
-.translate-y-2 { transform: translateY(8px); }
-.-rotate-45 { transform: rotate(-45deg); }
-.-translate-y-2 { transform: translateY(-8px); }
-.opacity-0 { opacity: 0; }
     </style>
 </head>
 <body>
@@ -341,7 +342,7 @@
     <div class="max-w-[95%] mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center space-x-3 cursor-pointer flex-shrink-0" onclick="window.scrollTo({top:0, behavior:'smooth'})">
             <img src="jbc-logo.png" alt="Logo" class="h-10 md:h-14 w-auto logo-original-glow">
-            <span class="text-base md:text-lg font-bold tracking-tight text-white uppercase whitespace-nowrap" data-key="nav-title">Junior Botball Challenge Taiwan</span>
+            <span class="nav-title-text text-base md:text-lg font-bold tracking-tight text-white uppercase whitespace-nowrap" data-key="nav-title">Junior Botball Challenge Taiwan</span>
         </div>
         
         <button id="menu-toggle" class="xl:hidden flex flex-col justify-center items-center w-10 h-10 space-y-1.5 focus:outline-none z-[1200]">
