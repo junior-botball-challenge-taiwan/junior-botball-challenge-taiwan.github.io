@@ -326,6 +326,37 @@
         line-height: 1.1 !important;
     }
 }
+        /* 4. 修正歷屆賽事卡片 (History Section) 重疊問題 */
+    .history-card {
+        height: auto !important;           /* 讓容器根據內容自動撐開高度 */
+        min-height: unset !important;      /* 解除最小高度限制 */
+        display: flex !important;
+        flex-direction: column !important; /* 改為垂直排列：圖片在上、文字在下 */
+        padding: 20px !important;
+        margin-bottom: 30px !important;    /* 增加卡片與卡片之間的距離 */
+        overflow: visible !important;      /* 確保內容不被裁切 */
+    }
+
+    .history-card-img {
+        width: 100% !important;
+        height: auto !important;           /* 圖片寬度撐滿，高度自適應 */
+        position: relative !important;     /* 確保不是絕對定位，才不會壓在文字上 */
+        top: 0 !important;
+        margin-bottom: 15px !important;    /* 給圖片下方留點空間放文字 */
+        transform: none !important;        /* 手機版暫時關閉複雜的位移效果 */
+    }
+
+    /* 針對卡片內的文字區塊，確保其排在圖片後方 */
+    .history-card div, .history-card span {
+        position: relative !important;
+        width: 100% !important;
+    }
+
+    /* 如果有按鈕組，也要改為垂直排列避免太擠 */
+    .history-card .flex.gap-4 {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
     </style>
 </head>
 <body>
