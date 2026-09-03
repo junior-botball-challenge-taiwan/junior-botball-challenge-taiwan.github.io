@@ -1,0 +1,26 @@
+﻿# Junior Botball Challenge Taiwan (JBC 臺灣區機器人挑戰賽)
+
+> Junior Botball Challenge (JBC) 臺灣區機器人挑戰賽官方網站。由臺灣智能程式科技教育推廣協會 (SPARK) 主辦，引領國小、國中與高中學子參與自主型機器人程式設計與工程解題，優秀隊伍銜接美國 GCER 全球總決賽與國際邀請賽。
+
+## 賽事核心資訊
+- **賽事名稱**：2026 JBC Junior Botball Challenge Taiwan (JBC 臺灣區機器人挑戰賽)
+- **主辦單位**：臺灣智能程式科技教育推廣協會 (SPARK)
+- **官方網站**：https://junior-botball-challenge-taiwan.github.io/
+- **比賽時間**：2026 年 3 月 8 日 09:00 - 17:30
+- **比賽地點**：臺中市葳格國際會議中心 (臺中市軍福十八路328號)
+- **國際銜接**：美國 GCER (Global Conference on Educational Robotics) 全球教育機器人大會、奧地利歐洲挑戰賽、泰國國際邀請賽
+- **社群媒體**：
+  - Facebook: https://www.facebook.com/share/18A49rW3a1/
+  - Instagram: https://www.instagram.com/spark_association/
+  - Threads: https://www.threads.net/@spark_association
+
+## 競賽特色與教育目標
+1. **純自主運行 (Autonomous Control)**：不使用遙控器，參賽者需完全依賴感測器 (顏色、超音波、陀螺儀、紅外線) 與自主程式演算法完成任務。
+2. **跨年齡梯隊**：涵蓋國小低年級、中高年級、國中組與高中組。
+3. **國際賽事直通車**：臺灣賽區優勝隊伍具備代表臺灣出征美國 GCER 全球總決賽與世界級交流賽的資格。
+4. **STEAM 教育精神**：融合科學 (Science)、技術 (Technology)、工程 (Engineering)、藝術 (Art) 與數學 (Math)。
+
+## 延伸閱讀
+- [國際賽事資訊 (GCER、奧地利、泰國)](https://junior-botball-challenge-taiwan.github.io/international.html)
+- [完整賽事指南與規程 (llms-full.txt)](https://junior-botball-challenge-taiwan.github.io/llms-full.txt)
+- [主辦單位 SPARK 協會官方網站](https://spark-taiwan-association.github.io/)

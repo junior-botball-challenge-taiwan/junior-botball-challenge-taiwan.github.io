@@ -1,0 +1,38 @@
+﻿# Junior Botball Challenge Taiwan (JBC 臺灣區機器人挑戰賽) 完整賽事規程與知識手冊
+
+## 1. 簡介與歷史
+Junior Botball Challenge (JBC) 起源於美國 KISS Institute for Practical Robotics (KIPR)，是國際最具公信力與歷史的自主型機器人教育競賽之一。臺灣區賽事由臺灣智能程式科技教育推廣協會 (SPARK) 主辦，旨在為國小、國中與高中學子提供一個不設限、重視自主邏輯與動手實踐的科學舞台。
+
+歷屆賽事回顧：
+- 2024 年：科技啟蒙，以探索程式與機器人基礎控制為主軸，吸引全台眾多校園隊伍。
+- 2025 年：突破自我，全面提升賽事難度，引入多重感測融合任務。
+- 2026 年：創想未來，於臺中葳格國際會議中心擴大舉辦，全面銜接國際三大賽區。
+
+## 2. 國際舞台銜接
+臺灣賽區表現優異之隊伍，由主辦單位頒發代表權或推薦名額，前進三大世界級賽事：
+1. **美國 GCER (Global Conference on Educational Robotics)**：
+   - 全球教育機器人大會，世界各國 Botball 與 JBC 頂尖好手匯聚之最高殿堂。
+   - 包含論文發表、自主挑戰賽、團隊技術交流與國際學者研討。
+2. **奧地利國際賽 (ECER / European Botball Challenge)**：
+   - 歐洲賽事中心，重視工程設計、演算法穩定度與跨國文化交流。
+3. **泰國國際邀請賽 (Thailand Invitational)**：
+   - 亞洲重要交流樞紐，促進東南亞與臺灣學子的程式與機器人競技。
+
+## 3. 賽制與技術規則
+- **自主控制核心**：比賽中所有機器人必須 100% 透過預寫程式自主運作，嚴禁任何形式的遠端手動遙控。
+- **感測器應用**：鼓勵學員運用紅外線、光感應器、超音波測距、陀螺儀、顏色識別等感測模組進行循線、避障、精準定位與物料搬運。
+- **評分維度**：
+  - 任務完成度 (Score Points)
+  - 程式邏輯與演算法效率
+  - 機械結構穩定度與創新性
+  - 團隊合作與工程筆記紀錄
+
+## 4. 主辦與聯繫
+- **主辦單位**：臺灣智能程式科技教育推廣協會 (SPARK Taiwan)
+- **官方網站**：https://junior-botball-challenge-taiwan.github.io/
+- **官方信箱**：contacteduspark@gmail.com
+- **主辦協會首頁**：https://spark-taiwan-association.github.io/
+- **社群媒體**：
+  - FB: https://www.facebook.com/share/18A49rW3a1/
+  - IG: https://www.instagram.com/spark_association/
+  - Threads: https://www.threads.net/@spark_association
