@@ -17,3 +17,4 @@
 ## 2026-09-11
 - 在首頁競賽規則「最新規則」旁新增「點我查看20261213賽事簡章」按鈕，支援中英雙語切換並同步更新浮動簡章連結。
 - 更新側欄「前往報名」按鈕連結至最新 Google 表單 (https://forms.gle/fjha4p4qbDPJBKuV6)。
+- 更新側欄「匯款完成表單」按鈕連結至最新 Google 表單 (https://forms.gle/NYLy2fz9EUi4smjY7)。
