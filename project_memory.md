@@ -19,3 +19,6 @@
 - 更新側欄「前往報名」按鈕連結至最新 Google 表單 (https://forms.gle/fjha4p4qbDPJBKuV6)。
 - 更新側欄「匯款完成表單」按鈕連結至最新 Google 表單 (https://forms.gle/NYLy2fz9EUi4smjY7)。
 - 導覽列快速連結項目「積動城市 FB」改為「臺灣智能程式科技教育推廣協會」並外連至協會網站。
+
+## 2026-09-12
+- 更新首頁浮動按鈕與規則區「賽事簡章」連結為最新 Google 雲端資料夾。
