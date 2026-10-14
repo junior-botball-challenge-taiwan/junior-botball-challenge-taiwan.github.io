@@ -10,9 +10,9 @@
 - **比賽地點**：臺中市葳格國際會議中心 (臺中市軍福十八路328號)
 - **國際銜接**：美國 GCER (Global Conference on Educational Robotics) 全球教育機器人大會、奧地利歐洲挑戰賽、泰國國際邀請賽
 - **社群媒體**：
-  - Facebook: https://www.facebook.com/share/18A49rW3a1/
-  - Instagram: https://www.instagram.com/spark_association/
-  - Threads: https://www.threads.net/@spark_association
+  - Facebook: https://www.facebook.com/BotballTaiwan/
+  - Instagram: https://www.instagram.com/jbc__taiwan/
+  - Threads: https://www.threads.com/@jbc__taiwan
 
 ## 競賽特色與教育目標
 1. **純自主運行 (Autonomous Control)**：不使用遙控器，參賽者需完全依賴感測器 (顏色、超音波、陀螺儀、紅外線) 與自主程式演算法完成任務。

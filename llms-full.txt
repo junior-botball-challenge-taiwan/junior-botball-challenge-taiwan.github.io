@@ -33,6 +33,6 @@ Junior Botball Challenge (JBC) 起源於美國 KISS Institute for Practical Robo
 - **官方信箱**：contacteduspark@gmail.com
 - **主辦協會首頁**：https://spark-taiwan-association.github.io/
 - **社群媒體**：
-  - FB: https://www.facebook.com/share/18A49rW3a1/
-  - IG: https://www.instagram.com/spark_association/
-  - Threads: https://www.threads.net/@spark_association
+  - FB: https://www.facebook.com/BotballTaiwan/
+  - IG: https://www.instagram.com/jbc__taiwan/
+  - Threads: https://www.threads.com/@jbc__taiwan
