@@ -134,7 +134,11 @@ section{padding-block:52px}
 .jb.L{background:var(--blue-soft);color:var(--blue)}
 .jb.F{background:var(--amber-soft);color:var(--amber)}
 .mtable{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.mrow{display:grid;grid-template-columns:3rem minmax(0,1fr) repeat(3,7.2rem) 4.2rem;gap:10px;align-items:center;padding:12px 16px;border-top:1px dashed var(--line)}
+.mrow{display:grid;grid-template-columns:3rem 8.5rem minmax(0,1fr) repeat(3,6.8rem) 4rem;gap:10px;align-items:center;padding:12px 16px;border-top:1px dashed var(--line)}
+.mrow .th{display:block;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:#eef1f5;aspect-ratio:360/166}
+.mrow .th img{width:100%;height:100%;object-fit:cover}
+.mrow .th:hover{border-color:var(--ink)}
+.mrow .me::before{content:"｜";color:var(--line)}
 .mrow:first-child{border-top:0}
 .mrow.hd{background:#f3f6fb;font:700 .78rem var(--mono);color:var(--muted);padding-block:10px}
 .mrow .no{font:700 1.05rem var(--mono);color:var(--red)}
@@ -143,18 +147,21 @@ section{padding-block:52px}
 .mrow .nm small{display:block;color:var(--muted);font-size:.85rem;line-height:1.45}
 .mrow .st{display:flex;align-items:center;gap:6px;font:700 .95rem var(--mono)}
 .mrow .st.none{color:#a3abbd;font-weight:500}
-.mrow .mx{font:700 1.05rem var(--mono);text-align:right;grid-column:6}
+.mrow .mx{font:700 1.05rem var(--mono);text-align:right;grid-column:7}
 .mrow.tot{background:var(--red-soft);font-weight:700}
 .mrow.tot .mx{color:var(--red-d)}
 .lbl{display:none;font:700 .7rem var(--mono);color:var(--muted)}
 .mrow .sts{display:contents}
 @media (max-width:760px){
-  .mrow{grid-template-columns:2.4rem minmax(0,1fr) auto;gap:6px 10px;align-items:start}
+  .mrow{grid-template-columns:2rem 5.5rem minmax(0,1fr) auto;gap:6px 10px;align-items:start}
+  .mrow .me{display:block;font:500 .78rem/1.4 var(--mono);color:var(--muted)}
+  .mrow .me::before{content:none}
   .mrow.hd{display:none}
   .mrow .no{grid-row:1;grid-column:1}
-  .mrow .nm{grid-row:1;grid-column:2}
-  .mrow .mx{grid-row:1;grid-column:3}
-  .mrow .sts{grid-row:2;grid-column:2/4;display:flex;flex-wrap:wrap;gap:6px 14px}
+  .mrow .th{grid-row:1;grid-column:2;margin-top:4px}
+  .mrow .nm{grid-row:1;grid-column:3}
+  .mrow .mx{grid-row:1;grid-column:4}
+  .mrow .sts{grid-row:2;grid-column:2/5;display:flex;flex-wrap:wrap;gap:6px 14px}
   .mrow.tot .sts,.mrow .st.none{display:none}
   .lbl{display:inline}
 }
@@ -293,6 +300,7 @@ footer .tm{flex-basis:100%;font-size:.8rem}
       <div class="head"><h2><span class="n">04 MISSIONS</span><span data-i18n="ms-h">18 個任務與分數</span></h2><p data-i18n="ms-p">每個任務分 Base → Bonus → Advanced，前一階完成才能拿下一階。點任務名稱可看 KIPR 官方說明與示範影片。</p></div>
       <div class="legend"><span><span class="jb L" data-i18n="jL">即時</span> <span data-i18n="jLd">裁判親眼看到發生就得分，之後東西掉了也不扣</span></span><span><span class="jb F" data-i18n="jF">終局</span> <span data-i18n="jFd">150 秒結束那一刻，看場上最後的狀態</span></span></div>
       <div class="mtable" id="mtable" role="table" aria-label="18 個任務分數表"></div>
+      <p class="fine" data-i18n="img-src">示意圖取自 KIPR 官方任務示範影片的完成畫面，點圖可看完整影片。</p>
     </div>
   </section>
 
@@ -391,7 +399,7 @@ var EN = {
   'rb-h':'No new hardware needed', 'rb-p':'Any platform that runs fully autonomously and meets the size and safety rules may compete. During the pilot season teams are not split by platform; follow official KIPR updates.',
   kit:'KIPR Wombat (official kit)', 'rb-b':'Robot rules', rb1:'At the start, every robot and independent structure must fit inside a starting box\'s vertical projection, no taller than 15 inches; robots may expand after the start.', rb2:'At most two independent structures on the field; a robot must deploy them, and they may not contain a controller, battery or powered actuator.', rb3:'Robots may not hold any game object at the start, and may not carry parts meant to damage the field or game pieces.',
   'ms-h':'18 missions and points', 'ms-p':'Each mission runs Base → Bonus → Advanced; each stage unlocks the next. Click a mission name for the official KIPR page and video.',
-  jL:'LIVE', jLd:'Scores when the judge sees it happen and stays earned', jF:'FINAL', jFd:'Judged on the field at the moment the 150 seconds end',
+  'img-src':'Thumbnails are the completed scenes from the official KIPR mission videos. Click one to watch the full video.', jL:'LIVE', jLd:'Scores when the judge sees it happen and stays earned', jF:'FINAL', jFd:'Judged on the field at the moment the 150 seconds end',
   'sc-h':'How scoring works', 'sc-p':'Points unlock stage by stage as the match goes on, and some actions score several missions at once. This is what teams need to practice most.',
   c1:'Declare first, unlock in stages', c1d:'Before each match, tell the judge which missions you will attempt. Bonus needs Base; Advanced needs Bonus.',
   c2:'Live and final, mixed', c2d:'Live stages count the moment they happen; final stages only count at the end. M6, M12, M13 and M14 start live and finish final, so plan the order.',
@@ -411,7 +419,7 @@ var MURL = 'https://www.kipr.org/missioncontrol_pilot/botball_explorer_2027/miss
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function renderMissions(){
   var en = lang==='en', h = [];
-  h.push('<div class="mrow hd" role="row"><span>#</span><span>'+(en?'MISSION':'任務')+'</span><span>BASE</span><span>BONUS</span><span>ADVANCED</span><span style="text-align:right">'+(en?'MAX':'上限')+'</span></div>');
+  h.push('<div class="mrow hd" role="row"><span>#</span><span></span><span>'+(en?'MISSION':'任務')+'</span><span>BASE</span><span>BONUS</span><span>ADVANCED</span><span style="text-align:right">'+(en?'MAX':'上限')+'</span></div>');
   BE.MISSIONS.forEach(function(m){
     var cells = '';
     for (var i=0;i<3;i++){
@@ -420,10 +428,11 @@ function renderMissions(){
                  : '<span class="st none" role="cell">—</span>';
     }
     h.push('<div class="mrow" role="row"><span class="no" role="cell">'+String(m.id).padStart(2,'0')+'</span>'+
-      '<span class="nm" role="cell"><a href="'+MURL+m.id+'/">'+esc(en?m.en:m.zh+'｜'+m.en)+'</a><small>'+esc(m.skill[lang])+'</small></span>'+
+      '<a class="th" role="cell" href="'+MURL+m.id+'/" aria-label="'+esc((en?'Mission ':'任務 ')+m.id+(en?' official video':' 官方示範影片'))+'"><img src="img/m'+m.id+'.webp" width="360" height="'+(m.id===7?168:166)+'" alt="'+esc((en?'Mission ':'任務 ')+m.id+' '+(en?m.en:m.zh)+(en?' completed (from the official KIPR video)':' 完成時的樣子（KIPR 官方影片截圖）'))+'" loading="lazy"></a>'+
+      '<span class="nm" role="cell"><a href="'+MURL+m.id+'/">'+(en?esc(m.en):esc(m.zh)+'<span class="me">'+esc(m.en)+'</span>')+'</a><small>'+esc(m.skill[lang])+'</small></span>'+
       '<span class="sts">'+cells+'</span><span class="mx" role="cell">'+BE.maxPts(m)+'</span></div>');
   });
-  h.push('<div class="mrow tot" role="row"><span></span><span class="nm" role="cell">'+(en?'Maximum total':'總分上限')+'</span><span class="sts"></span><span class="mx" role="cell">'+BE.TOTAL_MAX+'</span></div>');
+  h.push('<div class="mrow tot" role="row"><span></span><span></span><span class="nm" role="cell">'+(en?'Maximum total':'總分上限')+'</span><span class="sts"></span><span class="mx" role="cell">'+BE.TOTAL_MAX+'</span></div>');
   document.getElementById('mtable').innerHTML = h.join('');
 }
 function setLang(l){
