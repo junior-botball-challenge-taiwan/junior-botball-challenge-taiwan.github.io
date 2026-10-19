@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botball Explorer 計分模擬器 | Stack Attack 2026-2027 - JBC Taiwan</title>
+<meta name="description" content="Botball Explorer 2026-2027「Stack Attack」線上計分模擬器：宣告任務、150 秒計時、即時與終局判定、逐階解鎖、Discovery 碰觸扣分、Expedition 暫停卡，以及 5 場取最好 4 場的排名試算。">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://junior-botball-challenge-taiwan.github.io/explorer/score.html">
+<link rel="icon" type="image/png" href="../jbc-logo.png">
+<meta name="theme-color" content="#c8102e">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Botball Explorer 計分模擬器｜Stack Attack">
+<meta property="og:description" content="宣告任務、150 秒計時、即時與終局判定、碰觸扣分與暫停卡，5 場取 4 排名試算。">
+<meta property="og:image" content="https://junior-botball-challenge-taiwan.github.io/img/field.jpg">
+<meta property="og:url" content="https://junior-botball-challenge-taiwan.github.io/explorer/score.html">
+<meta property="og:site_name" content="Junior Botball Challenge Taiwan">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Botball Explorer 計分模擬器",
+  "url": "https://junior-botball-challenge-taiwan.github.io/explorer/score.html",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Any",
+  "inLanguage": ["zh-Hant-TW", "en"],
+  "isAccessibleForFree": true,
+  "isPartOf": {"@id": "https://junior-botball-challenge-taiwan.github.io/#website"},
+  "publisher": {"@id": "https://spark-taiwan-association.github.io/#organization"}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fbfcfe; --grid:#e3e9f2; --ink:#16213a; --muted:#56607a; --line:#d5dce8; --card:#fff;
+  --red:#c8102e; --red-d:#9e0c24; --red-soft:#fdecef; --blue:#1d4ed8; --blue-soft:#e8eefc; --amber:#b45309; --amber-soft:#fdf3e4;
+  --green:#15803d; --green-soft:#e7f6ec;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:12px; --w:62rem;
+}
+*{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid var(--blue);outline-offset:2px;border-radius:6px}
+h1,h2,h3{line-height:1.3;margin:0}
+.wrap{max-width:var(--w);margin:0 auto;padding-inline:16px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 12px;z-index:100}.skip:focus{left:8px}
+button{font-family:inherit}
+
+.top{position:sticky;top:0;z-index:50;background:rgba(251,252,254,.97);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:10px;min-height:60px}
+.brand img{width:96px;height:auto;display:block}
+.back{margin-left:auto;display:inline-flex;align-items:center;min-height:44px;padding:0 10px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500}
+.back:hover{background:#eef2f8}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.lang button{min-height:44px;min-width:44px;border:0;background:#fff;font:700 .85rem var(--sans);color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+.intro{background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border-bottom:1px solid var(--line);padding-block:22px}
+.kicker{font:700 .8rem/1.4 var(--mono);color:var(--red);letter-spacing:.04em}
+.intro h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:900;margin-top:6px}
+.intro p{margin:6px 0 0;color:var(--muted);max-width:44em}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;padding:0;list-style:none}
+.steps li{display:flex;align-items:center;gap:6px;padding:4px 12px 4px 6px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--muted);font-size:.9rem}
+.steps li b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#e9edf4;font:700 .8rem var(--mono)}
+.steps li.on{border-color:var(--ink);color:var(--ink);font-weight:700}
+.steps li.on b{background:var(--red);color:#fff}
+.steps li.done b{background:var(--ink);color:#fff}
+
+/* 計分板 */
+.board{position:sticky;top:60px;z-index:40;background:var(--ink);color:#fff;box-shadow:0 8px 18px -10px rgba(22,33,58,.6)}
+.board .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:10px}
+.board .ph{font:700 .78rem var(--mono);letter-spacing:.06em;color:#ffb3bf}
+.clock{display:flex;align-items:center;gap:6px}
+.clock .t{font:700 1.9rem/1 var(--mono);min-width:4.2ch;text-align:center;font-variant-numeric:tabular-nums}
+.clock .t.low{color:#ff8fa0}
+.clock .t.paused{color:#ffd27a}
+.ib{min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.3);border-radius:10px;background:rgba(255,255,255,.08);color:#fff;font-size:1rem;cursor:pointer}
+.ib:hover{background:rgba(255,255,255,.18)}
+.ib:disabled{opacity:.4;cursor:not-allowed}
+.sc{display:flex;flex-direction:column;line-height:1.1}
+.sc small{font:700 .7rem var(--mono);color:#b8c1d6;letter-spacing:.05em}
+.sc b{font:700 1.7rem var(--mono);font-variant-numeric:tabular-nums}
+.sc.main b{color:#ff8fa0;font-size:2rem}
+.rec{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rec .lab{font-size:.9rem;color:#dfe5f1}
+.tb{min-height:44px;padding:0 14px;border-radius:10px;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff;font-weight:700;cursor:pointer}
+.tb:hover{background:rgba(255,255,255,.12)}
+.tb.pri{background:var(--red);border-color:var(--red)}
+.tb.pri:hover{background:var(--red-d)}
+.tb:disabled{opacity:.45;cursor:not-allowed}
+.board .end{margin-left:auto}
+@media (max-width:640px){.board .wrap{gap:8px 12px}.clock .t{font-size:1.5rem}.sc b{font-size:1.35rem}.sc.main b{font-size:1.6rem}.board .end{margin-left:0;width:100%}.board .end .tb{width:100%}}
+
+main{padding-block:20px 40px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:16px}
+.panel h2{font-size:1.15rem;font-weight:900;margin-bottom:10px}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.field label{display:block;font-weight:700;font-size:.92rem;margin-bottom:4px}
+.field input{min-height:44px;width:min(22rem,100%);padding:0 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+.divpick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.divpick label{display:block;border:2px solid var(--line);border-radius:var(--r);padding:12px 14px;cursor:pointer;background:#fff}
+.divpick label.on{border-color:var(--red);background:var(--red-soft)}
+.divpick input{position:absolute;opacity:0;pointer-events:none}
+.divpick b{display:block;font-size:1.05rem}
+.divpick span{color:var(--muted);font-size:.88rem;line-height:1.5;display:block}
+.divpick label.dis{opacity:.6;cursor:not-allowed}
+@media (max-width:560px){.divpick{grid-template-columns:1fr}}
+.hint{color:var(--muted);font-size:.88rem;margin:8px 0 0}
+
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.count{font-weight:700}
+.count em{font-style:normal;color:var(--red)}
+.lb{min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:500;cursor:pointer;color:var(--ink)}
+.lb:hover{border-color:var(--ink)}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:700px){.picks{grid-template-columns:1fr}}
+.pick{position:relative;display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;cursor:pointer;background:#fff}
+.pick:hover{border-color:var(--ink)}
+.pick.on{border-color:var(--red);background:var(--red-soft)}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+.num{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:8px;background:var(--ink);color:#fff;font:700 .9rem var(--mono)}
+.pick.on .num{background:var(--red)}
+.pick .b{flex:1;min-width:0}
+.pick .nm{font-weight:700;line-height:1.35}
+.pick .en{display:block;font:500 .78rem var(--mono);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:4px;font:700 .72rem/1 var(--mono);padding:4px 6px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.jb{display:inline-flex;align-items:center;font:700 .66rem/1 var(--mono);padding:3px 5px;border-radius:5px;white-space:nowrap}
+.jb.L{background:var(--blue-soft);color:var(--blue)}
+.jb.F{background:var(--amber-soft);color:var(--amber)}
+.tick{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:transparent;font-size:.8rem;margin-top:4px}
+.pick.on .tick{background:var(--red);border-color:var(--red);color:#fff}
+.startbar{position:sticky;bottom:0;z-index:30;margin-top:14px;padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(0deg,var(--paper) 70%,rgba(251,252,254,0))}
+.startbar .in{background:var(--ink);color:#fff;border-radius:var(--r);padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.startbar .in span{font-size:.92rem;color:#dfe5f1}
+
+.banner{border-radius:var(--r);padding:12px 16px;margin-bottom:14px;border:1px solid}
+.banner.live{background:var(--blue-soft);border-color:#c3d2f7;color:#1e3a8a}
+.banner.final{background:var(--amber-soft);border-color:#f2d3a7;color:#7c2d12}
+.banner.pause{background:#fff7e0;border-color:#f0d58a;color:#713f12}
+.banner b{display:block}
+.warn{background:#fff;border:1px dashed var(--amber);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;color:#7c2d12;font-size:.92rem}
+.warn ul{margin:4px 0 0;padding-left:1.2em}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px 14px;margin-bottom:12px}
+.card .hd{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.card .hd .tt{flex:1;min-width:0}
+.card .hd h3{font-size:1.02rem}
+.card .hd .en{font:500 .78rem var(--mono);color:var(--muted)}
+.card .pts{font:700 1.1rem var(--mono);white-space:nowrap}
+.card .pts small{color:var(--muted);font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag{font-size:.78rem;padding:2px 8px;border-radius:999px;background:#eef2f8;color:var(--ink)}
+.tag.x{background:#fdf3e4;color:#7c2d12}
+.note{font-size:.84rem;color:var(--muted);margin:8px 0 0}
+.track{display:grid;grid-template-columns:repeat(var(--n),1fr);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+@media (max-width:620px){.track{grid-template-columns:1fr}}
+.stg{position:relative;text-align:left;border:0;border-right:1px dashed var(--line);background:#f5f7fb;padding:10px 12px;min-height:72px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;gap:4px}
+.stg:last-child{border-right:0}
+@media (max-width:620px){.stg{border-right:0;border-bottom:1px dashed var(--line)}.stg:last-child{border-bottom:0}}
+.stg .l{display:flex;align-items:center;gap:6px;font:700 .76rem var(--mono);letter-spacing:.04em}
+.stg .l .p{margin-left:auto;font-size:.95rem}
+.stg .d{font-size:.88rem;line-height:1.45}
+.stg .s{font-size:.76rem;color:var(--muted)}
+.dot{width:18px;height:18px;border-radius:50%;border:2px solid #b7c0d1;display:inline-grid;place-items:center;font-size:.65rem;color:transparent;flex:none}
+.stg.open{background:#fff}
+.stg.open:hover{background:#f0f5ff}
+.stg.done{background:var(--green-soft)}
+.stg.done .dot{background:var(--green);border-color:var(--green);color:#fff}
+.stg.done .l{color:var(--green)}
+.stg.locked,.stg.wait{cursor:not-allowed;color:#7b849a}
+.stg.locked .d,.stg.wait .d{opacity:.75}
+.stg.wait{background:repeating-linear-gradient(135deg,#f7f3ea 0 8px,#fbf8f1 8px 16px)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:6px}
+.bigbtn{min-height:48px;padding:0 20px;border-radius:10px;border:2px solid var(--ink);background:#fff;color:var(--ink);font-weight:700;cursor:pointer}
+.bigbtn.pri{background:var(--red);border-color:var(--red);color:#fff}
+.bigbtn.pri:hover{background:var(--red-d);border-color:var(--red-d)}
+.bigbtn:disabled{opacity:.5;cursor:not-allowed}
+
+/* 紀錄 */
+.tbl{width:100%;border-collapse:collapse;font-size:.95rem}
+.tbl th,.tbl td{padding:8px 6px;border-bottom:1px dashed var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl th{font:700 .74rem var(--mono);color:var(--muted)}
+.tbl tr.drop td{color:#9aa3b5;text-decoration:line-through}
+.tbl tr.drop td:last-child{text-decoration:none}
+.tbl tfoot td{font-weight:900;border-bottom:0;font-size:1.05rem}
+.tbl tfoot td.big{color:var(--red);font:700 1.4rem var(--mono)}
+.tb-info{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:.88rem;margin-top:8px}
+.empty{color:var(--muted);margin:0}
+.live-region{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;max-width:min(92vw,30rem);z-index:80;font-size:.92rem;box-shadow:0 10px 24px -10px rgba(0,0,0,.5);transition:transform .25s ease}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+footer{border-top:1px solid var(--line);padding-block:20px 28px;font-size:.88rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 20px;justify-content:space-between;align-items:center}
+footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44px}
+footer .tm{flex-basis:100%;font-size:.8rem}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSTZ156MFP"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RSTZ156MFP');</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">跳到主要內容</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Junior Botball Challenge Taiwan 首頁"><img src="../jbc-logo.png" width="400" height="158" alt="Junior Botball Challenge"></a>
+    <a class="back" href="./" data-i18n="back">← 賽事介紹</a>
+    <div class="lang" role="group" aria-label="語言 Language"><button type="button" data-lang="zh" aria-pressed="true">中</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <div class="kicker">BOTBALL EXPLORER · STACK ATTACK 2026–2027</div>
+    <h1 data-i18n="h1">計分模擬器</h1>
+    <p data-i18n="lead">照官方流程跑一場：賽前宣告任務 → 150 秒內判定即時任務 → 時間到判定終局任務 → 送出成績。可連打 5 場，自動取最好 4 場算排名。</p>
+    <ol class="steps" id="steps"></ol>
+  </div>
+</section>
+
+<div class="board" id="board" hidden></div>
+
+<main id="main">
+  <div class="wrap" id="app"></div>
+  <div class="wrap">
+    <section class="panel" id="record" aria-labelledby="rec-h"></section>
+    <p class="hint" data-i18n="disc">分數依 KIPR 官方任務頁（2026–2027 Rules V3.0）。本工具只是練習與試算用，正式成績以裁判判定為準。</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><span data-i18n="org">主辦單位：臺灣智能程式科技教育推廣協會（SPARK）｜內政部立案證書字號：1130027903</span></div>
+    <span><a href="https://spark-taiwan-association.github.io/" data-i18n="org-link">協會官網</a>　<a href="https://spark-taiwan-association.github.io/privacy.html" data-i18n="privacy">隱私權政策</a></span>
+    <div class="tm" data-i18n="tm">Botball®、Botguy™ 為 KISS Institute for Practical Robotics（KIPR）的商標。</div>
+  </div>
+</footer>
+<div class="live-region" aria-live="polite" id="sr"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="missions.js"></script>
+<script>
+(function(){
+'use strict';
+var S = {
+  zh: {
+    skip:'跳到主要內容', back:'← 賽事介紹', h1:'計分模擬器',
+    lead:'照官方流程跑一場：賽前宣告任務 → 150 秒內判定即時任務 → 時間到判定終局任務 → 送出成績。可連打 5 場，自動取最好 4 場算排名。',
+    disc:'分數依 KIPR 官方任務頁（2026–2027 Rules V3.0）。本工具只是練習與試算用，正式成績以裁判判定為準。',
+    org:'主辦單位：臺灣智能程式科技教育推廣協會（SPARK）｜內政部立案證書字號：1130027903', 'org-link':'協會官網', privacy:'隱私權政策',
+    tm:'Botball®、Botguy™ 為 KISS Institute for Practical Robotics（KIPR）的商標。',
+    st1:'選組別、宣告任務', st2:'比賽中（即時判定）', st3:'終局判定', st4:'送出成績',
+    team:'隊伍名稱（選填）', teamPh:'例：臺中機器人社 A 隊', division:'組別',
+    discD:'6 年級以下。碰觸不限次數，計時不停，每次扣該場 5%。',
+    expD:'7～12 年級（國小可往上報）。整場比賽共 2 張暫停卡，用卡時計時暫停。',
+    divLock:'已經有比賽紀錄，要換組別請先清除下方紀錄。',
+    declare:'宣告這場要挑戰的任務', declHint:'只有宣告的任務能得分。Bonus、Advanced 會在前一階完成後自動解鎖。',
+    count:'已宣告 {n} 個任務，最高 {p} 分', all:'全選 18 個', none:'全部清除', last:'沿用上一場',
+    start:'開始比賽', needOne:'至少宣告 1 個任務', allDone:'5 場都打完了。要重來請清除紀錄。', matchN:'第 {n} 場',
+    phLive:'比賽中', phFinal:'終局判定', phPause:'暫停中',
+    raw:'原始分', score:'本場成績', touch:'碰觸', touchN:'{n} 次（−{p}%）', tAdd:'＋1 碰觸', tSub:'−1',
+    tCard:'使用暫停卡', tLeft:'剩 {n} 張', resume:'恢復比賽', undoCard:'按錯了，取消暫停卡',
+    endMatch:'結束比賽 → 終局判定', submit:'送出這場成績', discard:'放棄這場',
+    confirmDiscard:'放棄這場？目前判定的分數不會保留。',
+    bLive:'比賽中：即時任務（藍色 LIVE）做到就點。終局任務（橘色 FINAL）等比賽結束再判定。',
+    bLive2:'按 ▶ 開始計時；也可以不計時，直接判定。',
+    bFinal:'時間到：依場上最後的狀態點選終局任務。即時任務如果判錯，也可以在這裡修正。',
+    bAuto:'150 秒到了，比賽結束。',
+    bPause:'暫停卡使用中：計時已暫停。機器人放回起始框；機器人當時控制的得分物移出場外，本場不能再計分。不能改程式。',
+    stLocked:'先完成上一階', stWait:'比賽結束後判定', stDone:'已得分（再點一次可取消）', stOpen:'點一下＝得分',
+    linked:'同一動作也可能得分：', excl:'限制：', toastLinked:'M{a} 得分！同一個動作也可能完成 {b}，記得檢查。',
+    w11:'M11 和 M15 都有得分：兩個任務必須是不同的籃子。', w1:'M1 和 M10 的 Bonus 都有得分：不能是同一次回到起始框。',
+    w7:'M7 Bonus：要確認用的是另一個 PVC 圍欄。', w12:'M12 Bonus：比賽結束時那一疊必須還在。', wTitle:'送出前再確認',
+    rec:'比賽紀錄（5 場取最好 4 場）', recEmpty:'還沒有紀錄。送出第一場成績後會出現在這裡。',
+    cM:'場次', cRaw:'原始分', cRec:'碰觸／暫停卡', cFin:'成績', cUse:'計入', yes:'計入', no:'不計',
+    rank:'排名總分', ti1:'碰觸／暫停卡合計 {n}', ti2:'計入場次原始分合計 {n}', ti3:'得分過的任務 {n} 個', cardsLeft:'暫停卡剩 {n} 張',
+    clear:'清除全部紀錄', confirmClear:'清除全部比賽紀錄？', saved:'第 {n} 場已送出：{s} 分',
+    stageNames:['Base','Bonus','Advanced'], live:'即時', fin:'終局', pt:'分'
+  },
+  en: {
+    skip:'Skip to content', back:'← About', h1:'Score Simulator',
+    lead:'Run a match the official way: declare missions → judge live stages during 150 seconds → judge final stages at time → submit. Play up to 5 matches; the best 4 count automatically.',
+    disc:'Points follow the official KIPR mission pages (2026–2027 Rules V3.0). This tool is for practice only; judges decide official scores.',
+    org:'Organizer: Taiwan Smart Programming AI Robotics & Knowledge Association (SPARK) | MOI registration No. 1130027903', 'org-link':'SPARK website', privacy:'Privacy policy',
+    tm:'Botball® and Botguy™ are trademarks of the KISS Institute for Practical Robotics (KIPR).',
+    st1:'Division & declare', st2:'Match (live judging)', st3:'Final judging', st4:'Submit',
+    team:'Team name (optional)', teamPh:'e.g. Taichung Robotics A', division:'Division',
+    discD:'Grade 6 and below. Unlimited Touches; the clock keeps running and each costs 5% of the match.',
+    expD:'Grades 7–12 (younger may play up). Two Timeout Cards per tournament; the clock stops during a timeout.',
+    divLock:'Matches are already recorded. Clear the record below to change division.',
+    declare:'Declare the missions for this match', declHint:'Only declared missions can score. Bonus and Advanced unlock once the previous stage is scored.',
+    count:'{n} missions declared, up to {p} pts', all:'Select all 18', none:'Clear all', last:'Same as last match',
+    start:'Start match', needOne:'Declare at least 1 mission', allDone:'All 5 matches played. Clear the record to start over.', matchN:'Match {n}',
+    phLive:'LIVE', phFinal:'FINAL JUDGING', phPause:'TIMEOUT',
+    raw:'Raw', score:'Match score', touch:'Touches', touchN:'{n} (−{p}%)', tAdd:'+1 Touch', tSub:'−1',
+    tCard:'Use Timeout Card', tLeft:'{n} left', resume:'Resume match', undoCard:'Mistake — cancel timeout',
+    endMatch:'End match → final judging', submit:'Submit match score', discard:'Discard match',
+    confirmDiscard:'Discard this match? Scored stages will be lost.',
+    bLive:'Match in progress: tap live stages (blue LIVE) as they happen. Final stages (orange FINAL) are judged after the match.',
+    bLive2:'Press ▶ to run the clock, or judge without timing.',
+    bFinal:'Time: tap final stages based on the field\'s end state. Live stages can be corrected here too.',
+    bAuto:'150 seconds are up. The match is over.',
+    bPause:'Timeout in use: the clock is stopped. Return the robot to a starting box; any scoring object it controlled is removed and cannot score this match. No software changes.',
+    stLocked:'Score the previous stage first', stWait:'Judged after the match', stDone:'Scored (tap again to undo)', stOpen:'Tap to score',
+    linked:'Same action may also score: ', excl:'Restriction: ', toastLinked:'M{a} scored! The same action may also complete {b} — check it.',
+    w11:'M11 and M15 both scored: they must use different baskets.', w1:'M1 and M10 bonuses both scored: they cannot come from the same return to a starting box.',
+    w7:'M7 Bonus: confirm a second PVC enclosure was used.', w12:'M12 Bonus: the stack must still be intact at the end.', wTitle:'Check before submitting',
+    rec:'Match record (best 4 of 5)', recEmpty:'No matches yet. Submitted matches appear here.',
+    cM:'Match', cRaw:'Raw', cRec:'Touches / Timeouts', cFin:'Score', cUse:'Counted', yes:'Yes', no:'Dropped',
+    rank:'Ranking total', ti1:'Touches / Timeouts total {n}', ti2:'Raw total of counted matches {n}', ti3:'Distinct missions scored {n}', cardsLeft:'{n} Timeout Cards left',
+    clear:'Clear all records', confirmClear:'Clear all match records?', saved:'Match {n} submitted: {s} pts',
+    stageNames:['Base','Bonus','Advanced'], live:'LIVE', fin:'FINAL', pt:'pts'
+  }
+};
+var lang = 'zh';
+function t(k, v){ var s = S[lang][k]; if (s == null) s = S.zh[k]; if (v) for (var x in v) s = s.split('{'+x+'}').join(v[x]); return s; }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]}); }
+function mName(m){ return lang==='en' ? m.en : m.zh; }
+function fmt(n){ return (Math.round(n*100)/100).toString(); }
+
+// ---------- 狀態 ----------
+var KEY = 'be-sim-v1';
+var rec = { team:'', division:'discovery', matches:[] };
+try { var saved = JSON.parse(localStorage.getItem(KEY) || 'null'); if (saved && Array.isArray(saved.matches)) rec = saved; } catch(e) {}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(rec)); } catch(e) {} }
+
+var phase = 'setup';                 // setup → live → final
+var declared = [];
+var earned = {};
+var touches = 0, timeouts = 0, paused = false, autoEnded = false;
+var remain = BE.MATCH_SECONDS * 1000, running = false, last = 0, timer = null;
+if (rec.matches.length) declared = (rec.matches[rec.matches.length-1].declared || []).slice();
+
+function cardsLeft(){
+  var used = rec.matches.reduce(function(s,m){ return s + (m.timeouts||0); }, 0);
+  return Math.max(0, BE.TIMEOUT_CARDS - used - timeouts);
+}
+function current(){ return BE.matchScore({ declared:declared, earned:earned, division:rec.division, touches:touches }); }
+
+// ---------- 計時 ----------
+function tick(){
+  var now = performance.now(); remain -= now - last; last = now;
+  if (remain <= 0){ remain = 0; stopClock(); if (phase === 'live'){ autoEnded = true; goFinal(); return; } }
+  renderClock();
+}
+function startClock(){ if (remain <= 0 || paused) return; running = true; last = performance.now(); timer = setInterval(tick, 200); renderBoard(); }
+function stopClock(){ running = false; clearInterval(timer); timer = null; }
+function resetClock(){ stopClock(); remain = BE.MATCH_SECONDS * 1000; }
+function clockText(){ var s = Math.ceil(remain/1000); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+function renderClock(){
+  var el = document.getElementById('clk'); if (!el) return;
+  el.textContent = clockText();
+  el.classList.toggle('low', remain <= 15000);
+}
+
+// ---------- 畫面 ----------
+function renderSteps(){
+  var idx = { setup:0, live:1, final:2 }[phase];
+  var h = '';
+  ['st1','st2','st3','st4'].forEach(function(k,i){
+    h += '<li class="'+(i===idx?'on':(i<idx?'done':''))+'"><b>'+(i+1)+'</b>'+t(k)+'</li>';
+  });
+  document.getElementById('steps').innerHTML = h;
+}
+
+function renderSetup(){
+  var n = rec.matches.length, full = n >= BE.MATCHES, locked = n > 0;
+  var maxP = declared.reduce(function(s,id){ return s + BE.maxPts(BE.byId(id)); }, 0);
+  var h = '';
+  h += '<section class="panel"><div class="row" style="align-items:flex-end;justify-content:space-between">';
+  h += '<div class="field"><label for="team">'+t('team')+'</label><input id="team" maxlength="40" value="'+esc(rec.team)+'" placeholder="'+esc(t('teamPh'))+'"></div>';
+  h += '<b class="mono" style="font:700 1rem var(--mono);color:var(--red)">'+t('matchN',{n:Math.min(n+1,BE.MATCHES)})+' / '+BE.MATCHES+'</b></div>';
+  h += '<h2 style="margin-top:14px">'+t('division')+'</h2><div class="divpick" role="radiogroup">';
+  [['discovery','Discovery','discD'],['expedition','Expedition','expD']].forEach(function(d){
+    var on = rec.division === d[0];
+    h += '<label class="'+(on?'on':'')+(locked?' dis':'')+'"><input type="radio" name="div" value="'+d[0]+'"'+(on?' checked':'')+(locked?' disabled':'')+'><b>'+d[1]+'</b><span>'+t(d[2])+'</span></label>';
+  });
+  h += '</div>'+(locked?'<p class="hint">'+t('divLock')+'</p>':'')+'</section>';
+
+  h += '<section class="panel"><h2>'+t('declare')+'</h2><p class="hint" style="margin:-4px 0 10px">'+t('declHint')+'</p>';
+  h += '<div class="toolbar"><span class="count">'+t('count',{n:'<em>'+declared.length+'</em>',p:'<em>'+maxP+'</em>'})+'</span><span class="row" style="gap:6px">';
+  h += '<button type="button" class="lb" data-act="all">'+t('all')+'</button><button type="button" class="lb" data-act="none">'+t('none')+'</button></span></div>';
+  h += '<div class="picks">';
+  BE.MISSIONS.forEach(function(m){
+    var on = declared.indexOf(m.id) >= 0, chips = '';
+    m.stages.forEach(function(s,i){ chips += '<span class="chip">'+S[lang].stageNames[i]+' '+s.pts+' <span class="jb '+s.j+'">'+(s.j==='L'?t('live'):t('fin'))+'</span></span>'; });
+    h += '<label class="pick'+(on?' on':'')+'"><input type="checkbox" data-id="'+m.id+'"'+(on?' checked':'')+'><span class="num">'+m.id+'</span><span class="b"><span class="nm">'+esc(mName(m))+(lang==='zh'?'<span class="en">'+esc(m.en)+'</span>':'')+'</span><span class="chips">'+chips+'</span></span><span class="tick" aria-hidden="true">✓</span></label>';
+  });
+  h += '</div><div class="startbar"><div class="in"><span>'+(full?t('allDone'):(declared.length?t('count',{n:declared.length,p:maxP}):t('needOne')))+'</span>';
+  h += '<button type="button" class="tb pri" data-act="start"'+(full||!declared.length?' disabled':'')+'>'+t('start')+'</button></div></div></section>';
+  document.getElementById('app').innerHTML = h;
+}
+
+function stageState(m, lvl){
+  var cur = earned[m.id] || 0;
+  if (cur >= lvl) return 'done';
+  if (BE.canToggle(m, lvl, earned, phase)) return 'open';
+  return cur < lvl - 1 ? 'locked' : 'wait';
+}
+
+function warnings(){
+  var w = [], e = earned;
+  if ((e[11]||0) >= 1 && (e[15]||0) >= 1) w.push(t('w11'));
+  if ((e[1]||0) >= 2 && (e[10]||0) >= 2) w.push(t('w1'));
+  if ((e[7]||0) >= 2) w.push(t('w7'));
+  if ((e[12]||0) >= 2) w.push(t('w12'));
+  return w;
+}
+
+function renderMatch(){
+  var h = '';
+  if (paused) h += '<div class="banner pause"><b>'+t('phPause')+'</b>'+t('bPause')+'</div>';
+  else if (phase === 'live') h += '<div class="banner live"><b>'+t('bLive')+'</b>'+t('bLive2')+'</div>';
+  else h += '<div class="banner final">'+(autoEnded?'<b>'+t('bAuto')+'</b>':'')+t('bFinal')+'</div>';
+  if (phase === 'final'){
+    var w = warnings();
+    if (w.length) h += '<div class="warn"><b>'+t('wTitle')+'</b><ul><li>'+w.join('</li><li>')+'</li></ul></div>';
+  }
+  BE.MISSIONS.filter(function(m){ return declared.indexOf(m.id) >= 0; }).forEach(function(m){
+    var cur = earned[m.id] || 0, got = 0;
+    for (var i=0;i<cur;i++) got += m.stages[i].pts;
+    var tags = '';
+    if (BE.LINKS[m.id]) tags += '<span class="tag">'+t('linked')+BE.LINKS[m.id].map(function(x){return 'M'+x;}).join(lang==='en'?', ':'、')+'</span>';
+    if (BE.EXCLUSIVE[m.id]) tags += '<span class="tag x">'+t('excl')+BE.EXCLUSIVE[m.id].map(function(x){return 'M'+x;}).join(lang==='en'?', ':'、')+'</span>';
+    h += '<article class="card"><div class="hd"><span class="num">'+m.id+'</span><div class="tt"><h3>'+esc(mName(m))+'</h3>'+(lang==='zh'?'<div class="en">'+esc(m.en)+'</div>':'')+(tags?'<div class="tags">'+tags+'</div>':'')+'</div><span class="pts">'+got+'<small> / '+BE.maxPts(m)+'</small></span></div>';
+    h += '<div class="track" style="--n:'+m.stages.length+'">';
+    m.stages.forEach(function(s,i){
+      var lvl = i+1, st = paused ? (stageState(m,lvl)==='done'?'done':'locked') : stageState(m,lvl);
+      var sub = st==='done'?t('stDone'):st==='open'?t('stOpen'):st==='wait'?t('stWait'):t('stLocked');
+      var dis = (st==='locked'||st==='wait');
+      h += '<button type="button" class="stg '+st+'" data-m="'+m.id+'" data-l="'+lvl+'" aria-pressed="'+(st==='done')+'"'+(dis?' disabled':'')+'>';
+      h += '<span class="l"><span class="dot">✓</span>'+S[lang].stageNames[i]+' <span class="jb '+s.j+'">'+(s.j==='L'?t('live'):t('fin'))+'</span><span class="p">+'+s.pts+'</span></span>';
+      h += '<span class="d">'+esc(s[lang])+'</span><span class="s">'+sub+'</span></button>';
+    });
+    h += '</div><p class="note">'+esc(m.note[lang])+'</p></article>';
+  });
+  h += '<div class="actions"><button type="button" class="bigbtn" data-act="discard">'+t('discard')+'</button>';
+  if (phase === 'live') h += '<button type="button" class="bigbtn pri" data-act="end"'+(paused?' disabled':'')+'>'+t('endMatch')+'</button>';
+  else h += '<button type="button" class="bigbtn pri" data-act="submit">'+t('submit')+'</button>';
+  h += '</div>';
+  document.getElementById('app').innerHTML = h;
+}
+
+function renderBoard(){
+  var b = document.getElementById('board');
+  if (phase === 'setup'){ b.hidden = true; b.innerHTML = ''; return; }
+  b.hidden = false;
+  var sc = current(), disc = rec.division === 'discovery';
+  var h = '<div class="wrap">';
+  h += '<div class="sc"><span class="ph">'+(paused?t('phPause'):phase==='live'?t('phLive'):t('phFinal'))+' · '+t('matchN',{n:rec.matches.length+1})+'</span>';
+  h += '<span class="clock"><button type="button" class="ib" data-act="clock" aria-label="start/pause"'+(phase!=='live'||paused||remain<=0?' disabled':'')+'>'+(running?'❚❚':'▶')+'</button><span class="t'+(paused?' paused':'')+'" id="clk"></span><button type="button" class="ib" data-act="reset" aria-label="reset"'+(phase!=='live'||paused?' disabled':'')+'>↻</button></span></div>';
+  h += '<div class="sc"><small>'+t('raw')+'</small><b>'+sc.raw+'</b></div>';
+  h += '<div class="sc main"><small>'+t('score')+'</small><b>'+fmt(sc.final)+'</b></div>';
+  h += '<div class="rec">';
+  if (disc){
+    h += '<span class="lab">'+t('touch')+' '+t('touchN',{n:touches,p:sc.penaltyPct})+'</span>';
+    h += '<button type="button" class="tb" data-act="touch"'+(phase!=='live'?' disabled':'')+'>'+t('tAdd')+'</button>';
+    h += '<button type="button" class="tb" data-act="untouch"'+(touches===0?' disabled':'')+' aria-label="undo touch">'+t('tSub')+'</button>';
+  } else if (paused){
+    h += '<button type="button" class="tb pri" data-act="resume">'+t('resume')+'</button><button type="button" class="tb" data-act="uncard">'+t('undoCard')+'</button>';
+  } else {
+    h += '<button type="button" class="tb" data-act="card"'+(phase!=='live'||cardsLeft()===0?' disabled':'')+'>'+t('tCard')+'（'+t('tLeft',{n:cardsLeft()})+'）</button>';
+  }
+  h += '</div></div>';
+  b.innerHTML = h;
+  renderClock();
+}
+
+function renderRecord(){
+  var ms = rec.matches, h = '<h2 id="rec-h">'+t('rec')+'</h2>';
+  if (!ms.length){ h += '<p class="empty">'+t('recEmpty')+'</p>'; }
+  else {
+    var tr = BE.tournament(ms);
+    h += '<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>'+t('cM')+'</th><th>'+t('cRaw')+'</th><th>'+t('cRec')+'</th><th>'+t('cFin')+'</th><th>'+t('cUse')+'</th></tr></thead><tbody>';
+    ms.forEach(function(m,i){
+      var drop = tr.dropped.indexOf(i) >= 0;
+      h += '<tr class="'+(drop?'drop':'')+'"><td>'+t('matchN',{n:i+1})+'</td><td>'+m.raw+'</td><td>'+(m.division==='expedition'?(m.timeouts||0):(m.touches||0))+'</td><td>'+fmt(m.final)+'</td><td>'+(drop?t('no'):t('yes'))+'</td></tr>';
+    });
+    h += '</tbody><tfoot><tr><td colspan="3">'+t('rank')+(rec.team?'｜'+esc(rec.team):'')+'</td><td class="big">'+fmt(tr.total)+'</td><td></td></tr></tfoot></table></div>';
+    h += '<div class="tb-info"><span>'+t('ti1',{n:tr.recoveries})+'</span><span>'+t('ti2',{n:tr.rawTotal})+'</span><span>'+t('ti3',{n:tr.distinct})+'</span>'+(rec.division==='expedition'?'<span>'+t('cardsLeft',{n:cardsLeft()})+'</span>':'')+'</div>';
+    h += '<div class="actions"><button type="button" class="lb" data-act="clear">'+t('clear')+'</button></div>';
+  }
+  document.getElementById('record').innerHTML = h;
+}
+
+function render(){ renderSteps(); if (phase === 'setup') renderSetup(); else renderMatch(); renderBoard(); renderRecord(); }
+
+// ---------- 動作 ----------
+var toastT = null;
+function toast(msg){ var el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function(){ el.classList.remove('show'); }, 3200); }
+function say(msg){ document.getElementById('sr').textContent = msg; }
+
+function goFinal(){ stopClock(); paused = false; phase = 'final'; render(); window.scrollTo({top:0}); }
+function newMatch(){ phase = 'setup'; earned = {}; touches = 0; timeouts = 0; paused = false; autoEnded = false; resetClock(); }
+
+document.addEventListener('change', function(e){
+  var el = e.target;
+  if (el.matches('.pick input')){
+    var id = +el.dataset.id, i = declared.indexOf(id);
+    if (el.checked && i < 0) declared.push(id); else if (!el.checked && i >= 0) declared.splice(i,1);
+    declared.sort(function(a,b){return a-b;}); renderSetup();
+  } else if (el.name === 'div'){ rec.division = el.value; save(); renderSetup(); }
+});
+document.addEventListener('input', function(e){ if (e.target.id === 'team'){ rec.team = e.target.value; save(); } });
+document.addEventListener('click', function(e){
+  var stg = e.target.closest('.stg');
+  if (stg && !stg.disabled){
+    var m = BE.byId(+stg.dataset.m), lvl = +stg.dataset.l, before = earned[m.id] || 0;
+    earned = BE.toggle(earned, m, lvl, phase);
+    var after = earned[m.id] || 0;
+    if (after > before && before === 0 && BE.LINKS[m.id]) toast(t('toastLinked',{a:m.id,b:BE.LINKS[m.id].map(function(x){return 'M'+x;}).join(lang==='en'?', ':'、')}));
+    say('M'+m.id+' '+S[lang].stageNames[lvl-1]+' '+(after>=lvl?'✓':'✗')+' · '+t('score')+' '+fmt(current().final));
+    renderMatch(); renderBoard();
+    return;
+  }
+  var b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
+  switch (b.dataset.act){
+    case 'all': declared = BE.MISSIONS.map(function(m){return m.id;}); renderSetup(); break;
+    case 'none': declared = []; renderSetup(); break;
+    case 'start': if (!declared.length || rec.matches.length >= BE.MATCHES) return; newMatch(); phase = 'live'; render(); window.scrollTo({top:0}); break;
+    case 'clock': running ? stopClock() : startClock(); renderBoard(); break;
+    case 'reset': resetClock(); renderBoard(); break;
+    case 'touch': touches++; renderBoard(); break;
+    case 'untouch': if (touches > 0) touches--; renderBoard(); break;
+    case 'card': if (cardsLeft() > 0){ timeouts++; paused = true; stopClock(); render(); } break;
+    case 'uncard': timeouts = Math.max(0, timeouts-1); paused = false; render(); break;
+    case 'resume': paused = false; render(); startClock(); break;
+    case 'end': goFinal(); break;
+    case 'discard': if (confirm(t('confirmDiscard'))){ newMatch(); render(); } break;
+    case 'submit':
+      var sc = current();
+      rec.matches.push({ division:rec.division, declared:declared.slice(), earned:earned, raw:sc.raw, final:sc.final, touches:touches, timeouts:timeouts,
+        scored: declared.filter(function(id){ return (earned[id]||0) >= 1; }) });
+      save(); toast(t('saved',{n:rec.matches.length,s:fmt(sc.final)})); newMatch(); render(); window.scrollTo({top:0}); break;
+    case 'clear': if (confirm(t('confirmClear'))){ rec.matches = []; save(); render(); } break;
+  }
+});
+
+// ---------- 語言 ----------
+function setLang(l){
+  lang = l;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.dataset.i18n); });
+  document.documentElement.lang = l==='en' ? 'en' : 'zh-Hant-TW';
+  document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.lang===l); });
+  try{ localStorage.setItem('jbc-lang', l); }catch(e){}
+  render();
+}
+document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.lang); }); });
+var startLang = 'zh'; try{ if (localStorage.getItem('jbc-lang') === 'en') startLang = 'en'; }catch(e){}
+setLang(startLang);
+})();
+</script>
+</body>
+</html>

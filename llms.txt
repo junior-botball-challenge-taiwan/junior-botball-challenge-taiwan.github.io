@@ -22,5 +22,7 @@
 
 ## 延伸閱讀
 - [國際賽事資訊 (GCER、奧地利、泰國)](https://junior-botball-challenge-taiwan.github.io/international.html)
+- [Botball Explorer 臺灣區中文介紹（KIPR 新賽事 2026-2027 Stack Attack）](https://junior-botball-challenge-taiwan.github.io/explorer/)
+- [Botball Explorer 計分模擬器](https://junior-botball-challenge-taiwan.github.io/explorer/score.html)
 - [完整賽事指南與規程 (llms-full.txt)](https://junior-botball-challenge-taiwan.github.io/llms-full.txt)
 - [主辦單位 SPARK 協會官方網站](https://spark-taiwan-association.github.io/)

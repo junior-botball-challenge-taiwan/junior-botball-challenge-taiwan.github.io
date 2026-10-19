@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botball Explorer 臺灣區 | 2026-2027 Stack Attack 自主機器人挑戰 - JBC Taiwan</title>
+<meta name="description" content="Botball Explorer 是美國 KIPR 新推出的自主機器人賽事，2026-2027 年度題目 Stack Attack。幼兒園到高中都能參加、不限機器人平台。中文規則重點、18 個任務分數表與線上計分模擬器。">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://junior-botball-challenge-taiwan.github.io/explorer/">
+<link rel="icon" type="image/png" href="../jbc-logo.png">
+<meta name="theme-color" content="#c8102e">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Botball Explorer 臺灣區｜2026-2027 Stack Attack">
+<meta property="og:description" content="KIPR 新賽事：幼兒園到高中、不限平台的自主機器人挑戰。中文規則重點、18 個任務分數表與計分模擬器。">
+<meta property="og:image" content="https://junior-botball-challenge-taiwan.github.io/img/field.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="980">
+<meta property="og:url" content="https://junior-botball-challenge-taiwan.github.io/explorer/">
+<meta property="og:site_name" content="Junior Botball Challenge Taiwan">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Botball Explorer 臺灣區｜2026-2027 Stack Attack">
+<meta name="twitter:description" content="幼兒園到高中、不限平台的自主機器人挑戰。18 個任務、301 分，附計分模擬器。">
+<meta name="twitter:image" content="https://junior-botball-challenge-taiwan.github.io/img/field.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://junior-botball-challenge-taiwan.github.io/explorer/#webpage",
+  "url": "https://junior-botball-challenge-taiwan.github.io/explorer/",
+  "name": "Botball Explorer 臺灣區｜2026-2027 Stack Attack",
+  "description": "KIPR Botball Explorer 自主機器人賽事中文介紹：組別、器材、18 個任務分數表、計分規則與計分模擬器。",
+  "inLanguage": "zh-Hant-TW",
+  "isPartOf": {"@id": "https://junior-botball-challenge-taiwan.github.io/#website"},
+  "publisher": {"@id": "https://spark-taiwan-association.github.io/#organization"},
+  "about": {"@type": "Thing", "name": "Botball Explorer", "url": "https://www.kipr.org/botball-explorer"}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* 沿用 JBC 首頁的「工程筆記本」版面：方格紙底、Botguy 紅、深藍墨水。 */
+:root{
+  --paper:#fbfcfe; --grid:#e3e9f2; --ink:#16213a; --muted:#56607a; --line:#d5dce8; --card:#fff;
+  --red:#c8102e; --red-d:#9e0c24; --red-soft:#fdecef; --blue:#1d4ed8; --blue-soft:#e8eefc; --amber:#b45309; --amber-soft:#fdf3e4;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:12px; --w:70rem;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.75 var(--sans);-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--blue)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
+h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance}
+.wrap{max-width:var(--w);margin:0 auto;padding-inline:20px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 12px;z-index:100}.skip:focus{left:8px}
+
+.top{position:sticky;top:0;z-index:50;background:rgba(251,252,254,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:64px}
+.brand{display:flex;align-items:center;min-height:44px}
+.brand img{width:112px;height:auto}
+.nav{margin-left:auto;display:flex;gap:2px}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 11px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500}
+.nav a:hover{background:#eef2f8}
+.nav a.hl{color:var(--red);font-weight:700}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.lang button{min-height:44px;min-width:44px;border:0;background:#fff;font:700 .85rem var(--sans);color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.menu{display:none}
+.menu summary{list-style:none;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:500;background:#fff}
+.menu summary::-webkit-details-marker{display:none}
+.menu[open] .panel{position:absolute;left:0;right:0;top:64px;background:#fff;border-bottom:1px solid var(--line);padding:8px 20px 16px;display:grid}
+.menu .panel a{min-height:48px;display:flex;align-items:center;text-decoration:none;color:var(--ink);font-weight:500;border-bottom:1px solid #eef1f5}
+@media (max-width:1000px){.nav{display:none}.menu{display:block;margin-left:auto}}
+
+.hero{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border-bottom:1px solid var(--line);padding-block:40px}
+.hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+.kicker{font:700 .82rem/1.4 var(--mono);color:var(--red);letter-spacing:.04em}
+.hero h1{font-size:clamp(2rem,4.6vw,3.1rem);font-weight:900;margin-top:12px}
+.hero h1 .en{display:block;font:700 clamp(1rem,2vw,1.2rem)/1.4 var(--mono);color:var(--muted);margin-top:6px}
+.hero .lead{font-size:1.1rem;color:var(--muted);margin:14px 0 20px;max-width:34em}
+.event{background:#fff;border:2px solid var(--ink);border-radius:var(--r);padding:16px 18px;display:grid;gap:6px;max-width:32rem;box-shadow:6px 6px 0 var(--red)}
+.event .row{display:grid;grid-template-columns:5.2rem 1fr;gap:8px;align-items:baseline}
+.event .k{font:700 .78rem/1.6 var(--mono);color:var(--red)}
+.event .v{font-weight:700}
+.event .v small{display:block;font-weight:400;color:var(--muted);font-size:.9rem}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:700;text-decoration:none;border:2px solid var(--ink)}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.primary:hover{background:var(--red-d);border-color:var(--red-d)}
+.btn.ghost{background:#fff;color:var(--ink)}
+.shot{margin:0;background:#fff;padding:10px 10px 8px;border:1px solid var(--line);border-radius:6px;transform:rotate(1.2deg);box-shadow:0 14px 30px -18px rgba(22,33,58,.5);position:relative}
+.shot::before{content:"";position:absolute;top:-12px;left:50%;width:96px;height:24px;margin-left:-48px;background:rgba(200,16,46,.18);border:1px solid rgba(200,16,46,.25);transform:rotate(-2deg)}
+.shot figcaption{font-size:.82rem;color:var(--muted);padding-top:8px}
+@media (max-width:900px){.hero .grid{grid-template-columns:1fr;gap:28px}.hero{padding-block:24px}.shot{transform:none}}
+
+section{padding-block:52px}
+.head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.head h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:900}
+.head h2 .n{font:700 .9rem var(--mono);color:var(--red);display:block;margin-bottom:4px}
+.head p{margin:0;color:var(--muted);max-width:44em}
+.prose{max-width:46em;color:var(--muted);margin:16px 0 0}
+
+/* 數字卡 */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.fact{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0}
+.fact b{display:block;font:700 1.9rem/1.2 var(--mono);color:var(--red)}
+.fact span{color:var(--muted);font-size:.95rem}
+@media (max-width:900px){.facts{grid-template-columns:1fr 1fr}}
+
+/* 組別 */
+.divs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.div{background:#fff;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:var(--r);padding:18px 20px;min-width:0}
+.div.exp{border-top-color:var(--red)}
+.div h3{font-size:1.25rem}
+.div .g{font:700 .85rem var(--mono);color:var(--muted);margin:2px 0 10px}
+.div ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+@media (max-width:760px){.divs{grid-template-columns:1fr}}
+
+/* 器材 */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;background:#fff;border:1px solid var(--line);border-radius:999px;font-weight:500}
+.chip.k{border-color:var(--ink);font-weight:700}
+.box{margin-top:18px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:var(--r);padding:14px 18px}
+.box h3{font-size:1rem;margin-bottom:4px}
+.box ul{margin:0;padding-left:1.2em;color:var(--muted)}
+
+/* 任務表 */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:12px;color:var(--muted);font-size:.92rem}
+.jb{display:inline-flex;align-items:center;font:700 .72rem/1 var(--mono);padding:4px 7px;border-radius:6px;white-space:nowrap}
+.jb.L{background:var(--blue-soft);color:var(--blue)}
+.jb.F{background:var(--amber-soft);color:var(--amber)}
+.mtable{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.mrow{display:grid;grid-template-columns:3rem minmax(0,1fr) repeat(3,7.2rem) 4.2rem;gap:10px;align-items:center;padding:12px 16px;border-top:1px dashed var(--line)}
+.mrow:first-child{border-top:0}
+.mrow.hd{background:#f3f6fb;font:700 .78rem var(--mono);color:var(--muted);padding-block:10px}
+.mrow .no{font:700 1.05rem var(--mono);color:var(--red)}
+.mrow .nm a{font-weight:700;color:var(--ink);text-decoration:none}
+.mrow .nm a:hover{text-decoration:underline}
+.mrow .nm small{display:block;color:var(--muted);font-size:.85rem;line-height:1.45}
+.mrow .st{display:flex;align-items:center;gap:6px;font:700 .95rem var(--mono)}
+.mrow .st.none{color:#a3abbd;font-weight:500}
+.mrow .mx{font:700 1.05rem var(--mono);text-align:right;grid-column:6}
+.mrow.tot{background:var(--red-soft);font-weight:700}
+.mrow.tot .mx{color:var(--red-d)}
+.lbl{display:none;font:700 .7rem var(--mono);color:var(--muted)}
+.mrow .sts{display:contents}
+@media (max-width:760px){
+  .mrow{grid-template-columns:2.4rem minmax(0,1fr) auto;gap:6px 10px;align-items:start}
+  .mrow.hd{display:none}
+  .mrow .no{grid-row:1;grid-column:1}
+  .mrow .nm{grid-row:1;grid-column:2}
+  .mrow .mx{grid-row:1;grid-column:3}
+  .mrow .sts{grid-row:2;grid-column:2/4;display:flex;flex-wrap:wrap;gap:6px 14px}
+  .mrow.tot .sts,.mrow .st.none{display:none}
+  .lbl{display:inline}
+}
+
+/* 計分卡 */
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.rule{background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:var(--r);padding:16px 18px;min-width:0}
+.rule h3{font-size:1.05rem}
+.rule p{margin:4px 0 0;color:var(--muted);font-size:.95rem}
+@media (max-width:760px){.rules{grid-template-columns:1fr}}
+.calc{margin-top:16px;background:var(--red-soft);border:1px solid #f6c5cf;border-radius:var(--r);padding:16px 20px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+.calc p{margin:0}
+.calc b{color:var(--red-d)}
+
+.list{margin:0;padding-left:1.2em;display:grid;gap:6px;max-width:48em}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.links a,.contact a{display:flex;flex-direction:column;justify-content:center;min-height:68px;padding:12px 16px;background:#fff;border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:var(--ink);min-width:0}
+.links small,.contact small{color:var(--muted);font-size:.8rem}
+.links b,.contact b{overflow-wrap:anywhere}
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fine{margin-top:14px;color:var(--muted);font-size:.9rem}
+
+footer{border-top:1px solid var(--line);padding-block:24px 96px;font-size:.9rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center}
+footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44px}
+footer .tm{flex-basis:100%;font-size:.8rem}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border-top:1px solid var(--line)}
+.dock a{flex:1;min-height:48px;padding:0 12px}
+@media (max-width:900px){.dock{display:flex}}
+@media (min-width:901px){footer{padding-bottom:24px}}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSTZ156MFP"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RSTZ156MFP');</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">跳到主要內容</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Junior Botball Challenge Taiwan 首頁"><img src="../jbc-logo.png" width="400" height="158" alt="Junior Botball Challenge"></a>
+    <nav class="nav" aria-label="主選單">
+      <a href="#about" data-i18n="n1">認識賽事</a><a href="#divisions" data-i18n="n2">組別</a><a href="#robots" data-i18n="n3">器材</a><a href="#missions" data-i18n="n4">18 個任務</a><a href="#scoring" data-i18n="n5">計分方式</a><a class="hl" href="score.html" data-i18n="n6">計分模擬器</a><a href="../" data-i18n="n7">JBC 首頁</a>
+    </nav>
+    <details class="menu">
+      <summary data-i18n="menu">選單</summary>
+      <div class="panel">
+        <a href="#about" data-i18n="n1">認識賽事</a><a href="#divisions" data-i18n="n2">組別</a><a href="#robots" data-i18n="n3">器材</a><a href="#missions" data-i18n="n4">18 個任務</a><a href="#scoring" data-i18n="n5">計分方式</a><a href="score.html" data-i18n="n6">計分模擬器</a><a href="../" data-i18n="n7">JBC 首頁</a>
+      </div>
+    </details>
+    <div class="lang" role="group" aria-label="語言 Language"><button type="button" data-lang="zh" aria-pressed="true">中</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap grid">
+      <div>
+        <div class="kicker" data-i18n="kicker">KIPR 新賽事｜2026–2027 試辦年度</div>
+        <h1><span data-i18n="h1">Botball Explorer 自主機器人挑戰</span><span class="en">Botball Explorer · Stack Attack</span></h1>
+        <p class="lead" data-i18n="lead">美國 KIPR（Botball 主辦單位）新推出的賽事。今年題目「Stack Attack」：智慧倉庫的 AI 當機了，機器人要自己分類、堆疊、運送貨物，把倉庫和 Botguy 救回來。幼兒園到高中都能參加，不限機器人平台。</p>
+        <div class="event" aria-label="賽事資訊">
+          <div class="row"><span class="k">SEASON</span><span class="v" data-i18n="season">2026–2027「Stack Attack」</span></div>
+          <div class="row"><span class="k">TAIWAN</span><span class="v"><span data-i18n="tw">臺灣區推廣中，比賽日期另行公告</span><small data-i18n="tw2">想第一時間收到消息，請加入 JBC LINE 群組</small></span></div>
+        </div>
+        <div class="btns">
+          <a class="btn primary" href="score.html" data-i18n="cta1">試玩計分模擬器</a>
+          <a class="btn ghost" href="https://www.kipr.org/missioncontrol_pilot/" data-i18n="cta2">KIPR 官方任務與規則</a>
+        </div>
+      </div>
+      <figure class="shot">
+        <img src="../img/field.jpg" width="1200" height="980" alt="Botball 比賽現場，學生蹲在場地上調整機器人" fetchpriority="high">
+        <figcaption data-i18n="cap">Botball 比賽現場：學生自己調整機器人與程式</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">01 ABOUT</span><span data-i18n="ab-h">認識 Botball Explorer</span></h2></div>
+      <div class="facts">
+        <div class="fact"><b>150<small>s</small></b><span data-i18n="f1">每場 150 秒，全自動運作</span></div>
+        <div class="fact"><b>2</b><span data-i18n="f2">每隊最多 2 台機器人</span></div>
+        <div class="fact"><b>15"</b><span data-i18n="f3">起始高度上限（約 38 公分）</span></div>
+        <div class="fact"><b>301</b><span data-i18n="f4">18 個任務的總分上限</span></div>
+      </div>
+      <p class="prose" data-i18n="ab-p">每隊最多 5 名學生。比賽開始後機器人要全程自己運作，不能遙控、不能無線控制，程式只能在兩場之間修改。整個作品 100% 由學生完成，大人不能幫忙組裝、寫程式或測試。</p>
+    </div>
+  </section>
+
+  <section id="divisions" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">02 DIVISIONS</span><span data-i18n="dv-h">兩個組別</span></h2><p data-i18n="dv-p">依年級分組，可以往上報，不能往下報。</p></div>
+      <div class="divs">
+        <article class="div">
+          <h3>Discovery</h3>
+          <div class="g" data-i18n="d1g">6 年級以下（幼兒園～國小六年級）</div>
+          <ul>
+            <li data-i18n="d1a">賽前可以自己選擇移走場上任何道具</li>
+            <li data-i18n="d1b">救援碰觸次數不限，計時不停，每碰一次扣該場成績 5%</li>
+            <li data-i18n="d1c">不能使用 3D 列印零件</li>
+            <li data-i18n="d1d">可以往上報名 Expedition</li>
+          </ul>
+        </article>
+        <article class="div exp">
+          <h3>Expedition</h3>
+          <div class="g" data-i18n="d2g">7～12 年級（國中～高中），國小學生也可往上報</div>
+          <ul>
+            <li data-i18n="d2a">標準場地配置，全部任務都要面對</li>
+            <li data-i18n="d2b">整個比賽（5 場合計）共 2 張暫停卡，用卡時計時暫停</li>
+            <li data-i18n="d2c">可用 3D 列印：1 個大件（≤ 220×220×250 mm）＋最多 6 個小件（≤ 75×75×85 mm）</li>
+            <li data-i18n="d2d">7 年級以上不能往下報 Discovery</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="robots" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">03 ROBOTS</span><span data-i18n="rb-h">不用買新器材</span></h2><p data-i18n="rb-p">只要能全自動運作、符合尺寸與安全規定，任何機器人平台都能參賽。試辦期間不按器材分組，最終以 KIPR 官方公告為準。</p></div>
+      <div class="chips">
+        <span class="chip k" data-i18n="kit">KIPR Wombat（官方套件）</span><span class="chip">LEGO SPIKE Prime</span><span class="chip">LEGO Mindstorms EV3</span><span class="chip">VEX IQ</span><span class="chip">Makeblock</span><span class="chip">Arduino</span><span class="chip">Raspberry Pi</span><span class="chip">micro:bit</span>
+      </div>
+      <div class="box">
+        <h3 data-i18n="rb-b">機器人規範</h3>
+        <ul>
+          <li data-i18n="rb1">開賽時整台機器人（含獨立結構）要在起始框的垂直範圍內、高度 ≤ 15 吋；比賽開始後可以展開。</li>
+          <li data-i18n="rb2">場上最多 2 個「獨立結構」：要由機器人放出去，不能有控制器、電池或動力元件。</li>
+          <li data-i18n="rb3">開賽時機器人不能先抓著任何道具；不能有會破壞場地或道具的零件。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="missions" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">04 MISSIONS</span><span data-i18n="ms-h">18 個任務與分數</span></h2><p data-i18n="ms-p">每個任務分 Base → Bonus → Advanced，前一階完成才能拿下一階。點任務名稱可看 KIPR 官方說明與示範影片。</p></div>
+      <div class="legend"><span><span class="jb L" data-i18n="jL">即時</span> <span data-i18n="jLd">裁判親眼看到發生就得分，之後東西掉了也不扣</span></span><span><span class="jb F" data-i18n="jF">終局</span> <span data-i18n="jFd">150 秒結束那一刻，看場上最後的狀態</span></span></div>
+      <div class="mtable" id="mtable" role="table" aria-label="18 個任務分數表"></div>
+    </div>
+  </section>
+
+  <section id="scoring" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">05 SCORING</span><span data-i18n="sc-h">計分方式</span></h2><p data-i18n="sc-p">分數會隨比賽進行一階一階解鎖，有些任務還能同時得分，這是這個賽事最需要練習的地方。</p></div>
+      <div class="rules">
+        <div class="rule"><h3 data-i18n="c1">賽前宣告、逐階解鎖</h3><p data-i18n="c1d">每場開始前要向裁判宣告這場挑戰哪些任務。Base 拿到才能拿 Bonus，Bonus 拿到才能拿 Advanced。</p></div>
+        <div class="rule"><h3 data-i18n="c2">即時與終局混在一起</h3><p data-i18n="c2d">即時任務一做到就入帳；終局任務只看最後一刻。M6、M12、M13、M14 的前一階是即時、後一階是終局，要規劃好順序。</p></div>
+        <div class="rule"><h3 data-i18n="c3">一個動作，多個任務</h3><p data-i18n="c3d">同一組紅方塊托盤可同時拿 M2、M5、M8；Botguy 可拿 M9＋M18；三角錐 M14＋M18；散落方塊 M12＋M16；歪斜方塊 M13＋M17。</p></div>
+        <div class="rule"><h3 data-i18n="c4">互相限制</h3><p data-i18n="c4d">M1 和 M10 的 Bonus 不能用同一次回框；M11 和 M15 要用不同的籃子；M7 的 Base 和 Bonus 要用不同的圍欄。</p></div>
+      </div>
+      <div class="calc">
+        <p><b data-i18n="ex-h">Discovery 扣分試算</b>　<span data-i18n="ex">原始分 60 分、碰觸 3 次 → 60 ×（1 − 15%）＝ 51 分。扣分在所有任務算完後才套用，最低 0 分。</span></p>
+        <a class="btn primary" href="score.html" data-i18n="ex-a">用模擬器試算一場</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="format" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">06 FORMAT</span><span data-i18n="fm-h">賽制與獎項</span></h2></div>
+      <ul class="list">
+        <li data-i18n="fm1">每隊打 5 場，取最好的 4 場加總排名，最低分那場不計。</li>
+        <li data-i18n="fm2">獎項：Discovery 冠軍、Expedition 冠軍、總冠軍（不分組最高分）。</li>
+        <li data-i18n="fm3">同分比序：① 碰觸／暫停卡用得少 ② 扣分前原始分高 ③ 得分任務數多 ④ 加賽 ⑤ 擲硬幣。</li>
+        <li data-i18n="fm4">計分複查：學生代表或教練可在場地重置前申請，每場 1 次，主審決定為最終結果。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="field" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">07 FIELD</span><span data-i18n="fd-h">練習場地</span></h2><p><a href="https://www.kipr.org/missioncontrol_pilot/game-board-build/" data-i18n="fd-a">KIPR 場地搭建指南</a></p></div>
+      <ul class="list">
+        <li data-i18n="fd1">場地內徑 93 × 45 吋（236.2 × 114.3 cm），圍牆高 2.5～4 吋，地墊方格 2 吋。</li>
+        <li data-i18n="fd2">練習桌：4 × 8 呎合板＋2×4 木框（約 24 根 2.5 吋木螺絲、霧黑漆）＋官方 PVC 套件與地墊。</li>
+        <li data-i18n="fd3">沒有桌子時，乾淨平整的地板也可以練習。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="resources" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">08 RESOURCES</span><span data-i18n="rs-h">官方資源</span></h2></div>
+      <div class="links">
+        <a href="https://www.kipr.org/missioncontrol_pilot/"><small>KIPR</small><b data-i18n="l1">Mission Control 預覽站</b></a>
+        <a href="https://www.kipr.org/missioncontrol_pilot/botball_explorer_2027/rules/"><small>Rules V3.0</small><b data-i18n="l2">完整競賽規則</b></a>
+        <a href="https://www.kipr.org/missioncontrol_pilot/botball_explorer_2027/rules-quick-start/"><small>Quick Start</small><b data-i18n="l3">規則快速入門</b></a>
+        <a href="https://www.kipr.org/missioncontrol_pilot/2027_Botball_Explorer_Quick_Reference.pdf"><small>PDF</small><b data-i18n="l4">一頁式重點整理</b></a>
+        <a href="https://www.kipr.org/botball-explorer"><small>KIPR</small><b data-i18n="l5">Botball Explorer 官方介紹</b></a>
+      </div>
+      <p class="fine" data-i18n="fine">本頁是臺灣區中文說明，規則與分數以 KIPR 官方最新公告為準。</p>
+    </div>
+  </section>
+
+  <section id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">CONTACT</span><span data-i18n="ct-h">追蹤臺灣區消息</span></h2></div>
+      <div class="contact">
+        <a href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default"><small>LINE</small><b data-i18n="line">JBC 報名群組</b></a>
+        <a href="https://www.facebook.com/BotballTaiwan/"><small>Facebook</small><b>Junior Botball Challenge Taiwan</b></a>
+        <a href="https://www.instagram.com/jbc__taiwan"><small>Instagram</small><b>@jbc__taiwan</b></a>
+        <a href="https://www.threads.com/@jbc__taiwan"><small>Threads</small><b>@jbc__taiwan</b></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><span data-i18n="org">主辦單位：臺灣智能程式科技教育推廣協會（SPARK）｜內政部立案證書字號：1130027903</span></div>
+    <span><a href="https://spark-taiwan-association.github.io/" data-i18n="org-link">協會官網</a>　<a href="https://spark-taiwan-association.github.io/privacy.html" data-i18n="privacy">隱私權政策</a></span>
+    <div class="tm" data-i18n="tm">Botball®、Botguy™ 為 KISS Institute for Practical Robotics（KIPR）的商標。</div>
+  </div>
+</footer>
+
+<nav class="dock" aria-label="快速操作">
+  <a class="btn primary" href="score.html" data-i18n="dock1">計分模擬器</a>
+  <a class="btn ghost" href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="dock2">加入 LINE</a>
+</nav>
+
+<script src="missions.js"></script>
+<script>
+var EN = {
+  skip:'Skip to content', n1:'About', n2:'Divisions', n3:'Robots', n4:'18 Missions', n5:'Scoring', n6:'Score simulator', n7:'JBC home', menu:'Menu',
+  kicker:'NEW FROM KIPR | 2026–2027 PILOT SEASON', h1:'Botball Explorer Autonomous Robotics',
+  lead:'A new program from KIPR, the organizer of Botball. This season\'s game is "Stack Attack": the AI running the smart warehouse has gone dark, and robots must sort, stack and deliver cargo on their own to bring the warehouse and Botguy back online. Open to Pre-K through grade 12, any robot platform.',
+  season:'2026–2027 "Stack Attack"', tw:'Taiwan region: promotion stage, event date TBA', tw2:'Join the JBC LINE group for first news',
+  cta1:'Try the score simulator', cta2:'Official KIPR missions & rules', cap:'At a Botball event: students tune their own robots and code',
+  'ab-h':'About Botball Explorer', f1:'150-second matches, fully autonomous', f2:'Up to 2 robots per team', f3:'Maximum starting height (about 38 cm)', f4:'Maximum score across 18 missions',
+  'ab-p':'Teams of up to five students. Once a match starts, robots run entirely on their own: no remote or wireless control, and code can change only between matches. The work is 100% student-built; adults may not build, program or test the robot.',
+  'dv-h':'Two divisions', 'dv-p':'Divisions follow grade level. Teams may play up, never down.',
+  d1g:'Grade 6 and below (Pre-K to grade 6)', d1a:'Teams may remove any game pieces before the match', d1b:'Unlimited recovery Touches; the clock keeps running and each Touch costs 5% of the match score', d1c:'No 3D-printed parts', d1d:'May play up into Expedition',
+  d2g:'Grades 7–12; younger students may play up', d2a:'Standard field setup, full mission set', d2b:'Two Timeout Cards for the whole tournament (all 5 matches); the clock stops during a timeout', d2c:'3D printing allowed: one large part (≤ 220×220×250 mm) plus up to six small parts (≤ 75×75×85 mm)', d2d:'Grades 7 and up may not play down into Discovery',
+  'rb-h':'No new hardware needed', 'rb-p':'Any platform that runs fully autonomously and meets the size and safety rules may compete. During the pilot season teams are not split by platform; follow official KIPR updates.',
+  kit:'KIPR Wombat (official kit)', 'rb-b':'Robot rules', rb1:'At the start, every robot and independent structure must fit inside a starting box\'s vertical projection, no taller than 15 inches; robots may expand after the start.', rb2:'At most two independent structures on the field; a robot must deploy them, and they may not contain a controller, battery or powered actuator.', rb3:'Robots may not hold any game object at the start, and may not carry parts meant to damage the field or game pieces.',
+  'ms-h':'18 missions and points', 'ms-p':'Each mission runs Base → Bonus → Advanced; each stage unlocks the next. Click a mission name for the official KIPR page and video.',
+  jL:'LIVE', jLd:'Scores when the judge sees it happen and stays earned', jF:'FINAL', jFd:'Judged on the field at the moment the 150 seconds end',
+  'sc-h':'How scoring works', 'sc-p':'Points unlock stage by stage as the match goes on, and some actions score several missions at once. This is what teams need to practice most.',
+  c1:'Declare first, unlock in stages', c1d:'Before each match, tell the judge which missions you will attempt. Bonus needs Base; Advanced needs Bonus.',
+  c2:'Live and final, mixed', c2d:'Live stages count the moment they happen; final stages only count at the end. M6, M12, M13 and M14 start live and finish final, so plan the order.',
+  c3:'One action, several missions', c3d:'The same red-cube pallet can score M2, M5 and M8; Botguy M9 + M18; traffic cones M14 + M18; spilled cubes M12 + M16; unstraight cubes M13 + M17.',
+  c4:'Restrictions', c4d:'One return to a starting box cannot score both M1 and M10 bonuses; M11 and M15 need different baskets; M7 Base and Bonus need different enclosures.',
+  'ex-h':'Discovery penalty example', ex:'Raw score 60, 3 Touches → 60 × (1 − 15%) = 51. Penalties apply after all missions are scored, never below 0.', 'ex-a':'Try a match in the simulator',
+  'fm-h':'Format and awards', fm1:'Each team plays 5 matches; the best 4 are added for ranking and the lowest is dropped.', fm2:'Awards: Discovery Champion, Expedition Champion, Overall Champion (highest score regardless of division).', fm3:'Tie breakers: ① fewest Touches / Timeout Cards ② highest raw score before penalties ③ most distinct missions scored ④ tie-break match ⑤ coin flip.', fm4:'Scoring review: a student representative or coach may request one per match before the field is reset; the Head Judge\'s decision is final.',
+  'fd-h':'Practice field', 'fd-a':'KIPR game board build guide', fd1:'Inside dimensions 93 × 45 in (236.2 × 114.3 cm), walls 2.5–4 in high, 2-inch grid on the mat.', fd2:'Practice table: 4 × 8 ft plywood with a 2×4 frame (about 24 wood screws, matte black paint) plus the official PVC kit and mat.', fd3:'Without a table, a clean, smooth floor works for practice.',
+  'rs-h':'Official resources', l1:'Mission Control preview', l2:'Full competition rules', l3:'Rules quick start', l4:'One-page quick reference', l5:'Botball Explorer by KIPR',
+  fine:'This page is a Chinese-language guide for Taiwan. Official KIPR rules and points always take precedence.',
+  'ct-h':'Follow Taiwan news', line:'JBC registration group',
+  org:'Organizer: Taiwan Smart Programming AI Robotics & Knowledge Association (SPARK) | MOI registration No. 1130027903', 'org-link':'SPARK website', privacy:'Privacy policy',
+  tm:'Botball® and Botguy™ are trademarks of the KISS Institute for Practical Robotics (KIPR).', dock1:'Score simulator', dock2:'Join LINE'
+};
+var lang = 'zh';
+var MURL = 'https://www.kipr.org/missioncontrol_pilot/botball_explorer_2027/missions/mission-';
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function renderMissions(){
+  var en = lang==='en', h = [];
+  h.push('<div class="mrow hd" role="row"><span>#</span><span>'+(en?'MISSION':'任務')+'</span><span>BASE</span><span>BONUS</span><span>ADVANCED</span><span style="text-align:right">'+(en?'MAX':'上限')+'</span></div>');
+  BE.MISSIONS.forEach(function(m){
+    var cells = '';
+    for (var i=0;i<3;i++){
+      var s = m.stages[i];
+      cells += s ? '<span class="st" role="cell"><span class="lbl">'+BE.STAGE_NAMES[i]+'</span>'+s.pts+' <span class="jb '+s.j+'">'+(s.j==='L'?(en?'LIVE':'即時'):(en?'FINAL':'終局'))+'</span></span>'
+                 : '<span class="st none" role="cell">—</span>';
+    }
+    h.push('<div class="mrow" role="row"><span class="no" role="cell">'+String(m.id).padStart(2,'0')+'</span>'+
+      '<span class="nm" role="cell"><a href="'+MURL+m.id+'/">'+esc(en?m.en:m.zh+'｜'+m.en)+'</a><small>'+esc(m.skill[lang])+'</small></span>'+
+      '<span class="sts">'+cells+'</span><span class="mx" role="cell">'+BE.maxPts(m)+'</span></div>');
+  });
+  h.push('<div class="mrow tot" role="row"><span></span><span class="nm" role="cell">'+(en?'Maximum total':'總分上限')+'</span><span class="sts"></span><span class="mx" role="cell">'+BE.TOTAL_MAX+'</span></div>');
+  document.getElementById('mtable').innerHTML = h.join('');
+}
+function setLang(l){
+  lang = l;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.dataset.i18n; if(!('zh' in el.dataset)) el.dataset.zh=el.textContent;
+    el.textContent = l==='en' ? (EN[k]||el.dataset.zh) : el.dataset.zh;
+  });
+  document.documentElement.lang = l==='en' ? 'en' : 'zh-Hant-TW';
+  document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed', b.dataset.lang===l)});
+  try{localStorage.setItem('jbc-lang',l)}catch(e){}
+  renderMissions();
+}
+document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.lang)})});
+renderMissions();
+try{ if(localStorage.getItem('jbc-lang')==='en') setLang('en'); }catch(e){}
+document.querySelectorAll('.menu .panel a').forEach(function(a){a.addEventListener('click',function(){a.closest('details').removeAttribute('open')})});
+</script>
+</body>
+</html>
