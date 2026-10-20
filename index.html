@@ -91,7 +91,7 @@ h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance}
 .brand{display:flex;align-items:center;min-height:44px}
 .brand img{width:112px;height:auto}
 .nav{margin-left:auto;display:flex;gap:2px}
-.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 11px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 11px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;white-space:nowrap}
 .nav a:hover{background:#eef2f8}
 .lang{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
 .lang button{min-height:44px;min-width:44px;border:0;background:#fff;font:700 .85rem var(--sans);color:var(--muted);cursor:pointer}
@@ -101,7 +101,7 @@ h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance}
 .menu summary::-webkit-details-marker{display:none}
 .menu[open] .panel{position:absolute;left:0;right:0;top:64px;background:#fff;border-bottom:1px solid var(--line);padding:8px 20px 16px;display:grid}
 .menu .panel a{min-height:48px;display:flex;align-items:center;text-decoration:none;color:var(--ink);font-weight:500;border-bottom:1px solid #eef1f5}
-@media (max-width:900px){.nav{display:none}.menu{display:block;margin-left:auto}}
+@media (max-width:960px){.nav{display:none}.menu{display:block;margin-left:auto}}
 
 /* 第一屏：方格紙 */
 .hero{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border-bottom:1px solid var(--line);padding-block:40px}
@@ -201,12 +201,12 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Junior Botball Challenge Taiwan"><img src="jbc-logo.png" width="400" height="158" alt="Junior Botball Challenge"></a>
     <nav class="nav" aria-label="主選單">
-      <a href="#apply" data-i18n="n1">報名</a><a href="#day" data-i18n="n2">當天賽程</a><a href="#rules" data-i18n="n3">競賽規則</a><a href="#history" data-i18n="n4">歷屆回顧</a><a href="international.html" data-i18n="n5">國外賽</a><a href="explorer/" data-i18n="n7">Botball Explorer</a><a href="#contact" data-i18n="n6">聯絡</a>
+      <a href="#apply" data-i18n="n1">報名</a><a href="#day" data-i18n="n2">當天賽程</a><a href="#rules" data-i18n="n3">競賽規則</a><a href="#history" data-i18n="n4">歷屆回顧</a><a href="international.html" data-i18n="n5">國外賽</a><a href="explorer/" data-i18n="n7">Botball Explorer</a><a href="botball/" data-i18n="n8">Botball</a><a href="#contact" data-i18n="n6">聯絡</a>
     </nav>
     <details class="menu">
       <summary data-i18n="menu">選單</summary>
       <div class="panel">
-        <a href="#apply" data-i18n="n1">報名</a><a href="#day" data-i18n="n2">當天賽程</a><a href="#rules" data-i18n="n3">競賽規則</a><a href="#history" data-i18n="n4">歷屆回顧</a><a href="international.html" data-i18n="n5">國外賽</a><a href="explorer/" data-i18n="n7">Botball Explorer</a><a href="#contact" data-i18n="n6">聯絡</a>
+        <a href="#apply" data-i18n="n1">報名</a><a href="#day" data-i18n="n2">當天賽程</a><a href="#rules" data-i18n="n3">競賽規則</a><a href="#history" data-i18n="n4">歷屆回顧</a><a href="international.html" data-i18n="n5">國外賽</a><a href="explorer/" data-i18n="n7">Botball Explorer</a><a href="botball/" data-i18n="n8">Botball</a><a href="#contact" data-i18n="n6">聯絡</a>
       </div>
     </details>
     <div class="lang" role="group" aria-label="語言 Language"><button type="button" data-lang="zh" aria-pressed="true">中</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
@@ -329,7 +329,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
 
 <script>
 var EN = {
-  skip:'Skip to content', n1:'Register', n2:'Schedule', n3:'Rules', n4:'History', n5:'International', n7:'Botball Explorer', n6:'Contact', menu:'Menu',
+  skip:'Skip to content', n1:'Register', n2:'Schedule', n3:'Rules', n4:'History', n5:'International', n7:'Botball Explorer', n8:'Botball', n6:'Contact', menu:'Menu',
   kicker:'2026 STEM EDUCATION COMPETITION', h1:'JBC Taiwan Robotics Challenge',
   lead:'Students write their own code so robots complete missions on their own. Any robot platform, open to elementary through high school. Top teams can advance to GCER, the global finals in the USA.',
   date:'Sunday, December 13, 2026', place:'Wagor International Convention Center', addr:'No. 328, Junfu 18th Rd., Beitun Dist., Taichung',

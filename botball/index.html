@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botball 臺灣區 | KIPR 國高中自主機器人賽事 2026-2027 - JBC Taiwan</title>
+<meta name="description" content="Botball 是美國 KIPR 的國高中自主機器人賽事：用 Wombat 控制器與相機、自己寫程式，先打排名賽再打雙敗淘汰賽，優勝隊伍可前進 GCER 國際賽。中文介紹賽制、器材、獎項與 2026-2027 賽季時程。">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<link rel="canonical" href="https://junior-botball-challenge-taiwan.github.io/botball/">
+<link rel="icon" type="image/png" href="../jbc-logo.png">
+<meta name="theme-color" content="#c8102e">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Botball 臺灣區｜KIPR 國高中自主機器人賽事">
+<meta property="og:description" content="國高中、Wombat 控制器＋相機、排名賽＋雙敗淘汰賽，優勝可前進 GCER 國際賽。中文賽制與賽季時程。">
+<meta property="og:image" content="https://junior-botball-challenge-taiwan.github.io/img/field.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="980">
+<meta property="og:url" content="https://junior-botball-challenge-taiwan.github.io/botball/">
+<meta property="og:site_name" content="Junior Botball Challenge Taiwan">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Botball 臺灣區｜KIPR 國高中自主機器人賽事">
+<meta name="twitter:description" content="國高中、Wombat 控制器＋相機、排名賽＋雙敗淘汰賽，優勝可前進 GCER 國際賽。">
+<meta name="twitter:image" content="https://junior-botball-challenge-taiwan.github.io/img/field.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://junior-botball-challenge-taiwan.github.io/botball/#webpage",
+  "url": "https://junior-botball-challenge-taiwan.github.io/botball/",
+  "name": "Botball 臺灣區｜KIPR 國高中自主機器人賽事",
+  "description": "KIPR Botball 國高中自主機器人賽事中文介紹：賽制、器材、獎項、賽季時程與 GCER 國際賽。",
+  "inLanguage": "zh-Hant-TW",
+  "isPartOf": {"@id": "https://junior-botball-challenge-taiwan.github.io/#website"},
+  "publisher": {"@id": "https://spark-taiwan-association.github.io/#organization"},
+  "about": {"@type": "Thing", "name": "Botball Educational Robotics Program", "url": "https://www.kipr.org/botball"}
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* 沿用 JBC 首頁與 Botball Explorer 頁的「工程筆記本」版面 */
+:root{
+  --paper:#fbfcfe; --grid:#e3e9f2; --ink:#16213a; --muted:#56607a; --line:#d5dce8; --card:#fff;
+  --red:#c8102e; --red-d:#9e0c24; --red-soft:#fdecef; --blue:#1d4ed8; --amber:#b45309;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:12px; --w:70rem;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.75 var(--sans);-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--blue)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
+h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance}
+.wrap{max-width:var(--w);margin:0 auto;padding-inline:20px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 12px;z-index:100}.skip:focus{left:8px}
+
+.top{position:sticky;top:0;z-index:50;background:rgba(251,252,254,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:64px}
+.brand{display:flex;align-items:center;min-height:44px}
+.brand img{width:112px;height:auto}
+.nav{margin-left:auto;display:flex;gap:2px}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 11px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;white-space:nowrap}
+.nav a:hover{background:#eef2f8}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.lang button{min-height:44px;min-width:44px;border:0;background:#fff;font:700 .85rem var(--sans);color:var(--muted);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.menu{display:none}
+.menu summary{list-style:none;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:500;background:#fff}
+.menu summary::-webkit-details-marker{display:none}
+.menu[open] .panel{position:absolute;left:0;right:0;top:64px;background:#fff;border-bottom:1px solid var(--line);padding:8px 20px 16px;display:grid}
+.menu .panel a{min-height:48px;display:flex;align-items:center;text-decoration:none;color:var(--ink);font-weight:500;border-bottom:1px solid #eef1f5}
+@media (max-width:1000px){.nav{display:none}.menu{display:block;margin-left:auto}}
+
+.hero{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border-bottom:1px solid var(--line);padding-block:40px}
+.hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+.kicker{font:700 .82rem/1.4 var(--mono);color:var(--red);letter-spacing:.04em}
+.hero h1{font-size:clamp(2rem,4.6vw,3.1rem);font-weight:900;margin-top:12px}
+.hero h1 .en{display:block;font:700 clamp(1rem,2vw,1.2rem)/1.4 var(--mono);color:var(--muted);margin-top:6px}
+.hero .lead{font-size:1.1rem;color:var(--muted);margin:14px 0 20px;max-width:34em}
+.event{background:#fff;border:2px solid var(--ink);border-radius:var(--r);padding:16px 18px;display:grid;gap:6px;max-width:32rem;box-shadow:6px 6px 0 var(--red)}
+.event .row{display:grid;grid-template-columns:5.2rem 1fr;gap:8px;align-items:baseline}
+.event .k{font:700 .78rem/1.6 var(--mono);color:var(--red)}
+.event .v{font-weight:700}
+.event .v small{display:block;font-weight:400;color:var(--muted);font-size:.9rem}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:700;text-decoration:none;border:2px solid var(--ink)}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn.primary:hover{background:var(--red-d);border-color:var(--red-d)}
+.btn.ghost{background:#fff;color:var(--ink)}
+.shot{margin:0;background:#fff;padding:10px 10px 8px;border:1px solid var(--line);border-radius:6px;transform:rotate(-1.2deg);box-shadow:0 14px 30px -18px rgba(22,33,58,.5);position:relative}
+.shot::before{content:"";position:absolute;top:-12px;left:50%;width:96px;height:24px;margin-left:-48px;background:rgba(200,16,46,.18);border:1px solid rgba(200,16,46,.25);transform:rotate(2deg)}
+.shot figcaption{font-size:.82rem;color:var(--muted);padding-top:8px}
+@media (max-width:900px){.hero .grid{grid-template-columns:1fr;gap:28px}.hero{padding-block:24px}.shot{transform:none}}
+
+section{padding-block:52px}
+.head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.head h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:900}
+.head h2 .n{font:700 .9rem var(--mono);color:var(--red);display:block;margin-bottom:4px}
+.head p{margin:0;color:var(--muted);max-width:44em}
+.prose{max-width:46em;color:var(--muted);margin:16px 0 0}
+
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.fact{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0}
+.fact b{display:block;font:700 1.9rem/1.2 var(--mono);color:var(--red)}
+.fact span{color:var(--muted);font-size:.95rem}
+@media (max-width:900px){.facts{grid-template-columns:1fr 1fr}}
+
+/* 賽制流程 */
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;counter-reset:s}
+.flow li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.flow li::before{content:"0" counter(s);font:700 1.6rem/1 var(--mono);color:var(--red)}
+.flow h3{font-size:1.05rem}
+.flow p{margin:0;color:var(--muted);font-size:.95rem}
+@media (max-width:760px){.flow{grid-template-columns:1fr}}
+.awards{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;background:#fff;border:1px solid var(--line);border-radius:999px;font-weight:500}
+.chip.k{border-color:var(--ink);font-weight:700}
+
+.box{margin-top:18px;background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:var(--r);padding:14px 18px}
+.box h3{font-size:1rem;margin-bottom:4px}
+.box ul{margin:0;padding-left:1.2em;color:var(--muted)}
+
+/* 時程 */
+.day{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.slot{display:grid;grid-template-columns:10.5rem 1fr;gap:16px;padding:16px 20px;border-top:1px dashed var(--line)}
+.slot:first-child{border-top:0}
+.slot .t{font:700 1rem var(--mono);font-variant-numeric:tabular-nums}
+.slot b{display:block}
+.slot span{color:var(--muted);font-size:.95rem}
+.slot.hl{background:var(--red-soft)}
+.slot.hl .t{color:var(--red-d)}
+@media (max-width:520px){.slot{grid-template-columns:1fr;gap:2px;padding:14px 16px}}
+
+/* 題目預告 */
+.soon{background:#fff;border:2px dashed var(--line);border-radius:var(--r);padding:20px 22px;display:grid;gap:6px}
+.soon b{font-size:1.1rem}
+.soon p{margin:0;color:var(--muted)}
+
+/* 比較 */
+.cmp{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.prog{background:#fff;border:1px solid var(--line);border-top:5px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0;display:flex;flex-direction:column}
+.prog.on{border-top-color:var(--red);box-shadow:0 10px 24px -18px rgba(200,16,46,.6)}
+.prog h3{font-size:1.15rem}
+.prog dl{margin:10px 0 0;display:grid;grid-template-columns:4.5rem 1fr;gap:6px 10px;font-size:.93rem;flex:1}
+.prog dt{color:var(--muted);font-weight:700}
+.prog dd{margin:0}
+.prog a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;margin-top:6px}
+@media (max-width:900px){.cmp{grid-template-columns:1fr}}
+
+.list{margin:0;padding-left:1.2em;display:grid;gap:6px;max-width:48em}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.links a,.contact a{display:flex;flex-direction:column;justify-content:center;min-height:68px;padding:12px 16px;background:#fff;border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:var(--ink);min-width:0}
+.links small,.contact small{color:var(--muted);font-size:.8rem}
+.links b,.contact b{overflow-wrap:anywhere}
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.fine{margin-top:14px;color:var(--muted);font-size:.9rem}
+
+footer{border-top:1px solid var(--line);padding-block:24px 96px;font-size:.9rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center}
+footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44px}
+footer .tm{flex-basis:100%;font-size:.8rem}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border-top:1px solid var(--line)}
+.dock a{flex:1;min-height:48px;padding:0 12px}
+@media (max-width:900px){.dock{display:flex}}
+@media (min-width:901px){footer{padding-bottom:24px}}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSTZ156MFP"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-RSTZ156MFP');</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">跳到主要內容</a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../" aria-label="Junior Botball Challenge Taiwan 首頁"><img src="../jbc-logo.png" width="400" height="158" alt="Junior Botball Challenge"></a>
+    <nav class="nav" aria-label="主選單">
+      <a href="#about" data-i18n="n1">認識 Botball</a><a href="#format" data-i18n="n2">賽制</a><a href="#kit" data-i18n="n3">器材</a><a href="#season" data-i18n="n4">賽季時程</a><a href="#compare" data-i18n="n5">怎麼選</a><a href="../" data-i18n="n6">JBC 首頁</a>
+    </nav>
+    <details class="menu">
+      <summary data-i18n="menu">選單</summary>
+      <div class="panel">
+        <a href="#about" data-i18n="n1">認識 Botball</a><a href="#format" data-i18n="n2">賽制</a><a href="#kit" data-i18n="n3">器材</a><a href="#season" data-i18n="n4">賽季時程</a><a href="#compare" data-i18n="n5">怎麼選</a><a href="../" data-i18n="n6">JBC 首頁</a>
+      </div>
+    </details>
+    <div class="lang" role="group" aria-label="語言 Language"><button type="button" data-lang="zh" aria-pressed="true">中</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap grid">
+      <div>
+        <div class="kicker" data-i18n="kicker">KIPR 國高中賽事｜2026–2027 賽季</div>
+        <h1><span data-i18n="h1">Botball 自主機器人挑戰</span><span class="en">Botball Educational Robotics</span></h1>
+        <p class="lead" data-i18n="lead">美國 KIPR 的國高中機器人賽事。每隊用同一套 Wombat 控制器、相機、馬達與感應器，自己設計、組裝、寫程式，讓兩台機器人全自動完成任務，沒有遙控器。優勝隊伍可前進 GCER 國際賽。</p>
+        <div class="event" aria-label="賽事資訊">
+          <div class="row"><span class="k">SEASON</span><span class="v"><span data-i18n="season">2026–2027 賽季</span><small data-i18n="season2">本季題目 2027 年 1 月公布</small></span></div>
+          <div class="row"><span class="k">TAIWAN</span><span class="v"><span data-i18n="tw">臺灣區推廣中，參賽方式另行公告</span><small data-i18n="tw2">想第一時間收到消息，請加入 JBC LINE 群組</small></span></div>
+        </div>
+        <div class="btns">
+          <a class="btn primary" href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="cta1">加入 LINE 收消息</a>
+          <a class="btn ghost" href="https://www.kipr.org/botball" data-i18n="cta2">KIPR 官方介紹</a>
+        </div>
+      </div>
+      <figure class="shot">
+        <img src="../img/field.jpg" width="1200" height="980" alt="Botball 比賽現場，學生蹲在場地上調整機器人" fetchpriority="high">
+        <figcaption data-i18n="cap">Botball 比賽現場：學生自己調整機器人與程式</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">01 ABOUT</span><span data-i18n="ab-h">認識 Botball</span></h2></div>
+      <div class="facts">
+        <div class="fact"><b data-i18n="f1n">國高中</b><span data-i18n="f1">國中、高中年齡的學生都能組隊</span></div>
+        <div class="fact"><b>2</b><span data-i18n="f2">每隊用一套器材做 2 台自主機器人</span></div>
+        <div class="fact"><b>7–9</b><span data-i18n="f3">題目公布後約 7～9 週製作期</span></div>
+        <div class="fact"><b>100%</b><span data-i18n="f4">學生自己組裝、自己寫程式</span></div>
+      </div>
+      <p class="prose" data-i18n="ab-p">機器人全程靠學生寫的程式和感應器（光、距離、顏色等）自己判斷、移動，比賽中不能遙控。每隊人數沒有上下限，美國的隊伍通常 10～15 人，可以分成組裝、程式、文件、網站、宣傳等小組，但要有一位成人帶隊老師。比賽當天的維修區只准學生進入，老師和家長不能進去。</p>
+    </div>
+  </section>
+
+  <section id="format" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">02 FORMAT</span><span data-i18n="fm-h">比賽怎麼進行</span></h2><p data-i18n="fm-p">區域賽一天完成：先排名、再淘汰，最後頒獎。</p></div>
+      <ol class="flow">
+        <li><h3 data-i18n="s1">排名賽（Seeding）</h3><p data-i18n="s1d">每隊單獨上場 3 輪，場上沒有對手，用分數決定排名。</p></li>
+        <li><h3 data-i18n="s2">雙敗淘汰賽</h3><p data-i18n="s2d">所有隊伍都進淘汰賽，兩隊同場對戰，輸兩場才淘汰。</p></li>
+        <li><h3 data-i18n="s3">頒獎典禮</h3><p data-i18n="s3d">兩輪之間可以在維修區改機器人、改程式。</p></li>
+      </ol>
+      <div class="awards">
+        <span class="chip k" data-i18n="a1">總冠軍 Overall</span><span class="chip" data-i18n="a2">雙敗淘汰賽 Double Elimination</span><span class="chip" data-i18n="a3">排名賽 Seeding</span><span class="chip" data-i18n="a4">評審獎 Judges' Choice</span><span class="chip" data-i18n="a5">技術文件 Documentation</span>
+      </div>
+      <div class="box">
+        <h3 data-i18n="doc-h">技術文件也算成績</h3>
+        <ul>
+          <li data-i18n="doc1">製作期間要把設計與開發過程整理成線上技術文件，交到 KIPR 的 Team Home Base。</li>
+          <li data-i18n="doc2">機器人只能用 Botball 套件裡核准的零件，必須完全由學生組裝與寫程式；裁判的計分判定為最終結果。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="kit" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">03 KIT</span><span data-i18n="kt-h">大家用同一套器材</span></h2><p data-i18n="kt-p">不用電動工具、不用機械加工，每隊起點一樣，比的是設計和程式。</p></div>
+      <div class="awards" style="margin-top:0">
+        <span class="chip k" data-i18n="k1">KIPR Wombat 控制器</span><span class="chip" data-i18n="k2">相機（影像辨識）</span><span class="chip" data-i18n="k3">馬達、伺服馬達</span><span class="chip" data-i18n="k4">多種感應器</span><span class="chip" data-i18n="k5">LEGO® 零件＋相容金屬件</span><span class="chip" data-i18n="k6">組裝工具</span>
+      </div>
+      <div class="box">
+        <h3 data-i18n="pg-h">程式語言</h3>
+        <ul>
+          <li data-i18n="pg1">KIPR 官方介紹寫的是 C、C++ 或 Java；秋季線上工作坊從 C 語言基礎教到進階。</li>
+          <li data-i18n="pg2">器材賽後可以繼續用在課堂、科展、營隊；KIPR 調查有 86% 的帶隊老師整年都在用這套器材。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="season" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">04 SEASON</span><span data-i18n="se-h">2026–2027 賽季時程（美國）</span></h2><p data-i18n="se-p">臺灣區的時程與參賽方式另行公告。</p></div>
+      <div class="day">
+        <div class="slot"><div class="t" data-i18n="t1">2026 秋季</div><div><b data-i18n="t1b">線上教師工作坊</b><span data-i18n="t1d">練 C 語言與感應器，題目公布前先熟悉器材。</span></div></div>
+        <div class="slot"><div class="t" data-i18n="t2">2026 年 12 月</div><div><b data-i18n="t2b">Fall Game（線上）</b><span data-i18n="t2d">KIPR 的秋季線上挑戰，詳細資訊待官方公布。</span></div></div>
+        <div class="slot hl"><div class="t" data-i18n="t3">2027 年 1 月</div><div><b data-i18n="t3b">公布本季題目</b><span data-i18n="t3d">1～2 月各地舉辦實體工作坊，進入 7～9 週製作期。</span></div></div>
+        <div class="slot"><div class="t" data-i18n="t4">2027 年 4～5 月</div><div><b data-i18n="t4b">美國各區域賽</b><span data-i18n="t4d">奧克拉荷馬、德州、加州、新英格蘭、紐約／紐澤西等地。</span></div></div>
+        <div class="slot hl"><div class="t" data-i18n="t5">2027/7/4–8</div><div><b data-i18n="t5b">GCER 國際賽</b><span data-i18n="t5d">美國田納西州 Murfreesboro，International Botball Tournament 與 International Junior Botball Challenge 同場舉行。</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="game" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">05 GAME</span><span data-i18n="gm-h">本季題目</span></h2></div>
+      <div class="soon">
+        <b data-i18n="gm-b">2027 年 1 月公布</b>
+        <p data-i18n="gm-p">Botball 的年度題目在 1 月發布給已報名的隊伍。公布後，這裡會補上中文任務說明、分數表與計分模擬器。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">06 COMPARE</span><span data-i18n="cp-h">KIPR 賽事怎麼選</span></h2></div>
+      <div class="cmp">
+        <article class="prog">
+          <h3>Junior Botball Challenge</h3>
+          <dl><dt data-i18n="cg">年級</dt><dd data-i18n="c1g">國小到高中</dd><dt data-i18n="ce">器材</dt><dd data-i18n="c1e">不限平台，器材自備</dd><dt data-i18n="cf">賽制</dt><dd data-i18n="c1f">現場限時挑戰，依任務完成度評分</dd></dl>
+          <a href="../" data-i18n="c1a">JBC 臺灣區比賽 →</a>
+        </article>
+        <article class="prog">
+          <h3>Botball Explorer</h3>
+          <dl><dt data-i18n="cg">年級</dt><dd data-i18n="c2g">幼兒園到高中，分兩組</dd><dt data-i18n="ce">器材</dt><dd data-i18n="c2e">任何能全自動的平台（SPIKE、EV3、Arduino 等）</dd><dt data-i18n="cf">賽制</dt><dd data-i18n="c2f">每場 150 秒，5 場取最好 4 場</dd></dl>
+          <a href="../explorer/" data-i18n="c2a">Explorer 介紹與計分模擬器 →</a>
+        </article>
+        <article class="prog on">
+          <h3>Botball</h3>
+          <dl><dt data-i18n="cg">年級</dt><dd data-i18n="c3g">國中、高中</dd><dt data-i18n="ce">器材</dt><dd data-i18n="c3e">統一 Botball 套件（Wombat＋相機）</dd><dt data-i18n="cf">賽制</dt><dd data-i18n="c3f">排名賽＋雙敗淘汰賽＋技術文件</dd></dl>
+          <a href="#top" data-i18n="c3a">就是這一頁 ↑</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">07 RESOURCES</span><span data-i18n="rs-h">官方資源</span></h2></div>
+      <div class="links">
+        <a href="https://www.kipr.org/botball"><small>KIPR</small><b data-i18n="l1">Botball 官方介紹</b></a>
+        <a href="https://www.kipr.org/botball/schedule-regions"><small>Schedule</small><b data-i18n="l2">美國區域賽與工作坊時程</b></a>
+        <a href="https://www.kipr.org/botball/what-is-botball/get-started"><small>Get Started</small><b data-i18n="l3">新隊伍入門指南</b></a>
+        <a href="https://www.kipr.org/gcer"><small>GCER</small><b data-i18n="l4">GCER 國際賽</b></a>
+      </div>
+      <p class="fine" data-i18n="fine">本頁是臺灣區中文說明，賽制與時程以 KIPR 官方最新公告為準。</p>
+    </div>
+  </section>
+
+  <section id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="head"><h2><span class="n">CONTACT</span><span data-i18n="ct-h">追蹤臺灣區消息</span></h2></div>
+      <div class="contact">
+        <a href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default"><small>LINE</small><b data-i18n="line">JBC 報名群組</b></a>
+        <a href="https://www.facebook.com/BotballTaiwan/"><small>Facebook</small><b>Junior Botball Challenge Taiwan</b></a>
+        <a href="https://www.instagram.com/jbc__taiwan"><small>Instagram</small><b>@jbc__taiwan</b></a>
+        <a href="https://www.threads.com/@jbc__taiwan"><small>Threads</small><b>@jbc__taiwan</b></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><span data-i18n="org">主辦單位：臺灣智能程式科技教育推廣協會（SPARK）｜內政部立案證書字號：1130027903</span></div>
+    <span><a href="https://spark-taiwan-association.github.io/" data-i18n="org-link">協會官網</a>　<a href="https://spark-taiwan-association.github.io/privacy.html" data-i18n="privacy">隱私權政策</a></span>
+    <div class="tm" data-i18n="tm">Botball®、Botguy™ 為 KISS Institute for Practical Robotics（KIPR）的商標；LEGO® 為其所有者的註冊商標。</div>
+  </div>
+</footer>
+
+<nav class="dock" aria-label="快速操作">
+  <a class="btn primary" href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="dock1">加入 LINE</a>
+  <a class="btn ghost" href="../explorer/" data-i18n="dock2">看 Explorer</a>
+</nav>
+
+<script>
+var EN = {
+  skip:'Skip to content', n1:'About', n2:'Format', n3:'Kit', n4:'Season', n5:'Compare', n6:'JBC home', menu:'Menu',
+  kicker:'KIPR MIDDLE & HIGH SCHOOL PROGRAM | 2026–2027 SEASON', h1:'Botball Autonomous Robotics',
+  lead:'KIPR\'s robotics competition for middle and high school students. Every team uses the same kit of a Wombat controller, camera, motors and sensors to design, build and program two fully autonomous robots — no remote controls. Top teams can advance to GCER.',
+  season:'2026–2027 season', season2:'This season\'s game is released in January 2027', tw:'Taiwan region: promotion stage, participation details TBA', tw2:'Join the JBC LINE group for first news',
+  cta1:'Join LINE for updates', cta2:'Official KIPR page', cap:'At a Botball event: students tune their own robots and code',
+  'ab-h':'About Botball', f1n:'MS & HS', f1:'Open to middle and high school aged students', f2:'Two autonomous robots from one kit', f3:'Weeks of build time after the game release', f4:'Student-built and student-programmed',
+  'ab-p':'Robots run on the students\' own code and sensors (light, distance, color and more) with no remote control. There is no minimum or maximum team size; US teams are typically 10–15 students, often split into building, programming, documentation, website and publicity groups, with an adult team leader. On tournament day the pit area is for students only.',
+  'fm-h':'How a tournament works', 'fm-p':'A regional tournament takes one day: seeding, then elimination, then awards.',
+  s1:'Seeding rounds', s1d:'Each team plays 3 unopposed rounds; scores set the ranking.', s2:'Double elimination', s2d:'All teams enter an equitable bracket and play head to head; two losses and you are out.', s3:'Awards ceremony', s3d:'Between rounds, teams may modify robots and code in the pit area.',
+  a1:'Overall', a2:'Double Elimination', a3:'Seeding', a4:'Judges\' Choice', a5:'Documentation',
+  'doc-h':'Documentation counts too', doc1:'During the build period, teams document their design and development online through the KIPR Team Home Base.', doc2:'Robots must be built only from approved Botball kit parts, entirely by students, and programmed entirely by students. Judges\' scoring decisions are final.',
+  'kt-h':'Everyone uses the same kit', 'kt-p':'No power tools or machine shop: every team starts level, so design and code make the difference.',
+  k1:'KIPR Wombat controller', k2:'Camera (computer vision)', k3:'Motors and servos', k4:'A variety of sensors', k5:'LEGO® pieces + compatible metal parts', k6:'Build tools',
+  'pg-h':'Programming', pg1:'KIPR\'s Botball page lists C, C++ or Java; the fall virtual workshops teach C from basic to advanced.', pg2:'The kit keeps working after the season for classes, science fairs and camps; 86% of team leaders surveyed use it year-round.',
+  'se-h':'2026–2027 season timeline (USA)', 'se-p':'Taiwan dates and participation details will be announced separately.',
+  t1:'Fall 2026', t1b:'Virtual educator workshops', t1d:'Practice C and sensors before the game is released.',
+  t2:'December 2026', t2b:'Fall Game (virtual)', t2d:'KIPR\'s fall online challenge; details coming from KIPR.',
+  t3:'January 2027', t3b:'Game release', t3d:'In-person workshops run January–February, followed by a 7–9 week build period.',
+  t4:'April–May 2027', t4b:'US regional tournaments', t4d:'Oklahoma, Texas, California, New England, New York/New Jersey and more.',
+  t5:'Jul 4–8, 2027', t5b:'GCER', t5d:'Murfreesboro, Tennessee, home of the International Botball Tournament and the International Junior Botball Challenge.',
+  'gm-h':'This season\'s game', 'gm-b':'Released in January 2027', 'gm-p':'The Botball game is released to registered teams in January. After that, this section will add a Chinese mission guide, a points table and a score simulator.',
+  'cp-h':'Which KIPR program fits?', cg:'Grades', ce:'Robots', cf:'Format',
+  c1g:'Elementary to high school', c1e:'Any platform, bring your own', c1f:'Timed on-site challenge, scored by mission completion', c1a:'JBC Taiwan event →',
+  c2g:'Pre-K to grade 12, two divisions', c2e:'Any fully autonomous platform (SPIKE, EV3, Arduino…)', c2f:'150-second matches, best 4 of 5', c2a:'Explorer guide & simulator →',
+  c3g:'Middle and high school', c3e:'Standard Botball kit (Wombat + camera)', c3f:'Seeding + double elimination + documentation', c3a:'You are here ↑',
+  'rs-h':'Official resources', l1:'Botball by KIPR', l2:'US regional & workshop schedule', l3:'Getting started guide', l4:'GCER',
+  fine:'This page is a Chinese-language guide for Taiwan. Official KIPR announcements always take precedence.',
+  'ct-h':'Follow Taiwan news', line:'JBC registration group',
+  org:'Organizer: Taiwan Smart Programming AI Robotics & Knowledge Association (SPARK) | MOI registration No. 1130027903', 'org-link':'SPARK website', privacy:'Privacy policy',
+  tm:'Botball® and Botguy™ are trademarks of the KISS Institute for Practical Robotics (KIPR); LEGO® is a registered mark of its owner.', dock1:'Join LINE', dock2:'See Explorer'
+};
+function setLang(l){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.dataset.i18n; if(!('zh' in el.dataset)) el.dataset.zh=el.textContent;
+    el.textContent = l==='en' ? (EN[k]||el.dataset.zh) : el.dataset.zh;
+  });
+  document.documentElement.lang = l==='en' ? 'en' : 'zh-Hant-TW';
+  document.querySelectorAll('.lang button').forEach(function(b){b.setAttribute('aria-pressed', b.dataset.lang===l)});
+  try{localStorage.setItem('jbc-lang',l)}catch(e){}
+}
+document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.lang)})});
+try{ if(localStorage.getItem('jbc-lang')==='en') setLang('en'); }catch(e){}
+document.querySelectorAll('.menu .panel a').forEach(function(a){a.addEventListener('click',function(){a.closest('details').removeAttribute('open')})});
+</script>
+</body>
+</html>
