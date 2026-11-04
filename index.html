@@ -120,6 +120,7 @@ h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance}
 .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
 .btn.primary:hover{background:var(--red-d);border-color:var(--red-d)}
 .btn.ghost{background:#fff;color:var(--ink)}
+.btn.closed{background:#eceef2;border-color:#c9cdd5;color:#555c68;cursor:not-allowed}
 .shot{margin:0;background:#fff;padding:10px 10px 8px;border:1px solid var(--line);border-radius:6px;transform:rotate(1.2deg);box-shadow:0 14px 30px -18px rgba(22,33,58,.5);position:relative}
 .shot::before{content:"";position:absolute;top:-12px;left:50%;width:96px;height:24px;margin-left:-48px;background:rgba(200,16,46,.18);border:1px solid rgba(200,16,46,.25);transform:rotate(-2deg)}
 .shot figcaption{font-size:.82rem;color:var(--muted);padding-top:8px}
@@ -138,6 +139,7 @@ section{padding-block:52px}
 .steps h3{font-size:1.05rem}
 .steps p{margin:0;color:var(--muted);font-size:.93rem;flex:1}
 .steps a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none}
+.steps .closed{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:var(--muted)}
 .extra{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 20px;color:var(--muted);font-size:.95rem}
 .extra a{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
 @media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
@@ -188,7 +190,7 @@ footer{border-top:1px solid var(--line);padding-block:24px 96px;font-size:.9rem;
 footer .wrap{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center}
 footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44px}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border-top:1px solid var(--line)}
-.dock a{flex:1;min-height:48px}
+.dock a,.dock .btn{flex:1;min-height:48px}
 @media (max-width:900px){.dock{display:flex}}
 @media (min-width:901px){footer{padding-bottom:24px}}
 </style>
@@ -225,7 +227,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
           <div class="row"><span class="k">PLACE</span><span class="v"><span data-i18n="place">葳格國際會議中心</span><small data-i18n="addr">臺中市北屯區軍福十八路 328 號</small></span></div>
         </div>
         <div class="btns">
-          <a class="btn primary" href="https://forms.gle/fjha4p4qbDPJBKuV6" data-i18n="cta1">前往報名</a>
+          <span class="btn closed" role="link" aria-disabled="true" data-i18n="cta1">報名已截止</span>
           <a class="btn ghost" href="https://drive.google.com/drive/folders/1B7hhfJ3Ua2CyPPmKw17oYh9i8j2RODKG?usp=sharing" data-i18n="cta2">報名簡章</a>
         </div>
       </div>
@@ -241,7 +243,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
       <div class="head"><h2><span class="n">STEP 01–04</span><span data-i18n="apply-h">報名 4 步驟</span></h2></div>
       <ol class="steps">
         <li><h3 data-i18n="s1">看簡章</h3><p data-i18n="s1d">確認組別、費用與報名期限。</p><a href="https://drive.google.com/drive/folders/1B7hhfJ3Ua2CyPPmKw17oYh9i8j2RODKG?usp=sharing" data-i18n="s1a">打開簡章</a></li>
-        <li><h3 data-i18n="s2">線上報名</h3><p data-i18n="s2d">填寫隊伍與選手資料。</p><a href="https://forms.gle/fjha4p4qbDPJBKuV6" data-i18n="s2a">報名表單</a></li>
+        <li><h3 data-i18n="s2">線上報名</h3><p data-i18n="s2d">填寫隊伍與選手資料。</p><span class="closed" data-i18n="s2a">報名已截止</span></li>
         <li><h3 data-i18n="s3">匯款後填表</h3><p data-i18n="s3d">完成匯款後，填寫匯款完成表單。</p><a href="https://forms.gle/NYLy2fz9EUi4smjY7" data-i18n="s3a">匯款完成表單</a></li>
         <li><h3 data-i18n="s4">加入 LINE 群組</h3><p data-i18n="s4d">賽前通知與題目更新都在群組公告。</p><a href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="s4a">加入群組</a></li>
       </ol>
@@ -323,7 +325,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
 </footer>
 
 <nav class="dock" aria-label="快速操作">
-  <a class="btn primary" href="https://forms.gle/fjha4p4qbDPJBKuV6" data-i18n="cta1">前往報名</a>
+  <span class="btn closed" role="link" aria-disabled="true" data-i18n="cta1">報名已截止</span>
   <a class="btn ghost" href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="dock2">加入 LINE</a>
 </nav>
 
@@ -333,9 +335,9 @@ var EN = {
   kicker:'2026 STEM EDUCATION COMPETITION', h1:'JBC Taiwan Robotics Challenge',
   lead:'Students write their own code so robots complete missions on their own. Any robot platform, open to elementary through high school. Top teams can advance to GCER, the global finals in the USA.',
   date:'Sunday, December 13, 2026', place:'Wagor International Convention Center', addr:'No. 328, Junfu 18th Rd., Beitun Dist., Taichung',
-  cta1:'Register now', cta2:'Competition guide', cap:'At a Botball event: students tune their robots on the field',
+  cta1:'Registration closed', cta2:'Competition guide', cap:'At a Botball event: students tune their robots on the field',
   'apply-h':'Register in 4 steps', s1:'Read the guide', s1d:'Check categories, fees and deadlines.', s1a:'Open the guide',
-  s2:'Register online', s2d:'Fill in team and student details.', s2a:'Registration form',
+  s2:'Register online', s2d:'Fill in team and student details.', s2a:'Registration closed',
   s3:'Pay, then confirm', s3d:'After paying, submit the payment form.', s3a:'Payment form',
   s4:'Join the LINE group', s4d:'Event notices and task updates are posted there.', s4a:'Join group',
   'qb-t':'Practice tasks:', qb:'Question bank', 'day-h':'Event-day schedule',
