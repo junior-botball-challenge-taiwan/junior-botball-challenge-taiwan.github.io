@@ -51,8 +51,8 @@
       "name": "2026 JBC Junior Botball Challenge Taiwan 臺灣區機器人挑戰賽",
       "description": "Junior Botball Challenge 臺灣區開放挑戰。由臺灣智能程式科技教育推廣協會（SPARK）主辦，不限平台，成績優異者可銜接 GCER 美國全球總決賽。",
       "image": "https://junior-botball-challenge-taiwan.github.io/img/field.jpg",
-      "startDate": "2026-12-13T09:00+08:00",
-      "endDate": "2026-12-13T17:30+08:00",
+      "startDate": "2026-12-13",
+      "endDate": "2026-12-13",
       "eventStatus": "https://schema.org/EventScheduled",
       "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
       "location": {"@type": "Place", "name": "葳格國際會議中心", "address": {"@type": "PostalAddress", "streetAddress": "軍福十八路328號", "addressLocality": "臺中市北屯區", "addressCountry": "TW"}},
@@ -147,10 +147,8 @@ section{padding-block:52px}
 
 /* 當天賽程 */
 .day{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.slot{display:grid;grid-template-columns:10.5rem 1fr;gap:16px;padding:16px 20px;border-top:1px dashed var(--line)}
-.slot:first-child{border-top:0}
-.slot .t{font:700 1.05rem var(--mono);font-variant-numeric:tabular-nums}
-@media (max-width:520px){.slot{grid-template-columns:1fr;gap:2px;padding:14px 16px}}
+.day p{margin:0;padding:16px 20px}
+@media (max-width:520px){.day p{padding:14px 16px}}
 
 /* 規則 */
 .rules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -255,8 +253,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
     <div class="wrap">
       <div class="head"><h2><span class="n">12/13 SUN</span><span data-i18n="day-h">當天賽程</span></h2></div>
       <div class="day">
-        <div class="slot"><div class="t">09:00–12:15</div><div data-i18n="am">國小、國中、高中各組（挑戰與頒獎）</div></div>
-        <div class="slot"><div class="t">13:30–17:30</div><div data-i18n="pm">啟蒙、入門、探索組（挑戰與頒獎）</div></div>
+        <p data-i18n="day-note">賽程將視報名隊伍數調整，正式賽程於賽前兩週（11/29）公布。</p>
       </div>
     </div>
   </section>
@@ -341,7 +338,7 @@ var EN = {
   s3:'Pay, then confirm', s3d:'After paying, submit the payment form.', s3a:'Payment form',
   s4:'Join the LINE group', s4d:'Event notices and task updates are posted there.', s4a:'Join group',
   'qb-t':'Practice tasks:', qb:'Question bank', 'day-h':'Event-day schedule',
-  am:'Elementary, junior high and high school categories (challenge and awards)', pm:'Starter, Entry and Explorer categories (challenge and awards)',
+  'day-note':'The schedule will be adjusted according to the number of registered teams; the official schedule will be announced two weeks before the event (Nov 29).',
   'rules-h':'Rules', 'rules-link':'Latest rules', r1:'Categories', r1d:'Starter, Explorer, Entry, Novice, Intermediate, Advanced.',
   r2:'Robot specs', r2d:'Any robot platform. Bring your own kit, follow category rules.', r3:'Live challenge', r3d:'Multiple test runs within 90 minutes.',
   r4:'Scoring', r4d:'Scored by mission completion; qualifying teams receive an international certificate.',
