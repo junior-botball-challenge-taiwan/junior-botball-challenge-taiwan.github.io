@@ -148,6 +148,8 @@ section{padding-block:52px}
 /* 當天賽程 */
 .day{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .day p{margin:0;padding:16px 20px}
+.day p+p{border-top:1px solid var(--line)}
+.day .dl{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
 @media (max-width:520px){.day p{padding:14px 16px}}
 
 /* 規則 */
@@ -253,7 +255,10 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
     <div class="wrap">
       <div class="head"><h2><span class="n">12/13 SUN</span><span data-i18n="day-h">當天賽程</span></h2></div>
       <div class="day">
-        <p data-i18n="day-note">賽程將視報名隊伍數調整，正式賽程於賽前兩週（11/29）公布。</p>
+        <p data-i18n="day-note">隊伍組別及賽程已公告（2026/11/08），各隊組別、隊伍編號、座位與詳細流程請見公告。</p>
+        <p><b data-i18n="day-am">上午場</b>　<span data-i18n="day-amd">09:00 入場、11:45 頒獎</span></p>
+        <p><b data-i18n="day-pm">下午場</b>　<span data-i18n="day-pmd">13:30 入場、16:30–17:00 頒獎</span></p>
+        <p><a class="dl" href="files/jbc-taichung-1213-teams-schedule-20261108.pdf" data-i18n="day-dl">下載：隊伍組別及賽程公告（2026/11/08，PDF）</a></p>
       </div>
     </div>
   </section>
@@ -338,7 +343,10 @@ var EN = {
   s3:'Pay, then confirm', s3d:'After paying, submit the payment form.', s3a:'Payment form',
   s4:'Join the LINE group', s4d:'Event notices and task updates are posted there.', s4a:'Join group',
   'qb-t':'Practice tasks:', qb:'Question bank', 'day-h':'Event-day schedule',
-  'day-note':'The schedule will be adjusted according to the number of registered teams; the official schedule will be announced two weeks before the event (Nov 29).',
+  'day-note':'Team divisions and the official schedule have been announced (2026/11/08). See the announcement for each team\'s division, team number, seat and the full programme.',
+  'day-am':'Morning session', 'day-amd':'Entry 09:00, awards 11:45',
+  'day-pm':'Afternoon session', 'day-pmd':'Entry 13:30, awards 16:30–17:00',
+  'day-dl':'Download: Team divisions & schedule announcement (2026/11/08, PDF, Chinese)',
   'rules-h':'Rules', 'rules-link':'Latest rules', r1:'Categories', r1d:'Starter, Explorer, Entry, Novice, Intermediate, Advanced.',
   r2:'Robot specs', r2d:'Any robot platform. Bring your own kit, follow category rules.', r3:'Live challenge', r3d:'Multiple test runs within 90 minutes.',
   r4:'Scoring', r4d:'Scored by mission completion; qualifying teams receive an international certificate.',
