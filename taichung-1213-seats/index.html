@@ -176,14 +176,7 @@ function panel() {
     .map(u => `<div class="u${sel === u.u ? ' on' : ''}" data-u="${esc(u.u)}"><span>${esc(u.u)}</span><span class="n">本場 ${cnt[u.u]} 隊</span></div>`).join('')
     || '<div class="hint">這個場次沒有符合的單位，試試切換上午／下午。</div>';
   $('units').querySelectorAll('.u').forEach(el => el.onclick = () => pickUnit(el.dataset.u));
-  const box = $('mine');
-  if (sel) {
-    const my = Object.values(T).filter(t => t.u === sel && t.s === cur).sort((p, r) => p.c.localeCompare(r.c));
-    box.style.display = 'block';
-    box.innerHTML = `<h3>${esc(sel)}　${cur}場 ${my.length} 隊</h3>` + my.map(t => `<div class="t" data-c="${esc(t.c)}"><b>${esc(t.c)}</b>　${esc(t.n)}<span>${esc(t.g)}｜${esc(t.loc)}</span></div>`).join('')
-      + '<div class="hint" style="margin:6px 0 0">點隊伍可以跳到桌子位置；再點一次單位取消。</div>';
-    box.querySelectorAll('.t').forEach(el => el.onclick = () => { tap(el.dataset.c); centerOn([seatOf(el.dataset.c)], 11); });
-  } else box.style.display = 'none';
+  $('mine').style.display = 'none';   // 11/7 理事長：點單位後的「隊伍資訊」清單卡片拿掉，只在地圖上亮出位置（點桌子仍可看隊名）
   const gs = [...new Set(Object.values(T).filter(t => t.s === cur).map(t => t.g))];
   $('lg').innerHTML = (sel ? '<span><i style="background:#E53935"></i>你選的單位</span>' : '') + gs.map(g => `<span><i style="background:${sel ? '#E3E7EB' : D.gcolor[g]}"></i>${esc(g)}</span>`).join('');
 }
