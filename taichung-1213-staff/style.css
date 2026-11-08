@@ -152,3 +152,5 @@ button.link[data-act="map"] { color: var(--navy); }
 .tag-pin:hover { background: #e53935; }
 #bigmap { display: grid; gap: 8px; margin-top: 8px; }
 #bigmap .mapwrap { max-width: 720px; }
+.score-try { margin: 0; font-size: 13.5px; color: var(--navy); }
+.score-try a { color: var(--navy); font-weight: 600; }

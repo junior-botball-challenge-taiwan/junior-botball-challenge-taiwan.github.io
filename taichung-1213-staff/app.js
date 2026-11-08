@@ -162,6 +162,15 @@
       '<p class="row-hint">點代號（J＝JBC 場地裁判、S＝相撲台、L＝循線賽道）就會跳到那個崗位。</p>';
   }
 
+  // 11/8 理事長：認領了崗位的人點練習計分，直接帶到這個崗位（練習模式，資料只在自己手機）
+  const SCORE_ST = window.SCORE_ST || {};
+  function scoreLinks(key) {
+    const s = SCORE_ST[key]; if (!s) return "";
+    const a = (st, t) => '<a href="score/judge.html?demo=1&station=' + encodeURIComponent(st) + '" target="_blank" rel="noopener">' + t + "</a>";
+    const parts = s.am && s.am === s.pm ? [a(s.am, "開始練習")] : [s.am && a(s.am, "上午崗位"), s.pm && a(s.pm, "下午崗位")].filter(Boolean);
+    return '<p class="score-try">📱 用這個崗位練習計分（練習模式・密碼已填好 1213）：' + parts.join("　") + "</p>";
+  }
+
   function roleRow(r) {
     const key = String(r.id), who = state.claims[key], t = teamOfRole(key);
     const badge = FIXED[key] || RESERVED.has(key) ? ["taken", "主辦指定"] : who ? ["taken", "已認領"] : t >= 0 ? ["team", "好友保留"] : ["free", "可認領"];
@@ -174,6 +183,7 @@
       actionHTML(key, who) +
       (hasMap ? '<button type="button" class="link" data-act="map" data-key="' + key + '">' + (mapOpen === key ? "▲ 收起位置圖" : "📍 在場地圖上看位置（上午／下午）") + "</button>" : "") +
       (hasMap && mapOpen === key ? rowMap(key) : "") +
+      scoreLinks(key) +
       '<details data-key="' + key + '"><summary>看詳細</summary><div class="body">' +
       '<p class="load">' + r.group + "</p>" +
       '<div class="two"><div class="box"><h4>上午</h4>' + list(r.am) + '</div><div class="box"><h4>下午</h4>' + list(r.pm) + "</div></div>" +

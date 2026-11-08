@@ -63,11 +63,14 @@
     return '<option value="">選擇崗位</option>' + groups.map(([l, f]) => '<optgroup label="' + l + '">' + STATIONS.filter(f).map((s) =>
       '<option value="' + esc(s.id) + '"' + (s.id === cur ? " selected" : "") + ">" + esc(s.label) + (s.teams ? "：" + s.teams.join("、") : "") + "</option>").join("") + "</optgroup>").join("");
   }
+  // 11/8 理事長：從工作人員專區「用這個崗位練習計分」點進來（?station=A05 等）就預先選好那個崗位；練習模式自動填密碼
+  const WANT = new URLSearchParams(location.search).get("station");
   function showLogin() {
     $("login").hidden = false; $("main").hidden = true;
     $("who").textContent = "登入"; $("roleText").textContent = "";
-    $("station").innerHTML = stationOptions(auth && auth.station);
+    $("station").innerHTML = stationOptions(WANT && S.stationOf(D, WANT) ? WANT : auth && auth.station);
     if (auth) { $("nick").value = auth.nick || ""; $("pw").value = auth.judge || ""; }
+    if (API.demo && !$("pw").value) $("pw").value = "1213";
   }
   $("loginBtn").addEventListener("click", async () => {
     const req = { action: "score.login", judge: $("pw").value, station: $("station").value, nick: $("nick").value.trim() };
@@ -181,7 +184,8 @@
     if (UI.busy($("view"))) { queueText(); return; }
     render();
   }
-  if (auth && station()) render(); else showLogin();
+  if (WANT && S.stationOf(D, WANT) && (!auth || auth.station !== WANT)) showLogin();   // 帶了別的崗位進來：先停在登入畫面讓他按「開始計分」
+  else if (auth && station()) render(); else showLogin();
   refresh();
   (function loop() { setTimeout(async () => { await refresh(); loop(); }, 15000 + Math.random() * 10000); })();
   window.addEventListener("online", refresh);
