@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>JBC 台中站 計分台</title>
+<link rel="stylesheet" href="score.css">
+</head>
+<body>
+<div class="demo" id="demoNote" hidden>示範模式：計分台密碼 demo；資料只存在這台裝置　<a href="#" id="demoReset">清空示範資料</a>　<a href="#" id="demoFill">示範：隨機填滿整場成績</a></div>
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">JBC 開放挑戰 台中站 2026/12/13・即時計分</p>
+    <h1>計分台</h1>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+</header>
+<main class="wrap">
+  <section class="login" id="login" hidden>
+    <label class="lbl">計分台密碼<input id="pw" type="password" autocomplete="current-password"></label>
+    <button type="button" id="loginBtn">進入</button>
+    <p class="msg" id="loginMsg"></p>
+  </section>
+  <section id="main" hidden>
+    <div class="status"><span id="warn"></span><span id="updated"></span></div>
+    <div id="view"></div>
+  </section>
+</main>
+<script src="../config.js"></script>
+<script src="score-config.js"></script>
+<script src="data.js"></script>
+<script src="rules.js"></script>
+<script src="server.js"></script>
+<script src="api.js"></script>
+<script src="common.js"></script>
+<script src="tools/fake.js"></script>
+<script>
+(function () {
+  const R = window.JBC_RULES, D = window.JBC_DATA, UI = window.JBC_UI, API = window.JBC_API;
+  const $ = (id) => document.getElementById(id);
+  const esc = UI.esc;
+  let pw = null;
+  try { pw = sessionStorage.getItem("jbcScoreAdmin"); } catch (e) {}
+  let server = { state: {} };
+  const state = () => server.state || {};
+  const TABS = [["rank", "即時排名"], ["warn", "警示"], ["edit", "JBC 成績修改"], ["draw", "對戰順序"], ["sumo", "相撲"], ["line", "循線"], ["absent", "缺賽"], ["award", "頒獎名單"], ["export", "匯出"], ["cfg", "設定"]];
+  const V = Object.assign({ tab: "rank", gk: D.order[0], sub: "rank", editGk: "EX", editTeam: "", sumoGk: "JSM", arena: "" }, API.store.get("jbcAdminView", {}));
+  if (location.hash.slice(1)) V.tab = location.hash.slice(1);
+  const saveV = () => API.store.set("jbcAdminView", V);
+  $("demoNote").hidden = !API.demo;
+  $("demoReset").addEventListener("click", (e) => { e.preventDefault(); if (confirm("清空這台裝置的示範資料？")) { localStorage.removeItem("jbcScoreDemo"); refresh(); } });
+  $("demoFill").addEventListener("click", (e) => {
+    e.preventDefault();
+    if (!confirm("用隨機成績填滿整場（會蓋掉目前的示範資料）？")) return;
+    localStorage.setItem("jbcScoreDemo", JSON.stringify(window.JBC_FAKE(D, R, Math.floor(Math.random() * 1e9))));
+    refresh();
+  });
+
+  // ---------- 登入 ----------
+  $("loginBtn").addEventListener("click", async () => {
+    $("loginMsg").className = "msg"; $("loginMsg").textContent = "確認中…";
+    try {
+      const r = await API.post({ action: "score.login", admin: $("pw").value });
+      if (!r.ok) throw new Error(r.message);
+      pw = $("pw").value; try { sessionStorage.setItem("jbcScoreAdmin", pw); } catch (e) {}
+      $("loginMsg").textContent = ""; show();
+    } catch (e) { $("loginMsg").className = "msg err"; $("loginMsg").textContent = e.message || "連線失敗"; }
+  });
+  $("pw").addEventListener("keydown", (e) => { if (e.key === "Enter") $("loginBtn").click(); });
+  function show() { $("login").hidden = !!pw; $("main").hidden = !pw; if (pw) render(); }
+
+  async function save(items) {
+    try {
+      const r = await API.post({ action: "score.put", admin: pw, items });
+      if (!r.ok) return { ok: false, message: r.busy ? "系統忙碌，沒有儲存，請再按一次" : r.message };
+      server = r;
+      const bad = (r.results || []).filter((x) => !x.ok);
+      return bad.length ? { ok: false, message: bad.map((x) => x.message).join("、") } : { ok: true, message: "已儲存" };
+    } catch (e) { return { ok: false, message: "連線失敗，沒有儲存，請再按一次" }; }
+  }
+  const saveAndRender = (items) => save(items).then((r) => { UI.toast(r.message, r.ok); render(); return r; });
+
+  // ---------- 共用 ----------
+  const chips = (list, cur, attr) => '<div class="slots noprint">' + list.map(([v, l]) => '<button type="button" class="' + (v === cur ? "on" : "") + '" data-' + attr + '="' + v + '">' + esc(l) + "</button>").join("") + "</div>";
+  const groupChips = (pred, cur, attr) => chips(UI.groupsBy(pred).map((gk) => [gk, D.groups[gk].short + "（" + gk + "）"]), cur, attr);
+  const WL = (list) => '<ul class="warnlist">' + list.map((w) => '<li class="' + w.level + '">' + esc(w.msg) + "</li>").join("") + "</ul>";
+
+  // ---------- 各分頁 ----------
+  function rankView(st) {
+    const g = D.groups[V.gk];
+    return groupChips(() => true, V.gk, "gk") + (g.kind === "sumo" ? chips([["rank", "名次與積分"], ["final", "決賽"], ["sched", "對戰表"]], V.sub, "sub") : "") +
+      UI.groupHTML(st, V.gk, { admin: true, unit: true, sub: V.sub }) + WL(R.warnings(D, st).filter((w) => w.gk === V.gk));
+  }
+  function warnView(st) {
+    const W = R.warnings(D, st);
+    return "<h2>警示（" + W.filter((w) => w.level === "err").length + " 個要處理、" + W.filter((w) => w.level === "warn").length + " 個未完成）</h2>" +
+      (W.length ? WL(W.sort((a, b) => ({ err: 0, warn: 1, info: 2 }[a.level] - { err: 0, warn: 1, info: 2 }[b.level]))) : '<div class="banner okb">沒有警示</div>') +
+      '<p class="note">「同分待秤重」：到相撲分頁的「秤重」輸入公克數。「神秘題成績但基礎題沒完成」：到「JBC 成績修改」確認。</p>';
+  }
+  function editView(st) {
+    const opts = '<option value="">選隊伍</option>' + D.teams[V.editGk].map((t) => '<option value="' + t.id + '"' + (t.id === V.editTeam ? " selected" : "") + ">" + esc(t.id + " " + t.name) + "</option>").join("");
+    return groupChips((g) => g.kind === "mys" || g.kind === "task", V.editGk, "egk") + '<select id="editTeam" class="finder">' + opts + "</select>" +
+      (V.editTeam ? UI.jbcCardHTML(st, V.editTeam, { admin: true, now: new Date() }) : '<p class="note">選一隊就能修改它的基礎題、神秘題（含作廢、恢復）、啟蒙／探索的成功失敗。計分台改過的那筆，裁判就不能再改。</p>');
+  }
+  // 相撲抽籤（11/5 理事長：對戰當天抽籤）：每組輸入 籤號 → 隊伍，輸入完整才能開打
+  function drawView(st) {
+    const gk = V.sumoGk, g = D.groups[gk], lots = R.drawOf(st, gk, D), ids = D.teams[gk].map((t) => t.id);
+    // 11/5 晚理事長：不抽籤，對戰順序照隊伍編號（fixedDraw）→ 唯讀
+    if (g.fixedDraw) return groupChips((x) => x.kind === "sumo", gk, "sgk") + "<h2>" + esc(g.name) + " 對戰順序</h2>" +
+      '<p class="note">對戰已排好（照隊伍編號，不抽籤），裁判台直接照這個順序比。共 ' + g.rounds + " 輪、" + D.schedule[gk].length + " 場，用 " + g.arenas.join("、") + " 號台，決賽在 " + g.finalArena + " 號台。</p>" + UI.scheduleHTML(st, gk, {});
+    const used = {};
+    Object.keys(lots).forEach((k) => { if (lots[k]) used[lots[k]] = (used[lots[k]] || 0) + 1; });
+    const done = R.drawDone(D, st, gk), n = g.lots;
+    const status = UI.groupsBy((x) => x.kind === "sumo").map((k) => D.groups[k].short + (R.drawDone(D, st, k) ? " ✓" : " ✗")).join("　");
+    return groupChips((x) => x.kind === "sumo", gk, "sgk") + '<p class="note">各組狀態：' + esc(status) + "</p>" +
+      "<h2>" + esc(g.name) + " 抽籤（籤 1–" + n + "）" + (done ? ' <span class="tag ok">已完成，可以開打</span>' : ' <span class="tag err">未完成，裁判台還不能開打</span>') + "</h2>" +
+      '<div class="card" id="drawCard"><div class="laps">' + Array.from({ length: n }, (_, i) => i + 1).map((k) =>
+        '<label class="lap"><span>籤 ' + k + '</span><select data-lot="' + k + '"><option value="">—</option>' + ids.map((id) => '<option value="' + id + '"' + (lots[String(k)] === id ? " selected" : "") + ">" + esc(id + " " + UI.team(id).name) + (used[id] && lots[String(k)] !== id ? "（已抽）" : "") + "</option>").join("") + "</select><small></small></label>").join("") + "</div>" +
+      '<label class="lbl inline">一次貼上（每行「籤號 隊伍編號」，或依籤號順序每行一個隊伍編號；隊伍編號可只寫數字，例 7＝' + gk + '-007）<textarea id="drawPaste" rows="5" style="width:100%;font:inherit"></textarea></label>' +
+      '<div class="foot"><button type="button" class="ghost small" id="drawFromPaste">從貼上帶入</button><button type="button" class="ghost small" id="drawRandom">電腦代抽（隨機）</button><button type="button" id="drawSave">儲存抽籤</button></div></div>' +
+      '<p class="note">儲存後裁判台、即時成績、匯出都會把籤號換成隊伍（約 15–25 秒同步）。已經開打後再改抽籤，已輸入的成績會跟著籤號換成別隊，請小心。</p>' + UI.scheduleHTML(st, gk, {});
+  }
+  function sumoView(st) {
+    const gk = V.sumoGk, g = D.groups[gk], F = R.finals(D, st, gk), ids = D.teams[gk].map((t) => t.id);
+    const arenaChips = chips([["", "決賽與秤重"]].concat(g.arenas.map((n) => [String(n), n + " 號台"])), V.arena, "arena");
+    let h = groupChips((x) => x.kind === "sumo", gk, "sgk") + arenaChips;
+    if (V.arena) return h + UI.arenaHTML(st, g.session, Number(V.arena), { admin: true });
+    const ties = R.tiesNeedingWeight(D, st, gk);
+    h += "<h2>" + esc(g.name) + " 預賽積分</h2>" + UI.sumoStandingsHTML(st, gk, { admin: true, unit: true });
+    h += "<h2>秤重</h2>" + (ties.length ? ties.map((t) => '<div class="banner err">第 ' + t.rank + " 名起 " + t.ids.join("、") + " 同分（積分、對戰都一樣）：請秤重，輕者在前</div>").join("") : '<p class="mute">目前沒有需要秤重的同分。</p>') +
+      '<div class="card"><div class="laps">' + ids.map((id) => '<label class="lap"><span>' + esc(id) + '</span><input type="number" inputmode="decimal" data-wcode="' + id + '" value="' + (R.weightOf(st, id) || "") + '" placeholder="公克"><small class="mute">' + esc(UI.team(id).name) + "</small></label>").join("") +
+      '</div><div class="foot"><button type="button" id="wSaveAll">儲存重量</button></div></div>';
+    h += "<h2>決賽（" + g.finalArena + " 號台）</h2>" + (F.prelim.done ? "" : '<div class="banner">預賽未完成（' + F.prelim.played + "/" + F.prelim.total + "），自動配對還沒產生；必要時可手動指定</div>") +
+      ["SF1", "SF2", "P3", "F"].map((slot) => {
+        const p = (st["final:" + gk + ":" + slot] || {}).payload || {}, x = F[slot];
+        const sel = (side) => '<select data-fset="' + side + '"><option value="">自動' + (x[side] && !p[side] ? "（" + x[side] + "）" : "") + "</option>" + ids.map((c) => '<option value="' + c + '"' + (p[side] === c ? " selected" : "") + ">" + c + "</option>").join("") + "</select>";
+        return '<div class="card" data-fslot="' + slot + '"><div class="fh"><b>' + R.FINAL_NAME[slot] + '</b><span class="mute small">' + esc(x.labels.join(" vs ")) + '</span></div><div class="cfg-grid">' +
+          '<label class="lbl inline">紅方' + sel("red") + '</label><label class="lbl inline">藍方' + sel("blue") + '</label><label class="lbl inline">台號<select data-fset="arena">' +
+          g.arenas.map((n) => '<option value="' + n + '"' + (Number(x.arena) === n ? " selected" : "") + ">" + n + " 號台" + (n === g.finalArena ? "（預設）" : "") + "</option>").join("") + "</select></label></div>" +
+          '<div class="foot"><button type="button" class="small" data-fsave>儲存對戰與台號</button></div></div>' + UI.boutCard(st, "final:" + gk + ":" + slot, x.red, x.blue, R.FINAL_NAME[slot], g.name, true, { admin: true });
+      }).join("");
+    return h;
+  }
+  function lineView(st) {
+    const set = (st.lineset || {}).payload || {};
+    const cur = set.laps ? '<p class="target" style="font-size:22px">目前題目：<b>' + set.laps + " 圈 × " + set.sec + " 秒 ＝ 目標 " + UI.f2(set.laps * set.sec) + " 秒</b></p>" : '<p class="target warn" style="font-size:20px">還沒抽題</p>';
+    return '<h2>循線抽題（現場抽籤，全場一致）</h2><div class="card">' + cur +
+      '<div class="foot" style="justify-content:flex-start"><button type="button" id="lineDraw" class="big">🎲 抽題（2–5 圈、每圈 10–30 秒）</button></div>' +
+      '<p class="note">抽完先確認，按「確定」才公布並同步到裁判手機與即時成績頁。比賽開始後不要再重抽。每隊比 ' + R.cfgOf(st).lineTries + " 次取最好（在「設定」改）。</p></div>" +
+      '<h2>手動設定</h2><div class="card"><div class="cfg-grid"><label class="lbl inline">圈數（2–5）<select id="laps"><option value="">—</option>' + [2, 3, 4, 5].map((n) => "<option" + (set.laps === n ? " selected" : "") + ">" + n + "</option>").join("") +
+      '</select></label><label class="lbl inline">每圈秒數（10–30）<input id="sec" type="number" min="10" max="30" step="1" value="' + (set.sec || "") + '"></label></div><div class="foot"><button type="button" id="lineSet">儲存設定</button></div></div>' +
+      "<h2>輸入／修改成績</h2>" + UI.lineEditorHTML(st) + UI.groupsBy((g) => g.kind === "line").map((gk) => UI.groupHTML(st, gk, { admin: true, unit: true })).join("");
+  }
+  function absentView(st) {
+    return groupChips(() => true, V.gk, "gk") + "<h2>" + esc(D.groups[V.gk].name) + ' 缺賽登記</h2><p class="note">整隊沒來：勾「整隊缺賽」（相撲還沒打的場次判對手 2:0、不排名、不發證書）。只有部分隊員沒到：勾第幾位（照報名表隊員 1／2／3 的順序；網站不放姓名），他們不發證書；國小隊伍到場不足 2 人沒有世界賽優先邀請資格。</p>' +
+      '<table class="tbl"><thead><tr><th>隊伍</th><th>整隊缺賽</th><th>沒到的隊員</th><th></th></tr></thead><tbody>' + D.teams[V.gk].map((t) => {
+        const miss = R.missOf(st, t.id);
+        return '<tr data-ab="' + t.id + '"><td>' + UI.teamHTML(t.id, { unit: true }) + '</td><td><input type="checkbox" data-abon' + (R.isAbsent(st, t.id) ? " checked" : "") + "></td><td>" +
+          Array.from({ length: t.n }, (_, i) => '<label class="check" style="margin:2px 0"><input type="checkbox" data-abm="' + i + '"' + (miss.indexOf(i) >= 0 ? " checked" : "") + "> 第 " + (i + 1) + " 位隊員</label>").join("") +
+          '</td><td><button type="button" class="small" data-absave="' + t.id + '">儲存</button></td></tr>';
+      }).join("") + "</tbody></table>";
+  }
+  function awardView(st) {
+    const W = R.warnings(D, st).filter((w) => w.level !== "info");
+    const ranked = UI.groupsBy((g) => g.kind !== "task");
+    let h = '<div class="foot noprint" style="justify-content:flex-start"><button type="button" onclick="window.print()">列印頒獎名單</button></div>' +
+      (W.length ? '<div class="banner">尚未完成 ' + W.length + " 項（看「警示」分頁）</div>" : '<div class="banner okb">全部完成</div>') +
+      '<p class="note">唱名時只念組別、獎項與隊名。教育局獎狀＝第一～五名（並列順延）；聯盟獎狀＝優勝、佳作。' + D.order.filter((gk) => D.groups[gk].noEdu).map((gk) => D.groups[gk].name).join("、") + " 不滿 10 隊堅持原組，只發聯盟獎狀。</p>";
+    h += ranked.map((gk) => {
+      const list = R.groupAwards(D, st, gk);
+      return '<div class="award-cat"><h2>' + esc(D.groups[gk].name) + '</h2><table class="tbl"><thead><tr><th style="width:150px">獎項</th><th>隊伍</th><th>學校／單位</th><th>說明</th></tr></thead><tbody>' +
+        (list.length ? list.map((a) => "<tr><td><b>" + esc((a.kind === "edu" ? "教育局 " : "聯盟 ") + a.title) + "</b></td><td>" + UI.teamHTML(a.id) + "</td><td class='mute'>" + esc(a.team.unit) + "</td><td class='mute small'>" + esc(a.note) + "</td></tr>").join("")
+          : '<tr><td colspan="4" class="mute">還沒有成績</td></tr>') + "</tbody></table></div>";
+    }).join("");
+    // 未來／探索工程師
+    h += '<div class="award-cat"><h2>未來工程師／探索工程師</h2><table class="tbl"><thead><tr><th>組別</th><th class="num">未來工程師</th><th class="num">探索工程師</th><th class="num">缺賽</th><th>世界賽優先邀請（國小）</th></tr></thead><tbody>' +
+      UI.groupsBy((g) => g.kind === "mys" || g.kind === "task").map((gk) => {
+        const ts = D.teams[gk], ab = ts.filter((t) => R.isAbsent(st, t.id));
+        const fut = ts.filter((t) => !R.isAbsent(st, t.id) && /未來/.test(R.certOf(D, st, t.id)));
+        const wo = ts.filter((t) => R.worldOk(D, st, t.id));
+        return "<tr><td>" + esc(D.groups[gk].name) + "</td><td class='num'>" + fut.length + "</td><td class='num'>" + (ts.length - fut.length - ab.length) + "</td><td class='num'>" + ab.length + "</td><td class='small'>" +
+          (D.groups[gk].level === "國小" && D.groups[gk].kind === "mys" ? wo.length + " 隊：" + wo.map((t) => t.id).join("、") : "") + "</td></tr>";
+      }).join("") + "</tbody></table></div>";
+    return h;
+  }
+  function exportView(st) {
+    return '<h2>匯出</h2><div class="card"><p>三個 CSV（Excel 可直接開）：</p><div class="foot" style="justify-content:flex-start;flex-wrap:wrap">' +
+      ["獲獎名單.csv", "完整成績.csv", "證書名冊.csv"].map((n) => '<button type="button" data-csv="' + n + '">下載 ' + n + "</button>").join("") + "</div>" +
+      '<p class="note">獲獎名單＝每個獎一列（組別、頒發單位、獎項、名次、隊伍、隊員）；完整成績＝每隊一列；證書名冊＝每位到場隊員一列（獎項、未來／探索工程師證書種類、世界賽資格）。缺賽的隊伍與沒到的隊員不列入證書名冊。<br><b>網站不放隊員姓名</b>：這裡下載的證書名冊姓名欄是「第 k 位隊員」、獲獎名單沒有隊員欄；正式的請在本機跑 <code>node score/tools/export_results.js</code>（自動讀最新的分組名單 xlsx 補姓名）。</p></div>' +
+      '<h2>原始資料備份</h2><div class="card"><button type="button" id="dlState" class="ghost">下載計分原始資料（JSON）</button>' +
+      '<p class="note">賽後用 tools/export_results.js 也能從這份 JSON 重算出一樣的三個 CSV（spark-score-results 技能）。</p>' +
+      (API.demo ? '<label class="lbl inline">示範模式：匯入 JSON 取代這台裝置的資料<input type="file" id="upState" accept=".json"></label>' : "") + "</div>";
+  }
+  function cfgView(st) {
+    const c = R.cfgOf(st);
+    const items = c.items.map((x, i) => '<div class="itemrow"><input data-it="t" data-i="' + i + '" value="' + esc(x.t) + '" placeholder="子項名稱"><input type="number" data-it="p" data-i="' + i + '" value="' + x.p + '" placeholder="分"><button type="button" class="ghost small" data-itdel="' + i + '">✕</button></div>').join("");
+    return '<h2>設定</h2><div class="card"><div class="cfg-grid">' +
+      '<label class="lbl inline">神秘題滿分<input id="c_mmax" type="number" min="1" value="' + c.mmax + '"></label>' +
+      '<label class="lbl inline">上午挑戰開始<input id="c_am" type="time" value="' + c.am + '"></label>' +
+      '<label class="lbl inline">下午挑戰開始<input id="c_pm" type="time" value="' + c.pm + '"></label>' +
+      '<label class="lbl inline">開始後幾分鐘開放神秘題<input id="c_gate" type="number" min="0" max="90" value="' + c.gate + '"></label>' +
+      '<label class="lbl inline">循線每隊次數<select id="c_lineTries">' + [1, 2, 3, 4, 5].map((n) => "<option" + (c.lineTries === n ? " selected" : "") + ">" + n + "</option>").join("") + "</select></label>" +
+      '<span class="lbl inline">相撲／循線聯盟獎狀：前八強（扣掉教育局前五名）＝優勝，之後的名次＝佳作（11/7 理事長）</span></div>' +
+      '<label class="check"><input type="checkbox" id="c_top5"' + (c.top5Only ? " checked" : "") + "> 神秘題前五名（教育局）不再重複拿聯盟優勝／佳作</label>" +
+      '<label class="check"><input type="checkbox" id="c_openam"' + (c.open.am ? " checked" : "") + "> 上午神秘題提前開放（不等時間）</label>" +
+      '<label class="check"><input type="checkbox" id="c_openpm"' + (c.open.pm ? " checked" : "") + "> 下午神秘題提前開放（不等時間）</label>" +
+      '<h3>神秘題子項（當天公布題目後再填，可不填）</h3><p class="note">填了之後，裁判可以勾子項自動加總分數（仍可直接改數字）。</p><div id="items">' + items + '</div><button type="button" class="ghost small" id="itAdd">＋ 加一個子項</button>' +
+      '<div class="foot"><button type="button" id="cfgSave">儲存設定</button></div></div>' +
+      '<h2>賽前清除</h2><div class="card"><p class="note">測試完、比賽開始前，把所有成績清掉（保留設定）。Apps Script 版會先把整份「計分資料」複製成備份分頁；開賽後（12/13 09:00 起）就不能清除。</p><button type="button" id="resetBtn" class="ghost">清除全部成績</button></div>';
+  }
+
+  function render() {
+    if (!pw) return show();
+    $("tabs").innerHTML = TABS.map(([id, l]) => '<button type="button" class="' + (id === V.tab ? "on" : "") + '" data-tab="' + id + '">' + l + "</button>").join("");
+    const st = state();
+    const W = R.warnings(D, st);
+    $("warn").textContent = "警示：" + W.filter((w) => w.level === "err").length + " 個要處理";
+    const v = { rank: rankView, warn: warnView, edit: editView, draw: drawView, sumo: sumoView, line: lineView, absent: absentView, award: awardView, export: exportView, cfg: cfgView }[V.tab] || rankView;
+    $("view").innerHTML = v(st);
+  }
+
+  // ---------- 事件 ----------
+  $("tabs").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-tab]");
+    if (b) { V.tab = b.dataset.tab; saveV(); history.replaceState(null, "", "#" + V.tab); render(); }
+  });
+  $("view").addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    const st = state();
+    if (b.dataset.gk) { V.gk = b.dataset.gk; V.sub = "rank"; saveV(); render(); }
+    else if (b.dataset.sub) { V.sub = b.dataset.sub; saveV(); render(); }
+    else if (b.dataset.egk) { V.editGk = b.dataset.egk; V.editTeam = ""; saveV(); render(); }
+    else if (b.dataset.sgk) { V.sumoGk = b.dataset.sgk; V.arena = ""; saveV(); render(); }
+    else if (b.dataset.arena != null && !b.dataset.act) { V.arena = b.dataset.arena; saveV(); render(); }
+    else if (b.id === "wSaveAll") {
+      const items = Array.from(document.querySelectorAll("[data-wcode]")).map((el) => {
+        const old = R.weightOf(st, el.dataset.wcode), v = el.value === "" ? null : Number(el.value);
+        return v === old ? null : { key: "weight:" + el.dataset.wcode, payload: v == null ? null : { g: v } };
+      }).filter(Boolean);
+      if (!items.length) { UI.toast("沒有改變", true); return; }
+      saveAndRender(items);
+    } else if (b.hasAttribute("data-fsave")) {
+      const c = b.closest("[data-fslot]"), key = "final:" + V.sumoGk + ":" + c.dataset.fslot;
+      const get = (n) => c.querySelector('[data-fset="' + n + '"]').value;
+      const p = Object.assign({}, (st[key] || {}).payload);
+      ["red", "blue"].forEach((n) => { if (get(n)) p[n] = get(n); else delete p[n]; });
+      p.arena = Number(get("arena"));
+      saveAndRender([{ key, payload: p }]);
+    } else if (b.id === "drawFromPaste") {
+      const gk = V.sumoGk, n = D.groups[gk].lots, lines = $("drawPaste").value.split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+      const norm = (x) => { x = String(x).trim().toUpperCase(); if (/^\d+$/.test(x)) x = gk + "-" + x.padStart(3, "0"); return x; };
+      const sel = (k) => document.querySelector('[data-lot="' + k + '"]');
+      let bad = [];
+      lines.forEach((ln, i) => {
+        const p = ln.split(/[\s,，、:：]+/).filter(Boolean);
+        const k = p.length >= 2 ? Number(p[0]) : i + 1, id = norm(p.length >= 2 ? p[1] : p[0]);
+        if (!(k >= 1 && k <= n) || !sel(k) || !D.teams[gk].some((t) => t.id === id)) { bad.push(ln); return; }
+        sel(k).value = id;
+      });
+      UI.toast(bad.length ? "看不懂的行：" + bad.join("／") : "已帶入，確認後按「儲存抽籤」", !bad.length);
+    } else if (b.id === "drawRandom") {
+      const gk = V.sumoGk, ids = D.teams[gk].map((t) => t.id).filter((id) => !R.isAbsent(st, id)).concat(D.teams[gk].map((t) => t.id).filter((id) => R.isAbsent(st, id)));
+      if (!confirm("由電腦隨機抽籤（" + D.groups[gk].name + "）？只在現場不實體抽籤時使用。")) return;
+      for (let i = ids.length - 1; i > 0; i--) { const a = new Uint32Array(1); crypto.getRandomValues(a); const j = a[0] % (i + 1); [ids[i], ids[j]] = [ids[j], ids[i]]; }
+      ids.forEach((id, i) => { document.querySelector('[data-lot="' + (i + 1) + '"]').value = id; });
+      UI.toast("已隨機帶入，確認後按「儲存抽籤」", true);
+    } else if (b.id === "drawSave") {
+      const gk = V.sumoGk, lots = {}, seen = {};
+      for (const el of document.querySelectorAll("[data-lot]")) {
+        if (!el.value) continue;
+        if (seen[el.value]) { UI.toast(el.value + " 同時在籤 " + seen[el.value] + " 和籤 " + el.dataset.lot, false); return; }
+        seen[el.value] = el.dataset.lot; lots[el.dataset.lot] = el.value;
+      }
+      const played = Object.keys(st).some((k) => k.startsWith("sumo:" + gk + ":"));
+      if (played && !confirm("這組已經有相撲成績了，改抽籤會讓已輸入的成績換成別隊，確定？")) return;
+      if (Object.keys(lots).length < D.groups[gk].lots && !confirm("還有 " + (D.groups[gk].lots - Object.keys(lots).length) + " 支籤沒填，先存起來（裁判台還不能開打）？")) return;
+      saveAndRender([{ key: "draw:" + gk, payload: { lots } }]);
+    } else if (b.id === "lineDraw") {
+      const rnd = (lo, hi) => { const a = new Uint32Array(1); crypto.getRandomValues(a); return lo + (a[0] % (hi - lo + 1)); };
+      const laps = rnd(2, 5), sec = rnd(10, 30), old = (st.lineset || {}).payload;
+      const ran = Object.keys(st).some((k) => k.startsWith("line:"));
+      if (confirm("抽到：" + laps + " 圈 × " + sec + " 秒 ＝ 目標 " + laps * sec + " 秒\n\n確定公布並同步到裁判手機？" + (old ? "\n（會取代目前的 " + old.laps + " 圈 × " + old.sec + " 秒）" : "") + (ran ? "\n\n⚠ 已經有循線成績了，換題目會讓已比的成績改用新目標計算！" : "")))
+        saveAndRender([{ key: "lineset", payload: { laps, sec } }]);
+    } else if (b.id === "lineSet") {
+      saveAndRender([{ key: "lineset", payload: { laps: Number($("laps").value), sec: Number($("sec").value) } }]);
+    } else if (b.dataset.absave) {
+      const tr = b.closest("[data-ab]"), id = b.dataset.absave;
+      const on = tr.querySelector("[data-abon]").checked;
+      const miss = Array.from(tr.querySelectorAll("[data-abm]")).filter((x) => x.checked).map((x) => Number(x.dataset.abm));
+      saveAndRender([{ key: "absent:" + id, payload: on || miss.length ? { on, miss } : null }]);
+    } else if (b.dataset.csv) {
+      UI.download(b.dataset.csv, R.exportCSV(D, st)[b.dataset.csv]);
+    } else if (b.id === "dlState") {
+      const t = new Date(), stamp = t.getFullYear() + UI.pad(t.getMonth() + 1) + UI.pad(t.getDate()) + "_" + UI.pad(t.getHours()) + UI.pad(t.getMinutes());
+      UI.download("計分網站原始資料_" + stamp + ".json", JSON.stringify({ ok: true, now: t.toISOString(), state: st }, null, 1), "application/json");
+    } else if (b.id === "itAdd") { const c = readCfg(); c.items.push({ t: "", p: 0 }); cfgDraft = c; renderCfgItems(); }
+    else if (b.dataset.itdel != null) { const c = readCfg(); c.items.splice(Number(b.dataset.itdel), 1); cfgDraft = c; renderCfgItems(); }
+    else if (b.id === "cfgSave") {
+      const c = readCfg();
+      c.items = c.items.filter((x) => x.t);
+      saveAndRender([{ key: "cfg", payload: c }]);
+    } else if (b.id === "resetBtn") {
+      if (!confirm("清除全部成績（保留設定）？")) return;
+      if (prompt("確定要清除，請輸入「清除」兩個字") !== "清除") return;
+      API.post({ action: "score.reset", admin: pw }).then((r) => { UI.toast(r.message, r.ok); refresh(); }).catch(() => UI.toast("連線失敗", false));
+    }
+  });
+  let cfgDraft = null;
+  function readCfg() {
+    const n = (id) => Number($(id).value);
+    const items = Array.from(document.querySelectorAll('[data-it="t"]')).map((el) => ({ t: el.value.trim(), p: Number(document.querySelector('[data-it="p"][data-i="' + el.dataset.i + '"]').value) || 0 }));
+    return { mmax: n("c_mmax"), am: $("c_am").value, pm: $("c_pm").value, gate: n("c_gate"), lineTries: n("c_lineTries"), round: "ceil",   /* 11/7：相撲循線改前八強，名額比例不再用 */ top5Only: $("c_top5").checked, open: { am: $("c_openam").checked, pm: $("c_openpm").checked }, items };
+  }
+  function renderCfgItems() {
+    $("items").innerHTML = cfgDraft.items.map((x, i) => '<div class="itemrow"><input data-it="t" data-i="' + i + '" value="' + esc(x.t) + '" placeholder="子項名稱"><input type="number" data-it="p" data-i="' + i + '" value="' + x.p + '" placeholder="分"><button type="button" class="ghost small" data-itdel="' + i + '">✕</button></div>').join("");
+  }
+  $("view").addEventListener("change", (e) => {
+    const el = e.target;
+    if (el.id === "editTeam") { V.editTeam = el.value; saveV(); render(); }
+    else if (el.id === "upState") {
+      const f = el.files[0]; if (!f) return;
+      f.text().then((t) => { const j = JSON.parse(t); localStorage.setItem("jbcScoreDemo", JSON.stringify(j.state || j)); UI.toast("已匯入", true); refresh(); }).catch(() => UI.toast("檔案格式錯誤", false));
+    }
+  });
+  UI.bindEditors($("view"), { state, save, render, toast: UI.toast, admin: true });
+
+  async function refresh() {
+    if (document.visibilityState === "hidden") return;
+    try {
+      const r = await API.load();
+      if (r && r.ok) { server = r; $("updated").textContent = "更新 " + UI.hhmmss(new Date()); }
+    } catch (e) { $("updated").textContent = "連線中斷"; }
+    if (pw && !UI.busy($("view")) && V.tab !== "cfg" && V.tab !== "absent" && V.tab !== "draw") render();
+  }
+  show();
+  refresh();
+  setInterval(refresh, 15000);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
+})();
+</script>
+</body>
+</html>

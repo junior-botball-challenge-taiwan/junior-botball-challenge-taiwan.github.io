@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>JBC 台中站 裁判計分</title>
+<link rel="stylesheet" href="score.css">
+</head>
+<body>
+<div class="demo" id="demoNote" hidden>示範模式：裁判密碼 1213；資料只存在這台裝置</div>
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">JBC 開放挑戰 台中站 2026/12/13・裁判計分</p>
+    <h1 id="who">登入</h1>
+    <p class="meta" id="roleText"></p>
+  </div>
+</header>
+<main class="wrap">
+  <section class="login" id="login" hidden>
+    <p class="mute">選你負責的崗位（看裁判分配表），輸入裁判密碼。</p>
+    <label class="lbl">崗位<select id="station"></select></label>
+    <label class="lbl">你的名字（可不填）<input id="nick" maxlength="20" placeholder="例：王小明"></label>
+    <label class="lbl">裁判密碼<input id="pw" type="password" inputmode="numeric" autocomplete="current-password"></label>
+    <button type="button" id="loginBtn">開始計分</button>
+    <p class="msg" id="loginMsg"></p>
+  </section>
+
+  <section id="main" hidden>
+    <div class="status"><span id="qText"></span><span><span id="updated"></span>　<a href="#" id="change">換崗位</a></span></div>
+    <div id="rejected"></div>
+    <div id="bar"></div>
+    <div id="view"></div>
+  </section>
+</main>
+<script src="../config.js"></script>
+<script src="score-config.js"></script>
+<script src="data.js"></script>
+<script src="rules.js"></script>
+<script src="server.js"></script>
+<script src="api.js"></script>
+<script src="common.js"></script>
+<script>
+(function () {
+  const R = window.JBC_RULES, D = window.JBC_DATA, UI = window.JBC_UI, API = window.JBC_API, S = window.JBC_SERVER;
+  const $ = (id) => document.getElementById(id);
+  const esc = UI.esc;
+  const AK = "jbcScoreJudge";
+  let auth = API.store.get(AK, null);          // {judge, station, nick}
+  let server = { state: {} };
+  const V = Object.assign({ team: {}, sub: "jbc", subTeam: "", subArena: "" }, API.store.get("jbcJudgeView", {}));
+  const saveV = () => API.store.set("jbcJudgeView", V);
+  $("demoNote").hidden = !API.demo;
+
+  const STATIONS = S.stations(D);
+  const st = () => API.overlay(server.state || {}, auth && (auth.nick || auth.station));
+  const station = () => S.stationOf(D, auth && auth.station);
+
+  // ---------- 登入 ----------
+  function stationOptions(cur) {
+    const groups = [["上午 JBC 裁判（地圖）", (s) => s.type === "jbc" && s.sess === "am"], ["下午 JBC 裁判（地圖）", (s) => s.type === "jbc" && s.sess === "pm"],
+      ["上午 相撲台", (s) => s.type === "sumo" && s.sess === "am"], ["下午 相撲台", (s) => s.type === "sumo" && s.sess === "pm"], ["循線／機動", (s) => s.type === "line" || s.type === "sub"]];
+    return '<option value="">選擇崗位</option>' + groups.map(([l, f]) => '<optgroup label="' + l + '">' + STATIONS.filter(f).map((s) =>
+      '<option value="' + esc(s.id) + '"' + (s.id === cur ? " selected" : "") + ">" + esc(s.label) + (s.teams ? "：" + s.teams.join("、") : "") + "</option>").join("") + "</optgroup>").join("");
+  }
+  function showLogin() {
+    $("login").hidden = false; $("main").hidden = true;
+    $("who").textContent = "登入"; $("roleText").textContent = "";
+    $("station").innerHTML = stationOptions(auth && auth.station);
+    if (auth) { $("nick").value = auth.nick || ""; $("pw").value = auth.judge || ""; }
+  }
+  $("loginBtn").addEventListener("click", async () => {
+    const req = { action: "score.login", judge: $("pw").value, station: $("station").value, nick: $("nick").value.trim() };
+    if (!req.station || !req.judge) { $("loginMsg").className = "msg err"; $("loginMsg").textContent = "請選崗位、輸入裁判密碼"; return; }
+    $("loginBtn").disabled = true; $("loginMsg").className = "msg"; $("loginMsg").textContent = "確認中…";
+    try {
+      const r = await API.post(req);
+      if (!r.ok) { $("loginMsg").className = "msg err"; $("loginMsg").textContent = r.message; return; }
+      if (auth && auth.station !== req.station && API.queue().length) await API.flush(auth);   // 換崗位前先把舊崗位的資料送掉
+      auth = { judge: req.judge, station: req.station, nick: req.nick };
+      API.store.set(AK, auth);
+      $("loginMsg").textContent = "";
+      render(); refresh();
+    } catch (e) { $("loginMsg").className = "msg err"; $("loginMsg").textContent = "連線失敗，請確認網路"; }
+    finally { $("loginBtn").disabled = false; }
+  });
+  $("change").addEventListener("click", (e) => {
+    e.preventDefault();
+    if (API.queue().length && !confirm("還有 " + API.queue().length + " 筆成績沒上傳（會繼續留在手機自動補傳），確定換崗位？")) return;
+    showLogin();
+  });
+
+  // ---------- 主畫面 ----------
+  function queueText() {
+    const n = API.queue().length;
+    $("qText").className = "q " + (n ? "warn" : "ok");
+    $("qText").textContent = n ? "待上傳 " + n + " 筆（網路恢復會自動補傳）" : "成績都已上傳 ✓";
+    const rej = API.rejected();
+    $("rejected").innerHTML = rej.length ? '<div class="banner err">有 ' + rej.length + " 筆沒有被接受：" + rej.map((x) => esc(x.key) + "（" + esc(x.message) + "）").join("、") +
+      ' <button type="button" class="ghost small" id="clearRej">知道了</button></div>' : "";
+    const c = $("clearRej");
+    if (c) c.onclick = () => { API.clearRejected(); queueText(); };
+  }
+  function tabInfo(s, id) {
+    const g = D.groups[R.gkOf(id)];
+    if (g.kind === "task") { const r = R.taskTable(D, s, R.gkOf(id)).find((x) => x.id === id); return r.future ? "✓ 完成" : r.okN + "/" + (g.tasks || 1) + " 題"; }
+    const n = R.mysAttempts(s, id).filter((a) => !a.p.void).length;
+    return "基礎 " + R.basicDone(s, id) + "/2・神秘 " + n + " 次";
+  }
+  function jbcView(s, ids) {
+    let cur = V.team[auth.station];
+    if (ids.indexOf(cur) < 0) cur = ids[0];
+    $("bar").innerHTML = '<div class="teamtabs">' + ids.map((id) => '<button type="button" class="' + (id === cur ? "on" : "") + '" data-tm="' + id + '"><b>' + esc(id) + "</b>" + esc(UI.team(id).name) + "<small>" + esc(tabInfo(s, id)) + "</small></button>").join("") + "</div>";
+    return UI.jbcCardHTML(s, cur, { station: auth.station, now: new Date() });
+  }
+  function subView(s) {
+    const seg = '<div class="seg four">' + [["jbc", "JBC 隊伍"], ["sumo", "相撲台"], ["line", "循線"]].map(([v, l]) => '<button type="button" class="' + (V.sub === v ? "on" : "") + '" data-sub="' + v + '">' + l + "</button>").join("") + "</div>";
+    if (V.sub === "jbc") {
+      const opts = '<option value="">選隊伍</option>' + UI.groupsBy((g) => g.kind === "mys" || g.kind === "task").map((gk) => '<optgroup label="' + esc(D.groups[gk].name) + '">' +
+        D.teams[gk].map((t) => '<option value="' + t.id + '"' + (t.id === V.subTeam ? " selected" : "") + ">" + esc(t.id + " " + t.name) + "</option>").join("") + "</optgroup>").join("");
+      $("bar").innerHTML = seg + '<select id="subTeam">' + opts + "</select>";
+      return V.subTeam ? UI.jbcCardHTML(s, V.subTeam, { station: "SUB", now: new Date() }) : '<p class="note">選一隊開始輸入。</p>';
+    }
+    if (V.sub === "sumo") {
+      const opts = '<option value="">選相撲台</option>' + ["am", "pm"].map((ss) => '<optgroup label="' + UI.SESS[ss] + '">' + Object.keys(D.arenas[ss]).map(Number).sort((a, b) => a - b).map((n) =>
+        '<option value="' + ss + ":" + n + '"' + (V.subArena === ss + ":" + n ? " selected" : "") + ">" + n + " 號台（" + esc(D.groups[D.arenas[ss][n]].name) + "）</option>").join("") + "</optgroup>").join("");
+      $("bar").innerHTML = seg + '<select id="subArena">' + opts + "</select>";
+      if (!V.subArena) return '<p class="note">選一個台。</p>';
+      const [ss, n] = V.subArena.split(":");
+      return UI.arenaHTML(s, ss, Number(n), {});
+    }
+    $("bar").innerHTML = seg;
+    return "<h2>循線計時</h2>" + UI.lineEditorHTML(s);
+  }
+  function render() {
+    if (!auth || !station()) return showLogin();
+    $("login").hidden = true; $("main").hidden = false;
+    const s = st(), x = station();
+    $("who").textContent = x.type === "jbc" ? UI.SESS[x.sess] + " 裁判 " + x.id.slice(1) : x.type === "sumo" ? UI.SESS[x.sess] + " 相撲 " + x.arena + " 號台" : x.type === "line" ? "循線賽道" : "機動裁判";
+    $("roleText").textContent = (auth.nick ? auth.nick + "・" : "") + x.label;
+    if (x.type === "jbc") $("view").innerHTML = jbcView(s, x.teams);
+    else if (x.type === "sumo") { $("bar").innerHTML = ""; $("view").innerHTML = UI.arenaHTML(s, x.sess, x.arena, {}); }
+    else if (x.type === "line") { $("bar").innerHTML = ""; $("view").innerHTML = "<h2>循線計時</h2>" + UI.lineEditorHTML(s); }
+    else $("view").innerHTML = subView(s);
+    queueText();
+  }
+
+  $("bar").addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.tm) { V.team[auth.station] = b.dataset.tm; saveV(); render(); window.scrollTo(0, 0); }
+    else if (b.dataset.sub) { V.sub = b.dataset.sub; saveV(); render(); }
+  });
+  $("bar").addEventListener("change", (e) => {
+    if (e.target.id === "subTeam") V.subTeam = e.target.value;
+    else if (e.target.id === "subArena") V.subArena = e.target.value;
+    else return;
+    saveV(); render();
+  });
+
+  async function save(items) {
+    API.enqueue(items);
+    queueText();
+    const r = await API.flush(auth);
+    if (r.data) server = r.data;
+    if (r.offline) return { ok: true, message: "已存在手機，網路恢復後自動上傳" };
+    if (r.error) return { ok: true, message: "已存在手機（" + r.error + "）" };
+    if (r.failed) return { ok: false, message: "沒有被接受：" + (API.rejected().slice(-1)[0] || {}).message };
+    return { ok: true, message: "已上傳" };
+  }
+  UI.bindEditors($("view"), { state: st, save, render, toast: UI.toast, admin: false, station: () => (station() && station().type === "sub" ? "SUB" : auth.station) });
+
+  async function refresh() {
+    if (document.visibilityState === "hidden" && !API.queue().length) return;
+    if (API.queue().length && auth) { const r = await API.flush(auth); if (r.data) server = r.data; }
+    try {
+      const r = await API.load();
+      if (r && r.ok) { server = r; $("updated").textContent = "更新 " + UI.hhmmss(new Date()); }
+    } catch (e) { $("updated").textContent = "離線中"; }
+    if (!auth || $("main").hidden) return;
+    if (UI.busy($("view"))) { queueText(); return; }
+    render();
+  }
+  if (auth && station()) render(); else showLogin();
+  refresh();
+  (function loop() { setTimeout(async () => { await refresh(); loop(); }, 15000 + Math.random() * 10000); })();
+  window.addEventListener("online", refresh);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
+})();
+</script>
+</body>
+</html>

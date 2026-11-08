@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JBC 台中站 即時成績</title>
+<link rel="stylesheet" href="score.css">
+</head>
+<body>
+<div class="demo" id="demoNote" hidden>示範模式：資料只存在這台裝置</div>
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">2026-2027 JBC 開放挑戰 台中站</p>
+    <h1>即時成績</h1>
+    <p class="meta">2026/12/13（日）葳格國際會議中心 維多利亞廳</p>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+</header>
+<main class="wrap">
+  <div class="status"><span id="updated">讀取中…</span><button type="button" class="ghost small" id="refreshBtn">立即更新</button></div>
+  <div id="bar"></div>
+  <div id="view"></div>
+</main>
+<script src="../config.js"></script>
+<script src="score-config.js"></script>
+<script src="data.js"></script>
+<script src="rules.js"></script>
+<script src="server.js"></script>
+<script src="api.js"></script>
+<script src="common.js"></script>
+<script>
+(function () {
+  const R = window.JBC_RULES, D = window.JBC_DATA, UI = window.JBC_UI, API = window.JBC_API;
+  const $ = (id) => document.getElementById(id);
+  const esc = UI.esc;
+  const qs = new URLSearchParams(location.search), tv = qs.has("tv");
+  const TABS = [["mys", "新秀／進階／高手"], ["task", "啟蒙／探索"], ["sumo", "遙控相撲"], ["line", "循線競速"]];
+  const pm = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes() >= 12 * 60 + 30; };
+  const firstOf = (kind) => UI.groupsBy((g) => g.kind === kind && g.session === (pm() ? "pm" : "am"))[0] || UI.groupsBy((g) => g.kind === kind)[0];
+  const V = Object.assign({ tab: "mys", gk: {}, sub: "rank", me: "" }, API.store.get("jbcPubView", {}));
+  if (qs.get("tab")) V.tab = qs.get("tab");
+  const saveV = () => API.store.set("jbcPubView", V);
+  let state = {};
+  if (tv) document.body.classList.add("tv");
+  $("demoNote").hidden = !API.demo;
+  const seg = (list, cur, attr) => '<div class="slots">' + list.map(([v, l]) => '<button type="button" class="' + (v === cur ? "on" : "") + '" data-' + attr + '="' + v + '">' + esc(l) + "</button>").join("") + "</div>";
+
+  function render() {
+    $("tabs").innerHTML = TABS.map(([id, l]) => '<button type="button" class="' + (id === V.tab ? "on" : "") + '" data-tab="' + id + '">' + l + "</button>").join("");
+    const list = UI.groupsBy((g) => g.kind === V.tab);
+    let gk = V.gk[V.tab];
+    if (list.indexOf(gk) < 0) gk = firstOf(V.tab);
+    const me = V.me && R.gkOf(V.me) === gk ? V.me : "";
+    const opts = '<option value="">找我的隊伍</option>' + list.map((g) => '<optgroup label="' + esc(D.groups[g].name) + '">' + D.teams[g].map((t) => '<option value="' + t.id + '"' + (t.id === V.me ? " selected" : "") + ">" + esc(t.id + " " + t.name) + "</option>").join("") + "</optgroup>").join("");
+    $("bar").innerHTML = (tv ? "" : seg(list.map((g) => [g, D.groups[g].short + "（" + UI.SESS[D.groups[g].session] + "）"]), gk, "gk") +
+      (V.tab === "sumo" ? seg([["rank", "名次與積分"], ["final", "決賽"], ["sched", "對戰表"]], V.sub, "sub") : "") + '<select id="me" class="finder">' + opts + "</select>");
+    $("view").innerHTML = UI.groupHTML(state, gk, { unit: true, me, sub: V.tab === "sumo" ? V.sub : "rank" });
+  }
+
+  document.body.addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.tab) V.tab = b.dataset.tab;
+    else if (b.dataset.gk) V.gk[V.tab] = b.dataset.gk;
+    else if (b.dataset.sub) V.sub = b.dataset.sub;
+    else return;
+    saveV(); render();
+  });
+  document.body.addEventListener("change", (e) => {
+    if (e.target.id !== "me") return;
+    V.me = e.target.value;
+    if (V.me) V.gk[V.tab] = R.gkOf(V.me);
+    saveV(); render();
+  });
+
+  async function refresh() {
+    try {
+      const r = await API.load();
+      if (r && r.ok) { state = r.state || {}; $("updated").textContent = "更新於 " + UI.hhmmss(new Date()); if (document.activeElement && document.activeElement.id === "me") return; render(); }
+      else $("updated").textContent = "讀取失敗，稍後自動重試";
+    } catch (e) { $("updated").textContent = "連線中斷，稍後自動重試"; }
+  }
+  $("refreshBtn").addEventListener("click", () => { $("updated").textContent = "更新中…"; refresh(); });
+  render();
+  refresh();
+  (function loop() { setTimeout(async () => { if (document.visibilityState !== "hidden") await refresh(); loop(); }, tv ? 10000 : 20000 + Math.random() * 10000); })();
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refresh(); });
+  // 大螢幕 ?tv=1：同一個時段的組別輪播（每 20 秒換一組）
+  if (tv) setInterval(() => {
+    const all = D.order.filter((g) => D.groups[g].session === (pm() ? "pm" : "am") && D.groups[g].kind !== "task");
+    const cur = V.gk[V.tab] || all[0], i = all.indexOf(cur), nx = all[(i + 1) % all.length];
+    V.tab = D.groups[nx].kind; V.gk[V.tab] = nx; render();
+  }, 20000);
+})();
+</script>
+</body>
+</html>
