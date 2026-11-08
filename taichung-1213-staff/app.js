@@ -110,7 +110,7 @@
   }
 
   function actionHTML(key, takenBy) {
-    if (FIXED[key]) return '<div class="act"><span class="who">✔ ' + esc(FIXED[key]) + '（主辦指定）</span></div>';
+    if (FIXED[key]) return '<div class="act"><span class="who">✔ ' + esc(FIXED[key]) + "（" + esc((window.FIXED_TAG || {})[key] || "主辦指定") + "）" + quizTag(FIXED[key]) + "</span></div>";
     if (RESERVED.has(key)) return '<div class="act"><span class="fixed-tag">主辦單位指定，不開放認領</span></div>';
     const u = ui[key] || {}, locked = !state.open, dis = locked ? " disabled" : "";
     const msg = u.msg ? '<p class="row-msg ' + (u.ok ? "ok" : "err") + '">' + esc(u.msg) + "</p>" : "";
@@ -155,11 +155,18 @@
       (pins.length ? "" : '<p class="row-hint">這個時段沒有固定位置（機動或支援，聽裁判長／組長調度）</p>') +
       mapHTML(s, pins) + '<p class="row-hint">紅點＝你的位置（' + (s === "am" ? "上午" : "下午") + '）。圖上的「判」是 JBC 裁判桌，相撲台、循線賽道在下方。</p></div>';
   }
+  // 11/8 理事長：整張場地圖放大、每個位置直接顯示誰（已排定／已認領的暱稱），字也放大
   function bigMap() {
-    const pins = [], labels = [];
-    ROLES.forEach((r) => { const p = (POS[String(r.id)] || {})[bigSess]; if (p && /^(J\d|S\d|L\d)/.test(r.code)) { pins.push(p[0]); labels.push(r.code); } });
-    $("bigmap").innerHTML = tabsHTML("bsess", "", bigSess) + mapHTML(bigSess, pins, labels) +
-      '<p class="row-hint">點代號（J＝JBC 場地裁判、S＝相撲台、L＝循線賽道）就會跳到那個崗位。</p>';
+    const cl = state.claims || {};
+    const tags = ROLES.map((r) => {
+      const p = (POS[String(r.id)] || {})[bigSess]; if (!p || !/^(J\d|S\d|L\d)/.test(r.code)) return "";
+      const who = cl[String(r.id)] || "", fixed = !!FIXED[String(r.id)];
+      return '<span class="tag-pin' + (who ? (fixed ? " fixed" : " taken") : "") + '" style="left:' + p[0][0] + "%;top:" + p[0][1] + '%" data-act="goto" data-code="' + esc(r.code) + '">' +
+        "<b>" + esc(r.code) + "</b>" + (who ? "<i>" + esc(who) + "</i>" : "<i>可認領</i>") + "</span>";
+    }).join("");
+    $("bigmap").innerHTML = tabsHTML("bsess", "", bigSess) +
+      '<div class="bigscroll"><div class="mapwrap big"><img src="map/' + bigSess + '.jpg" alt="場地圖">' + tags + "</div></div>" +
+      '<p class="row-hint">手機可以左右滑動看整張圖。點位置（J＝JBC 場地裁判、S＝相撲台、L＝循線賽道）就會跳到那個崗位；名字是已排定或已認領的人。</p>';
   }
 
   // 11/8 理事長：認領了崗位的人點練習計分，直接帶到這個崗位（練習模式，資料只在自己手機）
@@ -173,7 +180,8 @@
 
   function roleRow(r) {
     const key = String(r.id), who = state.claims[key], t = teamOfRole(key);
-    const badge = FIXED[key] || RESERVED.has(key) ? ["taken", "主辦指定"] : who ? ["taken", "已認領"] : t >= 0 ? ["team", "好友保留"] : ["free", "可認領"];
+    const ftag = (window.FIXED_TAG || {})[key] || "";
+    const badge = FIXED[key] && ftag.indexOf("好友") === 0 ? ["team", "好友・已排好"] : FIXED[key] || RESERVED.has(key) ? ["taken", "主辦指定"] : who ? ["taken", "已認領"] : t >= 0 ? ["team", "好友保留"] : ["free", "可認領"];
     const hasMap = !!POS[key];
     return '<div class="row' + (who ? " is-taken" : "") + '" id="row-' + esc(r.code) + '"><div class="row-head">' +
       '<span class="num" style="background:' + (GROUP_COLOR[r.group] || "#555") + '">' + esc(r.code) + "</span>" +
@@ -209,6 +217,7 @@
     const active = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset : null;
     const activeKey = active && active.key, activeF = active && active.f;
 
+    bigMap();
     const shown = ROLES.filter(matches);
     $("rows").innerHTML = (filter === "全部" && !query ? arrangeRow() : "") + (shown.length ? shown.map(roleRow).join("") : "<p class='load'>找不到符合的崗位</p>");
     document.querySelectorAll("#rows details").forEach((d) => { if (openDetails.has(d.dataset.key) || (query && shown.length <= 3)) d.open = true; });

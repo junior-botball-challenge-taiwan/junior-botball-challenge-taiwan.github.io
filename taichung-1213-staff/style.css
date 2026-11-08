@@ -154,3 +154,12 @@ button.link[data-act="map"] { color: var(--navy); }
 #bigmap .mapwrap { max-width: 720px; }
 .score-try { margin: 0; font-size: 13.5px; color: var(--navy); }
 .score-try a { color: var(--navy); font-weight: 600; }
+/* 11/8 理事長：整張場地圖放大、位置上顯示名字 */
+.bigscroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: 8px; }
+.mapwrap.big { max-width: none; width: 1100px; border: 0; border-radius: 0; }
+@media (min-width: 1180px) { .mapwrap.big { width: 100%; } }
+.mapwrap.big .tag-pin { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 3px 5px; font-size: 13px; line-height: 1.15; border-radius: 6px; background: rgba(18, 53, 91, .82); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.mapwrap.big .tag-pin b { font-size: 12px; }
+.mapwrap.big .tag-pin i { font-style: normal; font-size: 13px; font-weight: 700; }
+.mapwrap.big .tag-pin.taken { background: rgba(180, 42, 34, .9); }
+.mapwrap.big .tag-pin.fixed { background: rgba(138, 98, 0, .92); }
