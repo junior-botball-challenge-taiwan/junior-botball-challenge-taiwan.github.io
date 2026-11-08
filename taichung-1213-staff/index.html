@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>JBC 台中站 工作人員專區</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">JBC 開放挑戰台中站 2026</p>
+    <h1>工作人員專區</h1>
+    <p class="meta" id="eventMeta"></p>
+    <ol class="steps">
+      <li><b>看手冊與規則</b>了解整天流程、會場動線與比賽規則</li>
+      <li><b>看崗位</b>點「看詳細」了解每個崗位上午、下午要做什麼；點「📍 在場地圖上看位置」看你會站在哪裡（上午／下午可切換）</li>
+      <li><b>認領崗位</b><span id="openText"></span>在想要的崗位，從下拉選單選你的暱稱、輸入手機號碼做本人確認、按確認</li>
+      <li><b>做培訓與測驗</b>認領後到<a href="../taichung-1213-judge-training/" target="_blank" rel="noopener" style="color:inherit">裁判線上培訓網頁</a>看規則、作答，最後選暱稱＋手機交卷（80 分及格、可重考）</li>
+    </ol>
+    <div class="btns">
+      <a class="btn-pdf" href="score/index.html" target="_blank" rel="noopener" hidden>計分系統入口</a><!-- 11/8：計分系統 12/6 前部署後再拿掉 hidden -->
+      <a class="btn-rule" id="staffDoc" target="_blank" rel="noopener" hidden>工作人員任務手冊（PDF）</a>
+      <a class="btn-rule" id="judgeDoc" target="_blank" rel="noopener" hidden>裁判手冊（PDF）</a>
+    </div>
+    <p class="rules-label">比賽規則（台灣賽題庫，Google 文件，請看對應分頁）</p>
+    <div class="btns" id="ruleBtns"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h2>每個人都要知道</h2>
+    <ul class="common" id="common"></ul>
+  </section>
+
+  <section>
+    <details class="tl">
+      <summary><h2>當天時間軸</h2></summary>
+      <table class="timeline" id="timeline"></table>
+      <p class="rule">11/5 定案。當天如有臨時調整，以裁判長公布為準。</p>
+    </details>
+  </section>
+
+  <section id="signup">
+    <div class="sec-head">
+      <h2>崗位認領</h2>
+      <span class="count" id="countText"></span>
+    </div>
+    <div class="lockbox" id="lockbox">
+      <p class="lock-title">尚未開放認領</p>
+      <p>開放時間：<b id="openAtText"></b>　現在可以先看各崗位內容</p>
+      <p class="countdown" id="countdown"></p>
+    </div>
+    <p class="rule">一個崗位限一人，先確認先得。哪裡都可以、或不確定選哪個，可以選第一列「由主辦單位安排崗位（機動人員）」：由主辦單位派你去任何一個裁判位置，或當機動人員隨時派任務（可多人）。想換崗位，直接在新崗位用同一組暱稱和電話確認，舊崗位會自動釋出。標「主辦指定」的崗位不開放認領；標「好友保留」的是報名時說想同組的夥伴，已經幫你們留好相鄰的位置，請在那幾格認領。</p>
+    <details class="tl" open>
+      <summary><h2>🗺️ 場地互動圖</h2></summary>
+      <div id="bigmap"></div>
+    </details>
+    <div class="chips" id="chips"></div>
+    <input class="search" id="search" type="search" placeholder="搜尋：崗位代號（J05）、地圖（M12）、隊伍編號（EX-012）、組別（國小新秀）">
+    <div class="rows" id="rows"></div>
+  </section>
+
+  <footer>
+    <p id="contact"></p>
+    <p class="demo" id="demoNote" hidden>示範模式：尚未連接後台，資料只存在這台裝置。網址加 ?open=1 可預覽開放後的畫面（示範暱稱：示範-小明，電話 0912345678）。</p>
+  </footer>
+</main>
+
+<script src="config.js"></script>
+<script src="roles.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

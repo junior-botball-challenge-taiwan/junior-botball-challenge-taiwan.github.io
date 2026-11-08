@@ -1,0 +1,154 @@
+/* JBC 台中站工作人員專區（照 GRG 2026 staff-site 的樣式改色） */
+:root {
+  --navy: #12355b; --red: #d9480f; --yellow: #ffc93c; --ink: #1d2733; --mute: #5e6b78;
+  --line: #d5dbe1; --soft: #f1f4f8; --bg: #ffffff; --card: #ffffff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif; line-height: 1.6; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+h1 { font-size: 34px; margin: 4px 0 6px; }
+h2 { font-size: 22px; margin: 0 0 12px; }
+
+.hero { background: var(--navy); color: #fff; padding: 32px 0 28px; }
+.kicker { color: var(--yellow); font-weight: 700; letter-spacing: .08em; margin: 0; }
+.meta { color: #c9d3de; margin: 0 0 16px; }
+.steps { margin: 0 0 20px; padding-left: 22px; color: #e3e8ee; }
+.steps li { margin: 4px 0; }
+.steps b { color: #fff; margin-right: 6px; }
+.btn-pdf { display: inline-block; background: var(--yellow); color: var(--navy); font-weight: 700; padding: 12px 20px; border-radius: 10px; text-decoration: none; font-size: 17px; }
+.btn-pdf:hover { filter: brightness(1.05); }
+
+main section { padding: 28px 0 8px; }
+.common { margin: 0; padding: 14px 14px 14px 32px; background: var(--soft); border-radius: 12px; }
+.common li { margin: 3px 0; }
+
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.count { color: var(--mute); font-size: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.chip { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 14px; font-weight: 400; cursor: pointer; }
+.chip.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+.cards { display: grid; gap: 10px; }
+details.card { border: 1px solid var(--line); border-radius: 12px; background: var(--card); overflow: hidden; }
+details.card summary { list-style: none; cursor: pointer; padding: 12px 14px; display: grid; grid-template-columns: auto 1fr auto; gap: 4px 12px; align-items: center; }
+details.card summary::-webkit-details-marker { display: none; }
+.num { width: 40px; height: 40px; border-radius: 50%; color: #fff; display: grid; place-items: center; font-weight: 700; font-family: Arial, sans-serif; grid-row: span 2; }
+.title { font-weight: 700; font-size: 16px; }
+.short { color: var(--mute); font-size: 13.5px; grid-column: 2; }
+.badge { font-size: 12.5px; padding: 3px 10px; border-radius: 999px; white-space: nowrap; grid-row: span 2; }
+.badge.free { background: #e3f5ee; color: #13775f; }
+.badge.taken { background: #fde8e6; color: #b42a22; }
+.body { padding: 0 14px 14px; display: grid; gap: 10px; }
+.body h4 { margin: 0 0 2px; font-size: 13.5px; color: var(--mute); }
+.body ul { margin: 0; padding-left: 20px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.box { background: var(--soft); border-radius: 10px; padding: 10px 12px; }
+.load { font-size: 13.5px; color: var(--mute); }
+
+.lockbox { background: #fff6dc; border: 1px solid #f1d58a; border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.lockbox p { margin: 2px 0; }
+.lock-title { font-weight: 700; color: #8a6200; }
+.countdown { font-size: 22px; font-weight: 700; font-family: Arial, sans-serif; color: var(--navy); }
+.form { display: grid; gap: 14px; background: var(--soft); padding: 16px; border-radius: 12px; }
+.form.locked { opacity: .55; }
+.form label { display: grid; gap: 6px; font-weight: 700; }
+select, input { font: inherit; font-weight: 400; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; width: 100%; }
+.rule { margin: 0; font-size: 13.5px; color: var(--mute); }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+button { font: inherit; font-weight: 700; padding: 11px 20px; border-radius: 8px; border: 0; background: var(--red); color: #fff; cursor: pointer; }
+button.ghost { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+button:disabled { cursor: not-allowed; opacity: .6; }
+.msg { margin: 0; font-weight: 700; min-height: 1.6em; }
+.msg.ok { color: #13775f; } .msg.err { color: #b42a22; }
+
+table.status { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.status th, .status td { border-bottom: 1px solid var(--line); padding: 7px 8px; text-align: left; }
+.status th { color: var(--mute); font-weight: 700; }
+.status td:first-child { width: 44px; color: var(--mute); font-family: Arial, sans-serif; }
+.status .empty { color: #a9b4bf; }
+
+footer { padding: 28px 0 40px; color: var(--mute); font-size: 14px; }
+.demo { color: #8a6200; }
+
+@media (max-width: 560px) {
+  h1 { font-size: 28px; }
+  .two { grid-template-columns: 1fr; }
+  details.card summary { grid-template-columns: auto 1fr; }
+  .badge { grid-row: auto; grid-column: 2; justify-self: start; }
+}
+
+/* ---------- 崗位認領列表 ---------- */
+.rule { margin: 0 0 12px; }
+.rows { display: grid; gap: 10px; }
+.row { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: #fff; display: grid; gap: 10px; }
+.row.arrange { background: #fff8e6; border-color: #f1d58a; }
+.row.is-taken { background: #fafbfc; }
+.row-head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.row-title { display: grid; }
+.num.star { background: var(--yellow); color: var(--navy); font-size: 18px; grid-row: auto; }
+.row-head .num, .row-head .badge { grid-row: auto; }
+.names { margin: 0; font-size: 14.5px; }
+.act { display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 8px; align-items: center; }
+.act select, .act input { padding: 9px 10px; }
+.taken-act { grid-template-columns: 1fr auto; }
+.who { font-weight: 700; color: #13775f; }
+button.small { padding: 8px 14px; font-size: 14px; }
+button.link { background: none; color: var(--mute); padding: 0; font-weight: 400; font-size: 13.5px; text-decoration: underline; justify-self: start; }
+.row-hint { margin: -4px 0 0; font-size: 13px; color: #8a6200; }
+.row-msg { margin: -2px 0 0; font-weight: 700; font-size: 14.5px; }
+.row-msg.ok { color: #13775f; } .row-msg.err { color: #b42a22; }
+.row details summary { cursor: pointer; color: var(--g-score); font-size: 14px; }
+.row details .body { padding: 10px 0 0; }
+@media (max-width: 560px) {
+  .act { grid-template-columns: 1fr; }
+  .act button { width: 100%; }
+  .taken-act { grid-template-columns: 1fr auto; }
+  .taken-act button { width: auto; }
+}
+.row-title .short { grid-column: auto; }
+.sec-head { flex-wrap: wrap; }
+.sec-head h2 { white-space: nowrap; }
+@media (max-width: 560px) {
+  .row-head .badge { grid-column: auto; justify-self: end; }
+  .act { grid-template-columns: 1fr auto; }
+  .act select { grid-column: 1 / -1; }
+  .act button { width: auto; }
+}
+.fixed-tag { justify-self: end; font-size: 12.5px; color: var(--mute); background: var(--soft); border-radius: 999px; padding: 3px 10px; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.rules-label { margin: 18px 0 8px; color: #c9d3de; font-size: 14px; }
+.btn-rule { display: inline-block; background: transparent; color: #fff; border: 1.5px solid #fff; font-weight: 700; padding: 10px 16px; border-radius: 10px; text-decoration: none; font-size: 15px; }
+.btn-rule:hover { background: rgba(255,255,255,.12); }
+
+/* ---------- JBC 版新增 ---------- */
+.num { width: auto; min-width: 46px; height: 34px; padding: 0 8px; border-radius: 17px; font-size: 14px; }
+.search { margin: 0 0 12px; }
+details.tl summary { cursor: pointer; list-style: none; }
+details.tl summary::-webkit-details-marker { display: none; }
+details.tl summary h2 { display: inline; }
+details.tl summary::after { content: "（點開）"; color: var(--mute); font-size: 14px; margin-left: 6px; }
+details.tl[open] summary::after { content: ""; }
+table.timeline { width: 100%; border-collapse: collapse; font-size: 14.5px; margin-top: 10px; }
+.timeline th, .timeline td { border-bottom: 1px solid var(--line); padding: 7px 8px; text-align: left; vertical-align: top; }
+.timeline th { color: var(--mute); }
+.timeline td.t { white-space: nowrap; font-family: Arial, sans-serif; font-weight: 700; color: var(--navy); }
+.btns + .rules-label { margin-top: 18px; }
+@media (max-width: 560px) {
+  .timeline td.t { white-space: normal; }
+  table.timeline { font-size: 13.5px; }
+}
+
+/* 11/8 理事長：好友同組保留位、互動場地圖 */
+.badge.team { background: #fff4d6; color: #8a6200; }
+.team-tag { margin: 0; font-size: 13.5px; color: #8a6200; background: #fff9e8; border-radius: 8px; padding: 6px 10px; }
+button.link[data-act="map"] { color: var(--navy); }
+.mapbox { display: grid; gap: 8px; }
+.maptabs { display: flex; gap: 8px; }
+.mapwrap { position: relative; width: 100%; max-width: 560px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+.mapwrap img { display: block; width: 100%; height: auto; }
+.pin { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; background: rgba(229, 57, 53, .85); border: 3px solid #fff; box-shadow: 0 0 0 2px #e53935; animation: pulse 1.4s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 2px #e53935, 0 0 0 0 rgba(229, 57, 53, .6); } 100% { box-shadow: 0 0 0 2px #e53935, 0 0 0 14px rgba(229, 57, 53, 0); } }
+.tag-pin { position: absolute; transform: translate(-50%, -50%); font-size: 10px; line-height: 1; padding: 2px 3px; border-radius: 4px; background: rgba(18, 53, 91, .88); color: #fff; cursor: pointer; white-space: nowrap; }
+.tag-pin:hover { background: #e53935; }
+#bigmap { display: grid; gap: 8px; margin-top: 8px; }
+#bigmap .mapwrap { max-width: 720px; }
