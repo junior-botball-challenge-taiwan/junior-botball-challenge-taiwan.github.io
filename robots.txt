@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /taichung-1213-seats/
+Disallow: /taichung-1213-judge-training/
 
 # Search Engine & Web Crawlers
 User-agent: Googlebot
