@@ -32,8 +32,22 @@
     c.items = Array.isArray(c.items) ? c.items : [];
     return c;
   }
-  const gkOf = (id) => String(id || "").split("-")[0];
-  function teamById(D, id) { return (D.teams[gkOf(id)] || []).find((t) => t.id === id) || null; }
+  // 11/18 理事長：JBC 場地組的隊伍編號＝座位代碼（X-035E、X-001J、J-001E…），前綴是比賽區不是組別
+  //   （X-035E 國小新秀、X-001J 國中新秀同區不同組）→ 組別一律查 data.js 的 teams（每隊的 gk 欄）；查不到才退回前綴（啟蒙／探索／相撲／循線）
+  const GKX = typeof WeakMap !== "undefined" ? new WeakMap() : null;
+  function gkIndex(D) {
+    if (!D || !D.teams) return null;
+    if (GKX && GKX.has(D)) return GKX.get(D);
+    const m = {};
+    Object.keys(D.teams).forEach((gk) => (D.teams[gk] || []).forEach((t) => { m[t.id] = t.gk || gk; }));
+    if (GKX) GKX.set(D, m);
+    return m;
+  }
+  function gkOf(id, D) {
+    const k = String(id || ""), ix = gkIndex(D && typeof D === "object" && D.teams ? D : root.JBC_DATA);   // .map(R.gkOf) 會把索引當第二個參數 → 不是名單就用全域
+    return (ix && ix[k]) || k.split("-")[0];
+  }
+  function teamById(D, id) { return (D.teams[gkOf(id, D)] || []).find((t) => t.id === id) || null; }
   const r2 = (x) => Math.round(Number(x) * 100) / 100;
 
   // ---------- 缺賽 ----------
@@ -147,7 +161,7 @@
     const lots = drawOf(st, gk, D), n = D.groups[gk].lots || D.teams[gk].length, seen = {};
     for (let i = 1; i <= n; i++) {
       const id = lots[String(i)];
-      if (!id || seen[id] || gkOf(id) !== gk || !teamById(D, id)) return false;
+      if (!id || seen[id] || gkOf(id, D) !== gk || !teamById(D, id)) return false;
       seen[id] = 1;
     }
     return true;
@@ -338,7 +352,7 @@
   }
   // 證書：未來工程師／探索工程師（啟蒙、探索、國小＝Botball亞洲組委會國際證書；國中、高中＝聯盟認證證書）；相撲、循線沒有
   function certOf(D, st, id) {
-    const gk = gkOf(id), g = D.groups[gk];
+    const gk = gkOf(id, D), g = D.groups[gk];
     if (g.kind !== "mys" && g.kind !== "task") return "";
     if (isAbsent(st, id)) return "";
     const future = g.kind === "mys" ? basicDone(st, id) >= 2 : taskTable(D, st, gk).find((r) => r.id === id).future;
@@ -347,7 +361,7 @@
   }
   // 國小新秀／進階／高手：未來工程師、人數 ≥2、當日有參賽 → 美國世界賽優先邀請資格
   function worldOk(D, st, id) {
-    const g = D.groups[gkOf(id)], t = teamById(D, id);
+    const g = D.groups[gkOf(id, D)], t = teamById(D, id);
     if (!g || g.kind !== "mys" || g.level !== "國小") return null;
     const attended = t.n - missOf(st, id).length;
     return !isAbsent(st, id) && basicDone(st, id) >= 2 && attended >= 2;
@@ -401,7 +415,7 @@
   const csvCell = (v) => { const s = String(v == null ? "" : v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const csv = (rows) => "﻿" + rows.map((r) => r.map(csvCell).join(",")).join("\r\n") + "\r\n";
   function summary(D, st, id) {
-    const gk = gkOf(id), g = D.groups[gk];
+    const gk = gkOf(id, D), g = D.groups[gk];
     if (g.kind === "mys") {
       const sc = mysScores(st, id);
       return "基礎題 " + basicDone(st, id) + "/2；神秘題 " + (sc.length ? sc.join("、") : "無");
@@ -415,7 +429,7 @@
     return r.tries.map((e, i) => "第" + (i + 1) + "次 " + (e ? (e.done ? e.final + " 秒（差 " + e.diffs[0] + "）" : e.laps + " 圈未完成") : "—")).join("；");
   }
   function rankOf(D, st, id) {
-    const gk = gkOf(id), g = D.groups[gk];
+    const gk = gkOf(id, D), g = D.groups[gk];
     const rows = g.kind === "mys" ? mysRanking(D, st, gk).rows : g.kind === "sumo" ? sumoRanking(D, st, gk).rows : g.kind === "line" ? lineRanking(D, st, gk).rows : [];
     const r = rows.find((x) => x.id === id);
     return r && r.rank != null ? r.rank + (r.tie ? "（並列）" : "") : "";
