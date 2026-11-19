@@ -11,6 +11,9 @@
   const teamOfRole = (id) => TEAMS.findIndex((t) => t.ids.map(String).includes(String(id)));
   const teamOfNick = (n) => TEAMS.findIndex((t) => t.nicks.includes(n));
   const TEAM_NAMES = new Set([].concat(...TEAMS.map((t) => t.nicks)));
+  // 11/19 下午理事長：組長 G1、G2 限有賽事經驗者認領（資格在後台名單分頁檢查，網頁不放名單）
+  const EXP_ONLY = new Set((window.EXP_ONLY || []).map(String));
+  const EXP_MSG = "這個崗位限有機器人賽事、營隊或大型活動志工／工作人員經驗的人認領（依報名表單）；如果你有經驗但表單填「否」，請在工作人員 LINE 群組告訴大會";
   // 互動位置圖：{ id: { am: [[左%, 上%]…], pm: … } }
   const POS = window.POS || {};
   const SESS = [["am", "上午"], ["pm", "下午"]];
@@ -30,6 +33,7 @@
   // ---------- 後台：正式（Apps Script）或示範模式 ----------
   const demo = !window.API_URL;
   const DEMO_STAFF = { "示範-小明": "0912345678", "示範-小華": "0922333444", "示範-阿美": "0933111222" };
+  const DEMO_EXP = new Set(["示範-小明"]);   // 示範模式：只有小明有賽事經驗（可認領 G1、G2）
   const demoOpen = () => new URLSearchParams(location.search).has("open");
   function demoLoad() { try { return JSON.parse(localStorage.getItem("jbcTcDemo") || "null") || { claims: {}, arrange: [] }; } catch (e) { return { claims: {}, arrange: [] }; } }
   function demoSave(d) { try { localStorage.setItem("jbcTcDemo", JSON.stringify(d)); } catch (e) {} }
@@ -46,6 +50,7 @@
       const d = demoLoad(), c = d.claims, a = d.arrange;
       if (norm(DEMO_STAFF[req.nickname]) !== norm(req.phone)) return { ok: false, message: "電話號碼不符", ...d };
       if (FIXED[String(req.roleId)] || RESERVED.has(String(req.roleId))) return { ok: false, message: "這個崗位由主辦單位指定", ...d };
+      if (req.action === "claim" && EXP_ONLY.has(String(req.roleId)) && !DEMO_EXP.has(req.nickname)) return { ok: false, message: EXP_MSG, ...d };
       if (req.action === "claim") {
         const mt = teamOfNick(req.nickname), rt = req.roleId === ARRANGE ? -1 : teamOfRole(req.roleId);
         if (mt >= 0 && rt !== mt) return { ok: false, message: "你和好友的位置保留在 " + TEAMS[mt].codes.join("、") + "，請在那幾格認領", ...d };
@@ -181,12 +186,13 @@
   function roleRow(r) {
     const key = String(r.id), who = state.claims[key], t = teamOfRole(key);
     const ftag = (window.FIXED_TAG || {})[key] || "";
-    const badge = FIXED[key] && ftag.indexOf("好友") === 0 ? ["team", "好友・已排好"] : FIXED[key] || RESERVED.has(key) ? ["taken", "主辦指定"] : who ? ["taken", "已認領"] : t >= 0 ? ["team", "好友保留"] : ["free", "可認領"];
+    const badge = FIXED[key] && ftag.indexOf("好友") === 0 ? ["team", "好友・已排好"] : FIXED[key] || RESERVED.has(key) ? ["taken", "主辦指定"] : who ? ["taken", "已認領"] : t >= 0 ? ["team", "好友保留"] : EXP_ONLY.has(key) ? ["team", "限有賽事經驗者"] : ["free", "可認領"];
     const hasMap = !!POS[key];
     return '<div class="row' + (who ? " is-taken" : "") + '" id="row-' + esc(r.code) + '"><div class="row-head">' +
       '<span class="num" style="background:' + (GROUP_COLOR[r.group] || "#555") + '">' + esc(r.code) + "</span>" +
       '<div class="row-title"><span class="title">' + esc(r.title) + '</span><span class="short">' + esc(r.short) + "</span></div>" +
       '<span class="badge ' + badge[0] + '">' + badge[1] + "</span></div>" +
+      (EXP_ONLY.has(key) ? '<p class="team-tag">⭐ ' + esc(window.EXP_ONLY_TEXT || "限有賽事經驗者") + "</p>" : "") +
       (t >= 0 ? '<p class="team-tag">🤝 好友同組保留位（' + TEAMS[t].codes.join("、") + "）：只有 " + TEAMS[t].nicks.map(esc).join("、") + " 能在這幾格認領</p>" : "") +
       actionHTML(key, who) +
       (hasMap ? '<button type="button" class="link" data-act="map" data-key="' + key + '">' + (mapOpen === key ? "▲ 收起位置圖" : "📍 在場地圖上看位置（上午／下午）") + "</button>" : "") +
