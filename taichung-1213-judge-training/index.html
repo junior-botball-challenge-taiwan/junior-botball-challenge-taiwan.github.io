@@ -49,12 +49,15 @@ table.tb th,table.tb td{border:1px solid var(--line);padding:5px 7px;text-align:
 .mute{color:var(--mute);font-size:.9rem}
 .inp{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);max-width:100%}
 .hide{display:none}
+.login{background:var(--ok-bg);border:1px solid var(--ok);border-radius:10px;padding:10px 14px;margin:12px 0 0;font-size:.95rem}
+.roles button[disabled]{opacity:.35;cursor:not-allowed}
 footer{color:var(--mute);font-size:.8rem;text-align:center;padding:20px 16px}
 </style></head>
 <body>
 <header><h1>JBC 台中站 2026/12/13 裁判線上培訓</h1>
 <p>先看完各章重點、回答每章後面的測驗題（每題作答後馬上對答案，答錯會看到正確答案和解說），最後在第 5 章交卷。版本 2026-11-08（依裁判手冊 2026-12 版與 11/8 最新決定）</p></header>
 <main>
+<p id="loginBar" class="login hide"></p>
 <nav class="steps"><a href="#ch1" class="on">1 共同須知</a><a href="#ch2">2 選崗位</a><a href="#ch3">3 崗位規則</a><a href="#ch4">4 計分系統</a><a href="#ch5">5 總分與回顧</a></nav>
 
 <section class="ch" id="ch1"><h2>第 1 章　共同須知（每位裁判都要看）</h2>
@@ -230,6 +233,14 @@ try { const v = JSON.parse(localStorage.getItem(KEY) || "null"); if (v && v.ans)
 if (!S.chk) S.chk = {};
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 const $ = (id) => document.getElementById(id);
+// 11/20 理事長：從工作人員專區登入進來（同網域 sessionStorage，電話不放網址）→ 鎖定大會指派的測驗類別、填好暱稱；直接打開（沒登入）照舊自由練習
+let LOGIN = null;
+try { LOGIN = JSON.parse(sessionStorage.getItem("jbc1213-staff-login") || "null"); } catch (e) {}
+if (LOGIN && !LOGIN.nick) LOGIN = null;
+let LOCK = LOGIN ? (LOGIN.track && LOGIN.track !== "共同" ? LOGIN.track : "") : null;   // null＝沒鎖；""＝只考共同題
+// 11/20 晚理事長：L1、L2 要考兩種（循線＋JBC 場地裁判）→ 只能在大會指派的這幾種之間切換
+const ALLOW = LOGIN ? (LOGIN.tracks && LOGIN.tracks.length ? LOGIN.tracks : [LOGIN.track || "共同"]).map((t) => (t === "共同" ? "" : t)) : null;
+if (LOCK !== null && S.role !== LOCK) { S.role = LOCK; S.res = null; save(); }
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 const busy = {};
 function pick(role, ch){ return BANK.filter((q) => (q["崗位"] === "共同" || q["崗位"] === role) && (!ch || q["章節"] === ch)); }
@@ -283,6 +294,13 @@ document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-chk]");
   if (b) { const q = BANK.find((x) => x.id === b.dataset.chk); if (!S.ans[q.id]) { alert("請至少勾一個選項"); return; } check(q); return; }
   const r = e.target.closest("[data-role]");
+  if (r && LOCK !== null && ALLOW.indexOf(r.dataset.role) < 0) { alert("你的測驗類別由大會依崗位安排（" + ALLOW.map((t) => t || "共同須知").join("＋") + "），要換工作請在工作人員 LINE 群組告訴大會"); return; }
+  if (r && LOCK !== null && r.dataset.role !== S.role) {   // 要考兩種的人：切到另一種（各自交卷）
+    if (S.res && !confirm("換到另一種測驗會清掉這次交卷的畫面（成績已記錄在後台），確定？")) return;
+    LOCK = r.dataset.role; LOGIN.track = LOCK || "共同"; try { sessionStorage.setItem("jbc1213-staff-login", JSON.stringify(LOGIN)); } catch (err) {}
+    S.role = LOCK; S.res = null; save(); renderAll(); location.hash = "ch3"; return;
+  }
+  if (r && LOCK !== null) return;
   if (r) { if (S.res && !confirm("換崗位會清掉這次交卷的結果，確定？")) return; S.role = r.dataset.role; S.res = null; save(); renderAll(); location.hash = "ch3"; return; }
   if (e.target.id === "submitRec") submit(true);
   if (e.target.id === "submitPrac") submit(false);
@@ -307,13 +325,28 @@ async function submit(record){
 }
 async function loadNicks(){
   const sel = $("nick");
+  if (LOGIN) {   // 從工作人員專區登入：暱稱固定、手機號碼帶入（交卷時後台照樣用電話驗證）
+    sel.innerHTML = "<option selected>" + esc(LOGIN.nick) + "</option>"; sel.disabled = true;
+    if (LOGIN.phone && !$("phone").value) $("phone").value = LOGIN.phone;
+    return;
+  }
   try {
     const d = await (await fetch(API, {cache: "no-store"})).json();
     sel.innerHTML = '<option value="">選你的暱稱</option>' + (d.nicknames || []).map((n) => '<option' + (n === S.nick ? " selected" : "") + ">" + esc(n) + "</option>").join("");
   } catch (e) { sel.innerHTML = '<option value="">名單讀取失敗，請重新整理</option>'; }
 }
+function renderLogin(){
+  const b = $("loginBar"); if (!b) return;
+  if (!LOGIN) { b.classList.add("hide"); return; }
+  b.classList.remove("hide");
+  b.innerHTML = "已從工作人員專區登入：<b>" + esc(LOGIN.nick) + "</b>｜崗位：" + esc(LOGIN.roleName || "大會安排中") +
+    "｜測驗類別：<b>" + esc(LOCK || "共同須知（只考共同題）") + "</b>（大會依崗位安排，已鎖定）" +
+    (ALLOW.length > 1 ? "｜你要考 " + ALLOW.length + " 種：" + ALLOW.map((t) => esc(t || "共同須知")).join("＋") + "（第 2 章按另一個類別切換，各自交卷）" : "") +
+    "　<a href=\"../taichung-1213-staff/\">← 回工作人員專區</a>";
+}
 function renderRole(){
-  document.querySelectorAll("[data-role]").forEach((b) => b.classList.toggle("on", b.dataset.role === S.role));
+  renderLogin();
+  document.querySelectorAll("[data-role]").forEach((b) => { b.classList.toggle("on", b.dataset.role === S.role); b.disabled = LOCK !== null && ALLOW.indexOf(b.dataset.role) < 0; });
   document.querySelectorAll("[data-for]").forEach((d) => d.classList.toggle("hide", d.dataset.for !== S.role));
   $("noRole3").classList.toggle("hide", !!S.role); $("noRole4").classList.toggle("hide", !!S.role);
   renderQuiz("quiz3", S.role ? pick(S.role, "崗位規則").filter((q) => q["崗位"] !== "共同") : []);

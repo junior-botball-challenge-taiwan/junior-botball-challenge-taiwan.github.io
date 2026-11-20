@@ -15,10 +15,11 @@
     <p class="meta" id="eventMeta"></p>
     <ol class="steps">
       <li><b>看手冊與規則</b>了解整天流程、會場動線與比賽規則</li>
-      <li><b>看崗位</b>點「看詳細」了解每個崗位上午、下午要做什麼；點「📍 在場地圖上看位置」看你會站在哪裡（上午／下午可切換）</li>
-      <li><b>認領崗位</b><span id="openText"></span>在想要的崗位，從下拉選單選你的暱稱、輸入手機號碼做本人確認、按確認</li>
-      <li><b>做培訓與測驗</b>認領後到<a href="../taichung-1213-judge-training/" target="_blank" rel="noopener" style="color:inherit">裁判線上培訓網頁</a>看規則、作答，最後選暱稱＋手機交卷（80 分及格、可重考）</li>
+      <li><b>登入看我的崗位</b>在下面「我的崗位與測驗」選你的暱稱、輸入手機號碼，就會看到大會幫你排好的崗位、上午下午要做什麼、站在哪裡</li>
+      <li><b>開始我的測驗</b>按「開始〇〇測驗」直接進到你這個崗位的線上培訓與測驗，交卷時再輸入一次手機號碼（80 分及格、可重考）。測驗 11/20 已歸零，請照新崗位重考</li>
+      <li><b>要換工作</b>崗位由大會安排，網站不能自己換；要換請在工作人員 LINE 群組告訴大會</li>
     </ol>
+    <span id="openText" hidden></span>
     <div class="btns">
       <a class="btn-pdf" href="score/judge.html?demo=1" target="_blank" rel="noopener">計分系統（練習模式・裁判密碼 1213）</a><!-- 11/8 理事長：先給工作人員練習；12/6 正式部署後改回 score/index.html -->
       <a class="btn-rule" id="staffDoc" target="_blank" rel="noopener" hidden>工作人員任務手冊（PDF）</a>
@@ -30,6 +31,21 @@
 </header>
 
 <main class="wrap">
+  <!-- 11/20 理事長：改成大會指派崗位；登入（暱稱＋電話）→ 我的崗位 → 開始自己崗位的測驗 -->
+  <section id="mine" class="mine">
+    <h2>我的崗位與測驗</h2>
+    <div id="loginBox" class="loginbox">
+      <p>崗位已由大會排好。選你的暱稱、輸入報名時填的手機號碼，就能看到你的崗位，再按按鈕開始你這個崗位的測驗。</p>
+      <div class="act">
+        <select id="loginNick"><option value="">名單讀取中…</option></select>
+        <input id="loginPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="手機號碼（本人確認）">
+        <button type="button" id="loginBtn">登入</button>
+      </div>
+      <p class="row-msg" id="loginMsg"></p>
+    </div>
+    <div id="myCard" class="mycard" hidden></div>
+  </section>
+
   <section>
     <h2>每個人都要知道</h2>
     <ul class="common" id="common"></ul>
@@ -45,7 +61,7 @@
 
   <section id="signup">
     <div class="sec-head">
-      <h2>崗位認領</h2>
+      <h2>全部崗位（大會安排）</h2>
       <span class="count" id="countText"></span>
     </div>
     <div class="lockbox" id="lockbox">
@@ -53,7 +69,7 @@
       <p>開放時間：<b id="openAtText"></b>　現在可以先看各崗位內容</p>
       <p class="countdown" id="countdown"></p>
     </div>
-    <p class="rule">一個崗位限一人，先確認先得。哪裡都可以、或不確定選哪個，可以選第一列「由主辦單位安排崗位（機動人員）」：由主辦單位派你去任何一個裁判位置，或當機動人員隨時派任務（可多人）。想換崗位，直接在新崗位用同一組暱稱和電話確認，舊崗位會自動釋出。標「主辦指定」的崗位不開放認領；標「好友保留」的是報名時說想同組的夥伴，已經幫你們留好相鄰的位置，請在那幾格認領。</p>
+    <p class="rule">每個崗位都由大會安排（好友同組已經幫你們排在相鄰的位置），網站不開放自己認領或取消。要換工作，請在工作人員 LINE 群組告訴大會，由大會個別調整。下面可以看每個崗位上午、下午做什麼、在場地圖上的位置。</p>
     <details class="tl" open>
       <summary><h2>🗺️ 場地互動圖</h2></summary>
       <div id="bigmap"></div>
@@ -65,7 +81,7 @@
 
   <footer>
     <p id="contact"></p>
-    <p class="demo" id="demoNote" hidden>示範模式：尚未連接後台，資料只存在這台裝置。網址加 ?open=1 可預覽開放後的畫面（示範暱稱：示範-小明，電話 0912345678）。</p>
+    <p class="demo" id="demoNote" hidden>示範模式：尚未連接後台。示範登入：示範-小明 0912345678（L2：上午 JBC 機動、下午循線）、示範-小華 0922333444（J01）、示範-阿美 0933111222（大會安排中）。</p>
   </footer>
 </main>
 
