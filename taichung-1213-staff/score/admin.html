@@ -103,10 +103,10 @@
     return groupChips((g) => g.kind === "mys" || g.kind === "task", V.editGk, "egk") + '<select id="editTeam" class="finder">' + opts + "</select>" +
       (V.editTeam ? UI.jbcCardHTML(st, V.editTeam, { admin: true, now: new Date() }) : '<p class="note">選一隊就能修改它的基礎題、神秘題（含作廢、恢復）、啟蒙／探索的成功失敗。計分台改過的那筆，裁判就不能再改。</p>');
   }
-  // 相撲抽籤（11/5 理事長：對戰當天抽籤）：每組輸入 籤號 → 隊伍，輸入完整才能開打
+  // 相撲抽籤（11/5 賽事主辦：對戰當天抽籤）：每組輸入 籤號 → 隊伍，輸入完整才能開打
   function drawView(st) {
     const gk = V.sumoGk, g = D.groups[gk], lots = R.drawOf(st, gk, D), ids = D.teams[gk].map((t) => t.id);
-    // 11/5 晚理事長：不抽籤，對戰順序照隊伍編號（fixedDraw）→ 唯讀
+    // 11/5 晚賽事主辦：不抽籤，對戰順序照隊伍編號（fixedDraw）→ 唯讀
     if (g.fixedDraw) return groupChips((x) => x.kind === "sumo", gk, "sgk") + "<h2>" + esc(g.name) + " 對戰順序</h2>" +
       '<p class="note">對戰已排好（照隊伍編號，不抽籤），裁判台直接照這個順序比。共 ' + g.rounds + " 輪、" + D.schedule[gk].length + " 場，用 " + g.arenas.join("、") + " 號台，決賽在 " + g.finalArena + " 號台。</p>" + UI.scheduleHTML(st, gk, {});
     const used = {};
@@ -201,7 +201,7 @@
       '<label class="lbl inline">下午挑戰開始<input id="c_pm" type="time" value="' + c.pm + '"></label>' +
       '<label class="lbl inline">開始後幾分鐘開放神秘題<input id="c_gate" type="number" min="0" max="90" value="' + c.gate + '"></label>' +
       '<label class="lbl inline">循線每隊次數<select id="c_lineTries">' + [1, 2, 3, 4, 5].map((n) => "<option" + (c.lineTries === n ? " selected" : "") + ">" + n + "</option>").join("") + "</select></label>" +
-      '<span class="lbl inline">相撲／循線聯盟獎狀：前八強（扣掉教育局前五名）＝優勝，之後的名次＝佳作（11/7 理事長）</span></div>' +
+      '<span class="lbl inline">相撲／循線聯盟獎狀：前八強（扣掉教育局前五名）＝優勝，之後的名次＝佳作（11/7 賽事主辦）</span></div>' +
       '<label class="check"><input type="checkbox" id="c_top5"' + (c.top5Only ? " checked" : "") + "> 神秘題前五名（教育局）不再重複拿聯盟優勝／佳作</label>" +
       '<label class="check"><input type="checkbox" id="c_openam"' + (c.open.am ? " checked" : "") + "> 上午神秘題提前開放（不等時間）</label>" +
       '<label class="check"><input type="checkbox" id="c_openpm"' + (c.open.pm ? " checked" : "") + "> 下午神秘題提前開放（不等時間）</label>" +

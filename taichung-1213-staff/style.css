@@ -138,7 +138,7 @@ table.timeline { width: 100%; border-collapse: collapse; font-size: 14.5px; marg
   table.timeline { font-size: 13.5px; }
 }
 
-/* 11/8 理事長：好友同組保留位、互動場地圖 */
+/* 11/8 賽事主辦：好友同組保留位、互動場地圖 */
 .badge.team { background: #fff4d6; color: #8a6200; }
 .team-tag { margin: 0; font-size: 13.5px; color: #8a6200; background: #fff9e8; border-radius: 8px; padding: 6px 10px; }
 button.link[data-act="map"] { color: var(--navy); }
@@ -154,7 +154,7 @@ button.link[data-act="map"] { color: var(--navy); }
 #bigmap .mapwrap { max-width: 720px; }
 .score-try { margin: 0; font-size: 13.5px; color: var(--navy); }
 .score-try a { color: var(--navy); font-weight: 600; }
-/* 11/8 理事長：整張場地圖放大、位置上顯示名字 */
+/* 11/8 賽事主辦：整張場地圖放大、位置上顯示名字 */
 .bigscroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--line); border-radius: 8px; }
 .mapwrap.big { max-width: none; width: 1100px; border: 0; border-radius: 0; }
 @media (min-width: 1180px) { .mapwrap.big { width: 100%; } }
@@ -164,7 +164,7 @@ button.link[data-act="map"] { color: var(--navy); }
 .mapwrap.big .tag-pin.taken { background: rgba(180, 42, 34, .9); }
 .mapwrap.big .tag-pin.fixed { background: rgba(138, 98, 0, .92); }
 
-/* 11/20 理事長：大會指派崗位——登入 → 我的崗位卡 → 開始自己崗位的測驗 */
+/* 11/20 賽事主辦：大會指派崗位——登入 → 我的崗位卡 → 開始自己崗位的測驗 */
 .mine { border: 2px solid var(--navy); border-radius: 14px; padding: 6px 16px 16px; margin-top: 18px; background: #f7faff; }
 .loginbox p { margin: 6px 0 10px; }
 .mycard { display: grid; gap: 10px; }
@@ -177,3 +177,25 @@ button.link[data-act="map"] { color: var(--navy); }
 .bigbtn:hover { filter: brightness(1.06); }
 .qs { font-weight: 700; } .qs.ok { color: #13775f; } .qs.ng { color: #b42a22; } .qs.none { color: var(--mute); }
 @media (max-width: 560px) { .mine .act { grid-template-columns: 1fr; } }
+
+/* 11/20 第 3 輪（賽事主辦）：好友組一組一色——色塊＋「好友組 F05」深色字（顏色以外也有文字，色弱看得懂） */
+.fg { display: inline-flex; align-items: center; gap: 6px; margin: 2px 6px 2px 0; padding: 2px 9px 2px 3px; border: 1.5px solid #1d2733; border-left: 8px solid var(--fg); border-radius: 999px; background: #fff; color: #1d2733; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.fg i { width: 14px; height: 14px; border-radius: 3px; background: var(--fg); border: 1px solid #1d2733; }
+.mycard > .fg { justify-self: start; }
+.fg-legend { margin: 0; line-height: 2; font-size: 13px; }
+.mapwrap.big .tag-pin.fr { box-shadow: 0 0 0 2px #fff, 0 0 0 6px var(--fg), 0 0 0 7px #1d2733; }   /* 白圈隔開，紅色系好友組也看得出跟紅底標籤不同 */
+.mapwrap.big .tag-pin em { font-style: normal; font-size: 11px; font-weight: 800; background: #fff; color: #1d2733; border: 1px solid var(--fg); border-radius: 3px; padding: 0 3px; }
+/* 11/20 第 3 輪：沒崗位的人認領空缺 */
+.who.vac { color: #13775f; font-weight: 700; }
+.claimbox { background: #fff; border: 2px dashed #13775f; border-radius: 12px; padding: 12px 14px; }
+.claimbox .qline { margin: 0 0 8px; }
+.vac-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.vac-list li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.vac-list .vt { flex: 1 1 160px; }
+/* 11/20 第 4 輪：崗位卡「全部組別題目與規則」（預設收起） */
+.ruletabs { background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.ruletabs > summary { cursor: pointer; font-weight: 700; color: var(--navy); }
+.ruletabs .row-hint { margin: 8px 0; color: var(--mute); }
+.ruletab-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.ruletab-list a { display: inline-block; padding: 8px 12px; border: 1.5px solid var(--navy); border-radius: 10px; color: var(--navy); font-weight: 700; text-decoration: none; background: #fff; }
+.ruletab-list a:hover { background: #e7eef7; }

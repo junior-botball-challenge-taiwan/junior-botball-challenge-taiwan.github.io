@@ -2,23 +2,23 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const ROLES = window.ROLES, EV = window.EVENT;
-  const ARRANGE = "A", ARRANGE_NAME = "由主辦單位安排崗位（機動人員）";   // 11/8 理事長：派去哪個裁判崗位都可以，或當天當機動、隨時派任務（可多人）
+  const ARRANGE = "A", ARRANGE_NAME = "由主辦單位安排崗位（機動人員）";   // 11/8 賽事主辦：派去哪個裁判崗位都可以，或當天當機動、隨時派任務（可多人）
   const FIXED = window.FIXED || {};                         // 主辦指定且已有人：{ id: 暱稱 }（組長）
   const RESERVED = new Set((window.RESERVED || []).map(String)); // 主辦指定、還沒有人：不開放認領
   const FIXED_NAMES = new Set(Object.values(FIXED));
-  // 11/8 理事長：好友同組保留的連續裁判位置（只有那組好友能認領，那組好友也只在自己的保留位認領）
+  // 11/8 賽事主辦：好友同組保留的連續裁判位置（只有那組好友能認領，那組好友也只在自己的保留位認領）
   const TEAMS = window.TEAMS || [];
   const teamOfRole = (id) => TEAMS.findIndex((t) => t.ids.map(String).includes(String(id)));
   const teamOfNick = (n) => TEAMS.findIndex((t) => t.nicks.includes(n));
   const TEAM_NAMES = new Set([].concat(...TEAMS.map((t) => t.nicks)));
-  // 11/19 下午理事長：組長 G1、G2 限有賽事經驗者認領（資格在後台名單分頁檢查，網頁不放名單）
+  // 11/19 下午賽事主辦：組長 G1、G2 限有賽事經驗者認領（資格在後台名單分頁檢查，網頁不放名單）
   const EXP_ONLY = new Set((window.EXP_ONLY || []).map(String));
   const EXP_MSG = "這個崗位限有機器人賽事、營隊或大型活動志工／工作人員經驗的人認領（依報名表單）；如果你有經驗但表單填「否」，請在工作人員 LINE 群組告訴大會";
   // 互動位置圖：{ id: { am: [[左%, 上%]…], pm: … } }
   const POS = window.POS || {};
   const SESS = [["am", "上午"], ["pm", "下午"]];
   let mapOpen = null, mapSess = {}, bigSess = "am";
-  // 11/20 理事長：改成「大會指派崗位」——登入（暱稱＋電話）看大會排好的崗位，按按鈕考自己崗位的測驗；不再開放自己認領／取消
+  // 11/20 賽事主辦：改成「大會指派崗位」——登入（暱稱＋電話）看大會排好的崗位，按按鈕考自己崗位的測驗；不再開放自己認領／取消
   //   指派模式下 roles.js 的 FIXED（自己認領時代的主辦指定）不再蓋到名單上，以後台認領分頁為準
   const ASSIGN = true;
   const ASSIGN_MSG = "崗位由大會安排，要換工作請在工作人員 LINE 群組告訴大會";
@@ -27,18 +27,28 @@
   const TRACK_LABEL = { "JBC 場地裁判": "JBC 場地裁判", "相撲": "相撲裁判", "循線": "循線裁判", "共同": "共同須知" };
   // 崗位 → 測驗類別（要和 Code.gs 的 trackOfRole_ 一致）：J、JM＝JBC 場地裁判；S＝相撲；L＝循線；其他＝共同
   const trackOf = (code) => /^J/.test(code) ? "JBC 場地裁判" : /^S/.test(code) ? "相撲" : /^L/.test(code) ? "循線" : "共同";
-  // 11/20 晚理事長：L1、L2（上午 JBC 機動、下午循線）循線＋JBC 場地裁判兩種都要考（要和 Code.gs 的 tracksOfRole_ 一致）
+  // 11/20 晚賽事主辦：L1、L2（上午 JBC 機動、下午循線）循線＋JBC 場地裁判兩種都要考（要和 Code.gs 的 tracksOfRole_ 一致）
   const tracksOf = (code) => (/^L/.test(code) ? [trackOf(code), "JBC 場地裁判"] : [trackOf(code)]);
   let me = null;   // 登入後：{ nickname, roleId, code, roleName, track, tracks, assigned, quiz, quizzes, allPass }
   const withFixed = (c) => (ASSIGN ? { ...(c || {}) } : { ...(c || {}), ...FIXED });
   const GROUP_COLOR = window.GROUP_COLOR || {};
   const byId = {}; ROLES.forEach((r) => (byId[String(r.id)] = r));
+  // 11/20 第 3 輪（賽事主辦）：好友組一組一色（資料在 roles.js 的 FRIEND_GROUPS，由 build_staff.py 從 friend_groups.py 產生）；一定配「好友組 F05」字樣，色弱也看得懂
+  const FRIEND_OF = {}; (window.FRIEND_GROUPS || []).forEach((g) => g.nicks.forEach((n) => (FRIEND_OF[n] = g)));
+  const friendTag = (n) => { const g = n && FRIEND_OF[n]; return g ? '<span class="fg" style="--fg:' + g.color + '"><i aria-hidden="true"></i>好友組 ' + g.label.replace(/[&<>"]/g, "") + "</span>" : ""; };
+  // 11/20 第 3 輪（賽事主辦）：還沒有崗位的人登入後可以自己認領空缺（不含主辦指定 RESERVED；已排好的人不能自己換）
+  const FULL_MSG = "目前崗位都排滿了，先做共同測驗；有空缺會開放";
+  let claimMsg = null;   // 我的崗位卡上的認領結果訊息
   const roleName = (id) => { if (String(id) === ARRANGE) return ARRANGE_NAME; const r = byId[String(id)]; return r ? r.code + " " + r.title : ""; };
   const pad = (n) => String(n).padStart(2, "0");
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const strip = (t) => String(t).replace(/<[^>]+>/g, "");
 
-  let state = { open: false, openAt: EV.openAt, offset: 0, nicknames: [], claims: {}, arrange: [] };
+  let state = { open: false, openAt: EV.openAt, offset: 0, nicknames: [], claims: {}, arrange: [], loaded: false };
+  const selfOn = () => ASSIGN && state.selfClaim !== false;   // 後台 GET 回 selfClaim:false 就關掉（回到全部由大會安排）
+  const isVacant = (id) => state.loaded && !!byId[String(id)] && !state.claims[String(id)] && !RESERVED.has(String(id));
+  const vacantRoles = () => ROLES.filter((r) => isVacant(r.id));
+  const canSelfClaim = () => selfOn() && state.loaded && !!me && !me.assigned && !(state.arrange || []).includes(me.nickname);
   let filter = "全部", query = "";
   const ui = {}; // 每一列的輸入狀態：{ nick, phone, cancel, msg, ok }，重新整理時保留
 
@@ -49,12 +59,22 @@
   const DEMO_ASSIGN = { "49": "示範-小明", "2": "示範-小華" };   // 示範模式的大會指派：小明 L2（上午 JBC 機動、下午循線）、小華 J01、阿美還沒排
   const DEMO_QUIZ = { "示範-小明": { score: 92, pass: true, track: "循線", byTrack: { "循線": { score: 92, pass: true } } } };   // 示範：小明循線已及格、JBC 還沒考
   const demoOpen = () => new URLSearchParams(location.search).has("open");
+  // 示範模式的崗位：小明 L2、小華 J01；好友組的暱稱照順序排進其他崗位（看得到顏色），剩下的是空缺（阿美可以認領）；?full=1＝全部排滿
+  let DEMO_CLAIMS = null;
+  function demoClaims() {
+    if (DEMO_CLAIMS) return DEMO_CLAIMS;
+    const c = { ...DEMO_ASSIGN }, nicks = [].concat(...(window.FRIEND_GROUPS || []).map((g) => g.nicks));
+    const free = ROLES.map((r) => String(r.id)).filter((id) => !RESERVED.has(id) && !c[id]);
+    nicks.forEach((n, i) => { if (free[i]) c[free[i]] = n; });
+    if (new URLSearchParams(location.search).has("full")) free.slice(nicks.length).forEach((id, i) => (c[id] = "示範-已排" + (i + 1)));
+    return (DEMO_CLAIMS = c);
+  }
   function demoLoad() { try { return JSON.parse(localStorage.getItem("jbcTcDemo") || "null") || { claims: {}, arrange: [] }; } catch (e) { return { claims: {}, arrange: [] }; } }
   function demoSave(d) { try { localStorage.setItem("jbcTcDemo", JSON.stringify(d)); } catch (e) {} }
   const norm = (p) => { let d = String(p || "").replace(/\D/g, ""); if (d.startsWith("886")) d = "0" + d.slice(3); return d; };
 
   async function apiStatus() {
-    if (demo && ASSIGN) return { open: true, openAt: EV.openAt, now: new Date().toISOString(), nicknames: Object.keys(DEMO_STAFF), claims: { ...DEMO_ASSIGN }, arrange: [], quiz: { ...DEMO_QUIZ } };
+    if (demo && ASSIGN) return { open: true, openAt: EV.openAt, now: new Date().toISOString(), nicknames: Object.keys(DEMO_STAFF), claims: { ...demoClaims() }, arrange: [], quiz: { ...DEMO_QUIZ }, selfClaim: true };
     if (demo) return { open: demoOpen() || Date.now() >= new Date(EV.openAt).getTime(), openAt: EV.openAt, now: new Date().toISOString(), nicknames: Object.keys(DEMO_STAFF), ...demoLoad() };
     const res = await fetch(window.API_URL, { cache: "no-store" });
     return res.json();
@@ -64,7 +84,7 @@
     if (demo) {
       if (!DEMO_STAFF[nickname]) return { ok: false, message: "找不到這個暱稱" };
       if (norm(DEMO_STAFF[nickname]).slice(-9) !== norm(phone).slice(-9)) return { ok: false, message: "電話號碼不符" };
-      const id = Object.keys(DEMO_ASSIGN).find((k) => DEMO_ASSIGN[k] === nickname), r = id && byId[id];
+      const dc = demoClaims(), id = Object.keys(dc).find((k) => dc[k] === nickname), r = id && byId[id];
       const tracks = r ? tracksOf(r.code) : ["共同"], bt = (DEMO_QUIZ[nickname] || {}).byTrack || {}, quizzes = {};
       tracks.forEach((t) => (quizzes[t] = bt[t] || null));
       return { ok: true, nickname, roleId: r ? r.id : null, code: r ? r.code : "", roleName: r ? r.code + " " + r.title : "大會安排中", track: tracks[0], tracks, assigned: !!r,
@@ -73,8 +93,23 @@
     const res = await fetch(window.API_URL, { method: "POST", body: JSON.stringify({ action: "me", nickname, phone }) });
     return res.json();
   }
+  // 11/20 第 3 輪：沒崗位的人認領空缺（後台 action 'claim'；電話用登入時的，存在 sessionStorage）
+  async function apiClaim(roleId) {
+    const v = loadLogin() || {}, req = { action: "claim", nickname: me ? me.nickname : "", phone: v.phone || "", roleId };
+    if (demo) {
+      const c = demoClaims(), id = String(roleId);
+      if (Object.keys(c).some((k) => c[k] === req.nickname)) return { ok: false, message: ASSIGN_MSG };
+      if (RESERVED.has(id)) return { ok: false, message: "這個崗位由主辦單位指定" };
+      if (c[id]) return { ok: false, message: "這個崗位已經有人了，請選其他空缺" };
+      if (EXP_ONLY.has(id) && !DEMO_EXP.has(req.nickname)) return { ok: false, message: EXP_MSG };
+      c[id] = req.nickname;
+      return { ok: true, message: "已認領 " + roleName(id) + "，可以開始測驗了", claims: { ...c } };
+    }
+    const res = await fetch(window.API_URL, { method: "POST", body: JSON.stringify(req) });
+    return res.json();
+  }
   async function apiPost(req) {
-    if (ASSIGN) return { ok: false, message: ASSIGN_MSG };   // 11/20 理事長：不再開放自己認領／取消
+    if (ASSIGN) return { ok: false, message: ASSIGN_MSG };   // 11/20 賽事主辦：不再開放自己認領／取消
     if (demo) {
       if (!state.open) return { ok: false, message: "尚未開放填寫（" + EV.openText + " 開放）" };
       const d = demoLoad(), c = d.claims, a = d.arrange;
@@ -111,7 +146,7 @@
     $("common").innerHTML = window.COMMON.map((t) => "<li>" + t + "</li>").join("");
     $("timeline").innerHTML = "<tr><th>時間</th><th>全場</th><th>工作人員重點</th></tr>" +
       window.TIMELINE.map((r) => "<tr><td class='t'>" + r[0] + "</td><td>" + r[1] + "</td><td>" + r[2] + "</td></tr>").join("");
-    $("ruleBtns").innerHTML = window.RULE_TABS.map((t) => '<a class="btn-rule" href="' + EV.ruleUrl + '" target="_blank" rel="noopener">' + t + "</a>").join("");
+    $("ruleBtns").innerHTML = window.RULE_TABS.map((t) => '<a class="btn-rule" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + esc(t.name) + "</a>").join("");   // 11/20 第 4 輪：每個按鈕直接開對應分頁
     const docs = window.DOCS || {};
     [["staffDoc", docs.staff], ["judgeDoc", docs.judge]].forEach(([id, href]) => { if (href) { $(id).href = href; $(id).hidden = false; } });
     $("demoNote").hidden = !demo;
@@ -138,8 +173,8 @@
       '<option value="' + esc(n) + '"' + (ui[key] && ui[key].nick === n ? " selected" : "") + ">" + esc(n) + (where[n] && !onlyFrom ? "（目前：" + where[n] + "）" : "") + "</option>").join("");
   }
 
-  // 11/8 理事長：裁判規則測驗在培訓網頁交卷，後台回傳每人最高分 state.quiz（byTrack＝每個類別各自的最高分）
-  // 11/20 晚理事長：要考兩種的崗位（L1、L2）兩種都及格才算 ✅
+  // 11/8 賽事主辦：裁判規則測驗在培訓網頁交卷，後台回傳每人最高分 state.quiz（byTrack＝每個類別各自的最高分）
+  // 11/20 晚賽事主辦：要考兩種的崗位（L1、L2）兩種都及格才算 ✅
   function quizTag(n, key) {
     const q = (state.quiz || {})[n], r = byId[String(key)];
     if (!q) return "・測驗未交";
@@ -151,8 +186,14 @@
   }
 
   function actionHTML(key, takenBy) {
-    if (ASSIGN) return '<div class="act"><span class="who">' + (takenBy ? "✔ " + esc(takenBy) + "（大會安排）" + quizTag(takenBy, key)
-      : RESERVED.has(key) ? "主辦單位指定" : "大會安排中") + "</span></div>";
+    if (ASSIGN) {
+      if (takenBy) return '<div class="act"><span class="who">✔ ' + esc(takenBy) + "（大會安排）" + quizTag(takenBy, key) + "</span>" + friendTag(takenBy) + "</div>";
+      if (RESERVED.has(key)) return '<div class="act"><span class="who">主辦單位指定</span></div>';
+      if (!selfOn() || !state.loaded) return '<div class="act"><span class="who">大會安排中</span></div>';
+      const exp = EXP_ONLY.has(key) ? "（限有賽事經驗者）" : "";
+      if (canSelfClaim()) return '<div class="act"><span class="who vac">空缺・可認領' + exp + '</span><button type="button" class="small" data-act="selfclaim" data-key="' + key + '">我要認領這格（' + esc(me.nickname) + "）</button></div>";
+      return '<div class="act"><span class="who vac">空缺・可認領' + exp + "：還沒有崗位的人，在上面「我的崗位與測驗」登入後就能認領</span></div>";
+    }
     if (FIXED[key]) return '<div class="act"><span class="who">✔ ' + esc(FIXED[key]) + "（" + esc((window.FIXED_TAG || {})[key] || "主辦指定") + "）" + quizTag(FIXED[key]) + "</span></div>";
     if (RESERVED.has(key)) return '<div class="act"><span class="fixed-tag">主辦單位指定，不開放認領</span></div>';
     const u = ui[key] || {}, locked = !state.open, dis = locked ? " disabled" : "";
@@ -200,21 +241,24 @@
       (pins.length ? "" : '<p class="row-hint">這個時段沒有固定位置（機動或支援，聽裁判長／組長調度）</p>') +
       mapHTML(s, pins) + '<p class="row-hint">紅點＝你的位置（' + (s === "am" ? "上午" : "下午") + '）。圖上的「判」是 JBC 裁判桌，相撲台、循線賽道在下方。</p></div>';
   }
-  // 11/8 理事長：整張場地圖放大、每個位置直接顯示誰（已排定／已認領的暱稱），字也放大
+  // 11/8 賽事主辦：整張場地圖放大、每個位置直接顯示誰（已排定／已認領的暱稱），字也放大
   function bigMap() {
     const cl = state.claims || {};
     const tags = ROLES.map((r) => {
       const p = (POS[String(r.id)] || {})[bigSess]; if (!p || !/^(J\d|S\d|L\d)/.test(r.code)) return "";
-      const who = cl[String(r.id)] || "", fixed = !!FIXED[String(r.id)];
-      return '<span class="tag-pin' + (who ? (fixed ? " fixed" : " taken") : "") + '" style="left:' + p[0][0] + "%;top:" + p[0][1] + '%" data-act="goto" data-code="' + esc(r.code) + '">' +
-        "<b>" + esc(r.code) + "</b>" + (who ? "<i>" + esc(who) + "</i>" : "<i>" + (ASSIGN ? "安排中" : "可認領") + "</i>") + "</span>";
+      const who = cl[String(r.id)] || "", fixed = !!FIXED[String(r.id)] && !ASSIGN, fg = who && FRIEND_OF[who];
+      const empty = ASSIGN ? (RESERVED.has(String(r.id)) ? "主辦指定" : selfOn() && state.loaded ? "空缺" : "安排中") : "可認領";
+      return '<span class="tag-pin' + (who ? (fixed ? " fixed" : " taken") : "") + (fg ? " fr" : "") + '" style="left:' + p[0][0] + "%;top:" + p[0][1] + "%" + (fg ? ";--fg:" + fg.color : "") + '" data-act="goto" data-code="' + esc(r.code) + '">' +
+        "<b>" + esc(r.code) + "</b>" + (who ? "<i>" + esc(who) + "</i>" : "<i>" + empty + "</i>") + (fg ? "<em>" + esc(fg.label) + "</em>" : "") + "</span>";
     }).join("");
+    const fgs = window.FRIEND_GROUPS || [];
     $("bigmap").innerHTML = tabsHTML("bsess", "", bigSess) +
       '<div class="bigscroll"><div class="mapwrap big"><img src="map/' + bigSess + '.jpg" alt="場地圖">' + tags + "</div></div>" +
-      '<p class="row-hint">手機可以左右滑動看整張圖。點位置（J＝JBC 場地裁判、S＝相撲台、L＝循線賽道）就會跳到那個崗位；名字是已排定或已認領的人。</p>';
+      '<p class="row-hint">手機可以左右滑動看整張圖。點位置（J＝JBC 場地裁判、S＝相撲台、L＝循線賽道）就會跳到那個崗位；名字是已排定的人，下面有色條和組號（例如 F05）的是好友組。</p>' +
+      (fgs.length ? '<p class="fg-legend">好友組顏色：' + fgs.map((g) => friendTag(g.nicks[0])).join("") + "</p>" : "");
   }
 
-  // 11/8 理事長：認領了崗位的人點練習計分，直接帶到這個崗位（練習模式，資料只在自己手機）
+  // 11/8 賽事主辦：認領了崗位的人點練習計分，直接帶到這個崗位（練習模式，資料只在自己手機）
   const SCORE_ST = window.SCORE_ST || {};
   function scoreLinks(key) {
     const s = SCORE_ST[key]; if (!s) return "";
@@ -226,7 +270,7 @@
   function roleRow(r) {
     const key = String(r.id), who = state.claims[key], t = teamOfRole(key);
     const ftag = (window.FIXED_TAG || {})[key] || "";
-    const badge = ASSIGN ? (who ? ["taken", "已安排"] : RESERVED.has(key) ? ["taken", "主辦指定"] : ["free", "安排中"]) : FIXED[key] && ftag.indexOf("好友") === 0 ? ["team", "好友・已排好"] : FIXED[key] || RESERVED.has(key) ? ["taken", "主辦指定"] : who ? ["taken", "已認領"] : t >= 0 ? ["team", "好友保留"] : EXP_ONLY.has(key) ? ["team", "限有賽事經驗者"] : ["free", "可認領"];
+    const badge = ASSIGN ? (who ? ["taken", "已安排"] : RESERVED.has(key) ? ["taken", "主辦指定"] : selfOn() && state.loaded ? ["free", "空缺・可認領"] : ["free", "安排中"]) : FIXED[key] && ftag.indexOf("好友") === 0 ? ["team", "好友・已排好"] : FIXED[key] || RESERVED.has(key) ? ["taken", "主辦指定"] : who ? ["taken", "已認領"] : t >= 0 ? ["team", "好友保留"] : EXP_ONLY.has(key) ? ["team", "限有賽事經驗者"] : ["free", "可認領"];
     const hasMap = !!POS[key];
     return '<div class="row' + (who ? " is-taken" : "") + '" id="row-' + esc(r.code) + '"><div class="row-head">' +
       '<span class="num" style="background:' + (GROUP_COLOR[r.group] || "#555") + '">' + esc(r.code) + "</span>" +
@@ -256,7 +300,7 @@
     const claims = state.claims || {}, arrange = state.arrange || [];
     const taken = Object.keys(claims).filter((k) => byId[k]).length;
     const open = ROLES.length - RESERVED.size;
-    $("countText").textContent = ASSIGN ? "大會已安排 " + taken + " / " + open + " 個崗位" + (arrange.length ? "・機動人員 " + arrange.length + " 人" : "")
+    $("countText").textContent = ASSIGN ? "大會已安排 " + taken + " / " + open + " 個崗位" + (selfOn() && state.loaded ? "・空缺 " + vacantRoles().length + " 個" : "") + (arrange.length ? "・機動人員 " + arrange.length + " 人" : "")
       : "已認領 " + taken + " / " + open + "・主辦安排 " + arrange.length + " 人" + (state.nicknames.length ? "・已填 " + (taken + arrange.length) + " / " + state.nicknames.length + " 人" : "");
     $("lockbox").hidden = ASSIGN || state.open;
     loginNicks();
@@ -283,8 +327,9 @@
   async function refresh() {
     try {
       const st = await apiStatus();
-      state = { ...state, ...st, claims: withFixed(st.claims), arrange: st.arrange || [], offset: new Date(st.now).getTime() - Date.now() };
+      state = { ...state, ...st, claims: withFixed(st.claims), arrange: st.arrange || [], offset: new Date(st.now).getTime() - Date.now(), loaded: true };
       renderDynamic(); tick();
+      if (me && !me.assigned) renderMe();   // 沒崗位的人：空缺清單跟著更新
     } catch (e) {
       $("countText").textContent = "讀取失敗，請稍後重新整理";
     }
@@ -335,15 +380,50 @@
     };
     const head = r ? '<div class="row-head"><span class="num" style="background:' + (GROUP_COLOR[r.group] || "#555") + '">' + esc(r.code) + "</span>" +
         '<div class="row-title"><span class="title">' + esc(r.title) + '</span><span class="short">' + esc(r.short) + "</span></div></div>"
-      : '<div class="row-head"><span class="num star">…</span><div class="row-title"><span class="title">大會安排中</span><span class="short">崗位排好後會在這裡顯示；可以先考共同須知題</span></div></div>';
-    box.innerHTML = '<p class="hello">👋 ' + esc(me.nickname) + (r ? "，這是大會幫你排好的崗位" : "，你的崗位大會還在安排") + "</p>" + head +
+      : '<div class="row-head"><span class="num star">…</span><div class="row-title"><span class="title">大會安排中</span><span class="short">崗位排好或你自己認領空缺後會在這裡顯示；可以先考共同須知題</span></div></div>';
+    const flash = claimMsg ? '<p class="row-msg ' + (claimMsg.ok ? "ok" : "err") + '">' + esc(claimMsg.text) + "</p>" : "";
+    box.innerHTML = '<p class="hello">👋 ' + esc(me.nickname) + (r ? "，這是大會幫你排好的崗位" : "，你的崗位大會還在安排") + "</p>" + friendTag(me.nickname) + flash + head + claimBoxHTML() +
       '<div class="quizbox">' + (tracks.length > 1 ? '<p class="qline"><b>你的崗位要考 ' + tracks.length + " 種測驗，兩種都要及格</b>（" + tracks.map((t) => esc(TRACK_LABEL[t] || t)).join("＋") + "，各自交卷）</p>" : "") +
       tracks.map(quizOne).join("") +
       '<p class="row-hint">測驗已在 11/20 歸零，之前考過的也請照新崗位再考一次；80 分及格、可以重考，以最高分為準。交卷時再輸入一次手機號碼確認本人。</p></div>' +
       (r ? '<div class="two"><div class="box"><h4>上午</h4>' + list(r.am) + '</div><div class="box"><h4>下午</h4>' + list(r.pm) + "</div></div>" +
         (POS[String(r.id)] ? rowMap(String(r.id)) : "") + scoreLinks(String(r.id)) : "") +
+      ruleTabsHTML() +
       '<p class="rule">要換工作？請在工作人員 LINE 群組告訴大會，由大會幫你調整（網站不能自己換）。</p>' +
       '<p><button type="button" class="ghost small" data-act="logout">登出（換別人登入）</button></p>';
+  }
+  // 11/20 第 4 輪賽事主辦：崗位卡也放「全部組別題目與規則」12 個連結（資料＝roles.js 的 RULE_TABS，build_staff.py 產生）；預設收起
+  let rulesOpen = false;
+  function ruleTabsHTML() {
+    const tabs = window.RULE_TABS || []; if (!tabs.length) return "";
+    return '<details class="ruletabs"' + (rulesOpen ? " open" : "") + '><summary>全部組別題目與規則（' + tabs.length + ' 個，台灣賽題庫 Google 文件）</summary>' +
+      '<p class="row-hint">每個連結開新分頁、直接到那個組別的分頁；沒登入 Google 也打得開。</p><div class="ruletab-list">' +
+      tabs.map((t) => '<a href="' + esc(t.url) + '" target="_blank" rel="noopener">' + esc(t.name) + "</a>").join("") + "</div></details>";
+  }
+  // 11/20 第 3 輪：沒崗位的人在卡片上看到空缺清單＋「認領這格」；沒有空缺就看到 FULL_MSG
+  function claimBoxHTML() {
+    if (!me || me.assigned || !selfOn()) return "";
+    if ((state.arrange || []).includes(me.nickname)) return "";   // 主辦安排分頁上的人由大會派
+    if (!state.loaded) return '<div class="claimbox"><p class="qline">崗位讀取中…</p></div>';
+    const v = vacantRoles();
+    if (!v.length) return '<div class="claimbox"><p class="qline"><b>' + FULL_MSG + "</b></p></div>";
+    return '<div class="claimbox"><p class="qline"><b>可以自己認領空缺崗位</b>（一崗一人、先送先得；認領後就是你的崗位，要換要在工作人員 LINE 群組告訴大會）</p><ul class="vac-list">' +
+      v.map((x) => '<li><span class="num" style="background:' + (GROUP_COLOR[x.group] || "#555") + '">' + esc(x.code) + '</span><span class="vt">' + esc(x.title) +
+        (EXP_ONLY.has(String(x.id)) ? "（限有賽事經驗者）" : "") + '</span><button type="button" class="small" data-act="selfclaim" data-key="' + x.id + '">認領這格</button></li>').join("") + "</ul></div>";
+  }
+  async function selfClaim(id) {
+    const x = byId[String(id)]; if (!x || !canSelfClaim()) return;
+    if (!confirm("確定要認領「" + x.code + " " + x.title + "」嗎？\n認領後就是你的崗位，網站不能自己換；要換請在工作人員 LINE 群組告訴大會。")) return;
+    claimMsg = { text: "送出中…", ok: true }; renderMe();
+    try {
+      const res = await apiClaim(String(id));
+      if (res.claims) state.claims = withFixed(res.claims);
+      claimMsg = { text: res.message || (res.ok ? "已認領" : "認領失敗"), ok: !!res.ok };
+      const v = loadLogin();
+      if (res.ok && v) await doLogin(v.nick, v.phone, true);   // 重新登入：拿到新崗位與要考的測驗類別
+      else refresh();
+    } catch (e) { claimMsg = { text: "送出失敗，請檢查網路後再試一次", ok: false }; }
+    renderMe(); renderDynamic();
   }
   async function doLogin(nick, phone, silent) {
     const msg = $("loginMsg");
@@ -357,14 +437,17 @@
       const track = prev && prev.nick === r.nickname && tracks.includes(prev.track) ? prev.track : tracks[0];
       saveLogin({ nick: r.nickname, phone, track, tracks, code: r.code, roleName: r.roleName, assigned: r.assigned, t: Date.now() });   // 培訓頁讀這個（同網域、只在這個分頁）
       renderMe();
+      if (state.loaded) renderDynamic();   // 全部崗位清單：沒崗位的人看得到「我要認領這格」
     } catch (e) { msg.textContent = "登入失敗，請檢查網路後再試一次"; msg.className = "row-msg err"; }
   }
   if ($("mine")) {
     $("loginBtn").onclick = () => doLogin($("loginNick").value, $("loginPhone").value.trim());
     $("loginPhone").addEventListener("keydown", (e) => { if (e.key === "Enter") $("loginBtn").click(); });
+    $("mine").addEventListener("toggle", (e) => { if (e.target.matches && e.target.matches("details.ruletabs")) rulesOpen = e.target.open; }, true);   // 重畫崗位卡時保留展開狀態
     $("mine").addEventListener("click", (e) => {
       const b = e.target.closest("[data-act]"); if (!b) return;
-      if (b.dataset.act === "logout") { me = null; saveLogin(null); $("loginPhone").value = ""; renderMe(); }
+      if (b.dataset.act === "logout") { me = null; claimMsg = null; saveLogin(null); $("loginPhone").value = ""; renderMe(); if (state.loaded) renderDynamic(); }
+      else if (b.dataset.act === "selfclaim") selfClaim(b.dataset.key);
       else if (b.dataset.act === "quiz") { const v = loadLogin(); if (v) { v.track = b.dataset.track; saveLogin(v); } }   // 按哪個測驗按鈕，培訓頁就鎖那一種（不擋連結，同分頁開）
       else if (b.dataset.act === "msess") { mapSess[b.dataset.key] = b.dataset.s; renderMe(); }
     });
@@ -387,7 +470,8 @@
   $("rows").addEventListener("click", (e) => {
     const b = e.target.closest("[data-act]"); if (!b || b.disabled) return;
     const key = b.dataset.key, act = b.dataset.act;
-    if (act === "claim") send("claim", key);
+    if (act === "selfclaim") { selfClaim(key); const m = $("mine"); if (m) m.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    else if (act === "claim") send("claim", key);
     else if (act === "cancel") { if (confirm("確定要取消嗎？")) send("cancel", key); }
     else if (act === "askcancel") { ui[key] = { cancel: true, nick: key === ARRANGE ? "" : state.claims[key] }; renderDynamic(); }
     else if (act === "back") { ui[key] = {}; renderDynamic(); }

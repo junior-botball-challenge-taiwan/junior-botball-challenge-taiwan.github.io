@@ -9,7 +9,7 @@ window.EVENT = {
  "contact": "有問題請在工作人員 LINE 群組找總指揮或裁判長（網站不放電話）",
  "ruleUrl": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/"
 };
-// 主辦指定且已有人：{ id: "暱稱" }（要和 Code.gs 的 FIXED 一致）；11/8 理事長：組長 G1、G2
+// 主辦指定且已有人：{ id: "暱稱" }（要和 Code.gs 的 FIXED 一致）；11/8 賽事主辦：組長 G1、G2
 window.FIXED = {"14": "勤益-愉珊", "15": "國軍-友睿", "16": "勤益-瑋恩", "17": "勤益-建豪", "18": "勤益-昀蓁", "19": "勤益-渂蓁"};
 // 主辦指定、還沒定人（不開放認領）
 window.RESERVED = [1, 52, 53, 56];
@@ -17,7 +17,7 @@ window.RESERVED = [1, 52, 53, 56];
 window.FIXED_TAG = {"14": "好友同組・已幫你排好", "15": "好友同組・已幫你排好", "16": "好友同組・已幫你排好", "17": "好友同組・已幫你排好", "18": "好友同組・已幫你排好", "19": "好友同組・已幫你排好"};
 // 好友同組保留的連續裁判位置（只有這些暱稱能認領；要和 Code.gs 的 TEAMS 一致）
 window.TEAMS = [];
-// 11/19 下午理事長：限有賽事經驗者認領的崗位（組長 G1、G2；要和 Code.gs 的 EXP_ONLY 一致，資格由後台名單分頁 C 欄檢查）
+// 11/19 下午賽事主辦：限有賽事經驗者認領的崗位（組長 G1、G2；要和 Code.gs 的 EXP_ONLY 一致，資格由後台名單分頁 C 欄檢查）
 window.EXP_ONLY = [50, 51];
 window.EXP_ONLY_TEXT = "限有賽事經驗者（報名表單「機器人賽事、營隊或大型活動志工／工作人員經驗」填「是」的人才能認領）";
 // 互動位置圖：{ id: { am: [[左%, 上%]…], pm: … } }，圖檔 map/am.jpg、map/pm.jpg
@@ -26,24 +26,26 @@ window.POS = {"2": {"am": [[9.13, 20.8]], "pm": [[9.13, 20.8]]}, "3": {"am": [[2
 window.SCORE_ST = {"1": {"am": "SUB", "pm": "SUB"}, "2": {"am": "A01", "pm": "P01"}, "3": {"am": "A02", "pm": "P02"}, "4": {"am": "A03", "pm": "P03"}, "5": {"am": "A04", "pm": "P04"}, "6": {"am": "A05", "pm": "P05"}, "7": {"am": "A06", "pm": "P06"}, "8": {"am": "A07", "pm": "P07"}, "9": {"am": "A08", "pm": "P08"}, "10": {"am": "A09", "pm": "P09"}, "11": {"am": "A10", "pm": "P10"}, "12": {"am": "A11", "pm": "P11"}, "13": {"am": "A12", "pm": "P12"}, "14": {"am": "A13", "pm": "P13"}, "15": {"am": "A14", "pm": "P14"}, "16": {"am": "A15", "pm": "P15"}, "17": {"am": "A16", "pm": "P16"}, "18": {"am": "A17", "pm": "P17"}, "19": {"am": "A18", "pm": "P18"}, "20": {"am": "A19", "pm": "P19"}, "21": {"am": "A20", "pm": "P20"}, "22": {"am": "A21", "pm": "P21"}, "23": {"am": "A22", "pm": "P22"}, "24": {"am": "A23", "pm": "P23"}, "25": {"am": "A24", "pm": "P24"}, "26": {"am": "A25", "pm": "P25"}, "27": {"am": "A26", "pm": "P26"}, "28": {"am": "A27", "pm": "P27"}, "29": {"am": "A28"}, "30": {"am": "SUB", "pm": "SUB"}, "31": {"am": "SUB", "pm": "SUB"}, "32": {"am": "SUB", "pm": "SUB"}, "33": {"am": "S:am:1", "pm": "S:pm:1"}, "34": {"am": "S:am:2", "pm": "S:pm:2"}, "35": {"am": "S:am:3", "pm": "S:pm:3"}, "36": {"am": "S:am:4", "pm": "S:pm:4"}, "37": {"am": "S:am:5", "pm": "S:pm:5"}, "38": {"am": "S:am:6", "pm": "S:pm:6"}, "39": {"am": "S:am:7", "pm": "S:pm:7"}, "40": {"am": "S:am:8", "pm": "S:pm:8"}, "41": {"am": "S:am:9", "pm": "S:pm:9"}, "42": {"am": "S:am:10", "pm": "S:pm:10"}, "43": {"am": "S:am:11", "pm": "S:pm:11"}, "44": {"am": "SUB", "pm": "S:pm:12"}, "45": {"am": "SUB", "pm": "S:pm:13"}, "46": {"am": "SUB", "pm": "S:pm:14"}, "47": {"am": "SUB", "pm": "S:pm:15"}, "48": {"am": "SUB", "pm": "L"}, "49": {"am": "SUB", "pm": "L"}};
 window.GROUP_ORDER = ["裁判長", "JBC 場地裁判", "相撲裁判", "循線裁判", "賽務組", "場務組"];
 window.GROUP_COLOR = {"裁判長": "#12355b", "JBC 場地裁判": "#2E6DB4", "相撲裁判": "#B85C00", "循線裁判": "#5B7F2E", "賽務組": "#8E5BB5", "場務組": "#1E9E8F"};
+// 好友組（friend_groups.py 的 GROUPS，v16）：一組一色；網頁用暱稱對到組別，顯示色塊＋「好友組 F05」字樣
+window.FRIEND_GROUPS = [{"id": "F01", "label": "F01", "color": "#e6194b", "nicks": ["勤益-瑋恩", "勤益-建豪", "勤益-昀蓁", "勤益-渂蓁"]}, {"id": "F02", "label": "F02", "color": "#3cb44b", "nicks": ["勤益-愉珊", "國軍-友睿", "勤益-宇哲"]}, {"id": "F03", "label": "F03＋F16", "color": "#4363d8", "nicks": ["勤益-芊英", "勤益-鈺綺", "勤益-科融", "勤益-鈺昕"]}, {"id": "F04", "label": "F04", "color": "#f58231", "nicks": ["勤益-淑妤", "勤益-品嫻", "勤益-詮玗", "勤益-妙華", "勤益-采余", "勤益-依亭", "勤益-亞哲", "勤益-廷芳"]}, {"id": "F05", "label": "F05", "color": "#911eb4", "nicks": ["勤益-杰佾", "勤益-騏福", "勤益-宏暉", "勤益-景立"]}, {"id": "F07", "label": "F07", "color": "#42d4f4", "nicks": ["勤益-柏豪", "勤益-宇廷"]}, {"id": "F08", "label": "F08", "color": "#f032e6", "nicks": ["逢甲-皓安", "逢甲-苡喬"]}, {"id": "F09", "label": "F09", "color": "#bfef45", "nicks": ["嶺東-榮財", "嶺東-程宜"]}, {"id": "F10", "label": "F10", "color": "#9a6324", "nicks": ["勤益-茂笙", "勤益-議澤"]}, {"id": "F11", "label": "F11", "color": "#469990", "nicks": ["勤益-品振", "勤益-杰楓", "勤益-佑昇"]}, {"id": "F12", "label": "F12", "color": "#000075", "nicks": ["勤益-守正", "勤益-咏芸"]}, {"id": "F13", "label": "F13", "color": "#808000", "nicks": ["勤益-冠銘", "勤益-景薇"]}, {"id": "F15", "label": "F15", "color": "#fabed4", "nicks": ["靜宜-壹婷", "逢甲-東豫"]}, {"id": "F18", "label": "F18", "color": "#ffe119", "nicks": ["聯大-家量", "聯大-宣至"]}];
 window.COMMON = [
- "08:00 到維多利亞廳服務台（門口進來左手邊；11/8 理事長）報到、簽到，領工作證（背心）；08:00–08:15 全員工作會報、08:15–08:50 場地檢查",
- "工作時間 08:00–17:00（跟招募表單一樣）；16:30–17:00 交接、歸還工作證，17:00 簽退（下午 JBC 場地裁判 16:30 帶隊到分區頒獎背景頒完未來工程師證書再交接；11/8 理事長）。下午頒獎尾段與撤場由主辦核心人員（組長 G1、G2＋協會計分台 K1、K2＋協會／少伯同仁）負責，願意留下的志工協助頒獎尾段與撤場到 18:30",
+ "08:00 到維多利亞廳服務台（門口進來左手邊；11/8 賽事主辦）報到、簽到，領工作證（背心）；08:00–08:15 全員工作會報、08:15–08:50 場地檢查",
+ "工作時間 08:00–17:00（跟招募表單一樣）；16:30–17:00 交接、歸還工作證，17:00 簽退（下午 JBC 場地裁判 16:30 帶隊到分區頒獎背景頒完未來工程師證書再交接；11/8 賽事主辦）。下午頒獎尾段與撤場由主辦核心人員（組長 G1、G2＋協會計分台 K1、K2＋協會／少伯同仁）負責，願意留下的志工協助頒獎尾段與撤場到 18:30",
  "服裝：整齊、好活動的衣服＋包鞋（要一直走動、蹲下看地圖）；不穿拖鞋",
  "午餐：大會提供便當（葷素依招募表單）；12:15–13:15 輪流用餐，比賽區內不吃東西",
  "手機充飽電、帶行動電源；加入工作人員 LINE 群組並開通知",
  "計分系統（首頁「計分系統入口」）：用裁判密碼（培訓時公布）登入、選自己的崗位；成績當下輸入，不要事後補；斷網時手機會先存著，有網路自動上傳",
  "小學、國中、高中組比賽中教練、家長不能進比賽區；啟蒙、探索組教練可在場邊協助，但不能指導；開幕式歡迎家長入場陪同選手到座位，賽事開始時須離開比賽會場",
  "成績、名次、爭議一律不跟家長或教練當場爭論，請他們找裁判長",
- "頒獎：教育局前五名在主舞台頒<b>獎盃＋每位隊員獎牌</b>（手拿大字報拍照；教育局獎狀賽後寄，11/7 理事長）；6 個分區頒獎背景只頒發未來工程師證書：<b>證書袋一開始就放在各 JBC 場地裁判位置上，頒獎時段裁判帶自己取得未來工程師的隊伍到最近的背景</b>，由來賓頒發、拍照（上午、下午都一樣；11/8 理事長）；<b>聯盟優勝、佳作（含相撲、循線）不上台頒發</b>，獎狀與探索工程師證書賽後寄送。<b>相撲、循線參賽證明當天發</b>：頒獎時段由各組相撲決賽台裁判、循線裁判 L1／L2 在相撲區、循線區照組別、隊伍編號發給各隊；聯盟優勝、佳作（相撲、國中循線前八強（非前五）＝優勝、之後＝佳作）獎狀賽後寄。<b>相撲、循線各組比完就拍</b>：得獎隊伍（前五名、優勝、佳作）到分區頒獎背景 5、6 拍一組一張大合照（高中相撲約 10:55、國中相撲約 11:15、國小相撲約 15:25、循線約 16:10；帶隊：相撲＝該組決賽台裁判、循線＝L1（國中）／L2（高中）；攝影師（另聘）拍，拍不到的那座由帶隊裁判用手機拍）（11/7 理事長）。高中循線（2 隊、無教育局）第一、二名由臺灣機器人教育聯盟頒名次獎狀＋獎盃＋每位隊員獎牌，上主舞台（不發優勝）。<b>下午頒獎尾段（16:30–17:00）與撤場由主辦核心人員（組長 G1、G2＋協會計分台 K1、K2） 負責</b>；下午 6 座分區頒獎背景跟上午一樣由 JBC 場地裁判帶隊、來賓頒發（11/8 理事長），組長 G1、G2 巡場協調；工作人員 17:00 簽退，願意留下的志工協助頒獎尾段與撤場到 18:30",
+ "頒獎：教育局前五名在主舞台頒<b>獎盃＋每位隊員獎牌</b>（手拿大字報拍照；教育局獎狀賽後寄，11/7 賽事主辦）；6 個分區頒獎背景只頒發未來工程師證書：<b>證書袋一開始就放在各 JBC 場地裁判位置上，頒獎時段裁判帶自己取得未來工程師的隊伍到最近的背景</b>，由來賓頒發、拍照（上午、下午都一樣；11/8 賽事主辦）；<b>聯盟優勝、佳作（含相撲、循線）不上台頒發</b>，獎狀與探索工程師證書賽後寄送。<b>相撲、循線參賽證明當天發</b>：頒獎時段由各組相撲決賽台裁判、循線裁判 L1／L2 在相撲區、循線區照組別、隊伍編號發給各隊；聯盟優勝、佳作（相撲、國中循線前八強（非前五）＝優勝、之後＝佳作）獎狀賽後寄。<b>相撲、循線各組比完就拍</b>：得獎隊伍（前五名、優勝、佳作）到分區頒獎背景 5、6 拍一組一張大合照（高中相撲約 10:55、國中相撲約 11:15、國小相撲約 15:25、循線約 16:10；帶隊：相撲＝該組決賽台裁判、循線＝L1（國中）／L2（高中）；攝影師（另聘）拍，拍不到的那座由帶隊裁判用手機拍）（11/7 賽事主辦）。高中循線（2 隊、無教育局）第一、二名由臺灣機器人教育聯盟頒名次獎狀＋獎盃＋每位隊員獎牌，上主舞台（不發優勝）。<b>下午頒獎尾段（16:30–17:00）與撤場由主辦核心人員（組長 G1、G2＋協會計分台 K1、K2） 負責</b>；下午 6 座分區頒獎背景跟上午一樣由 JBC 場地裁判帶隊、來賓頒發（11/8 賽事主辦），組長 G1、G2 巡場協調；工作人員 17:00 簽退，願意留下的志工協助頒獎尾段與撤場到 18:30",
  "拍照不要拍到選手證、報名資料等個資；照片上傳到大會雲端資料夾",
  "有狀況找裁判長（比賽）或總指揮（場務）"
 ];
 window.TIMELINE = [
  [
   "12/12（六）18:00–21:00",
-  "前一天場佈（理事長 11/6 定：葳格 18:00 起可進場；預估 3 小時）",
-  "協會人員（11/8 理事長）、大螢幕 V1＋主辦核心人員：桌椅、56 張地圖、15 張相撲台、循線賽道 2 條、分區頒獎背景架 6 個、雙面桌牌（上午面朝外）、各裁判椅子下的備用道具、主舞台旁獎盃獎牌擺放（依組別、名次；11/7 理事長）、舞台前方座位區（來賓／教練待命／家長觀禮）加椅（數量待葳格確認）；頒獎舞台後方大螢幕（今年新增，給現場頒獎用）測試投影與音響（見場佈分工表）"
+  "前一天場佈（賽事主辦 11/6 定：葳格 18:00 起可進場；預估 3 小時）",
+  "協會人員（11/8 賽事主辦）、大螢幕 V1＋主辦核心人員：桌椅、56 張地圖、15 張相撲台、循線賽道 2 條、分區頒獎背景架 6 個、雙面桌牌（上午面朝外）、各裁判椅子下的備用道具、主舞台旁獎盃獎牌擺放（依組別、名次；11/7 賽事主辦）、舞台前方座位區（來賓／教練待命／家長觀禮）加椅（數量待葳格確認）；頒獎舞台後方大螢幕（今年新增，給現場頒獎用）測試投影與音響（見場佈分工表）"
  ],
  [
   "08:00–08:15",
@@ -78,7 +80,7 @@ window.TIMELINE = [
  [
   "10:00–11:00",
   "JBC 第 30–90 分：神秘題",
-  "完成 2 題基礎題的隊伍才能挑戰神秘題；相撲決賽：高中 10:45–10:55、國中 11:05–11:15（11/8 理事長）"
+  "完成 2 題基礎題的隊伍才能挑戰神秘題；相撲決賽：高中 10:45–10:55、國中 11:05–11:15（11/8 賽事主辦）"
  ],
  [
   "11:00–11:20",
@@ -103,7 +105,7 @@ window.TIMELINE = [
  [
   "13:00–13:30",
   "下午場地準備",
-  "桌牌旋轉翻到下午那一面（雙面桌牌）；地圖不用換（11/8 理事長）；下午道具在各裁判椅子下；相撲台換組別牌；循線賽道就位"
+  "桌牌旋轉翻到下午那一面（雙面桌牌）；地圖不用換（11/8 賽事主辦）；下午道具在各裁判椅子下；相撲台換組別牌；循線賽道就位"
  ],
  [
   "13:30–13:45",
@@ -118,12 +120,12 @@ window.TIMELINE = [
  [
   "14:00–14:30",
   "國小新秀第 0–30 分：基礎變化題",
-  "啟蒙、探索開始挑戰（每題 2 次機會）；相撲 14:00–14:30 練習、秤重檢錄，14:30 照對戰表開打；循線 14:00–14:40 練習（11/8 理事長）"
+  "啟蒙、探索開始挑戰（每題 2 次機會）；相撲 14:00–14:30 練習、秤重檢錄，14:30 照對戰表開打；循線 14:00–14:40 練習（11/8 賽事主辦）"
  ],
  [
   "14:30–15:30",
   "國小新秀第 30–90 分：神秘題",
-  "相撲單循環 14:30–15:15、決賽 15:15–15:25；循線第 1 輪 14:40–15:10、15:10–15:40 練習、第 2 輪 15:40–16:10（每隊正式跑 2 次、每次 3 分鐘，取最好；11/8 理事長）"
+  "相撲單循環 14:30–15:15、決賽 15:15–15:25；循線第 1 輪 14:40–15:10、15:10–15:40 練習、第 2 輪 15:40–16:10（每隊正式跑 2 次、每次 3 分鐘，取最好；11/8 賽事主辦）"
  ],
  [
   "15:30–16:00",
@@ -151,7 +153,8 @@ window.TIMELINE = [
   "主辦核心（組長 G1、G2、協會計分台 K1、K2） 負責；願意留下的志工協助頒獎尾段與撤場到 18:30"
  ]
 ];
-window.RULE_TABS = ["新秀", "進階", "高手", "啟蒙A", "啟蒙B", "啟蒙C", "探索A", "探索B", "相撲", "循線"];
+// 台灣賽題庫 Google 文件 12 個分頁（全部組別題目與規則）：頁首按鈕＋崗位卡「全部組別題目與規則」；培訓頁 build_training.py 也讀這一行
+window.RULE_TABS = [{"name": "啟蒙A", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m"}, {"name": "啟蒙B", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.9j6h9vqty491"}, {"name": "啟蒙C", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.oa5yxqd2dmdp"}, {"name": "探索A", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33"}, {"name": "探索B", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq"}, {"name": "新秀", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0"}, {"name": "進階", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax"}, {"name": "高手", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h"}, {"name": "相撲", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu"}, {"name": "循線", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.nzvhawqca115"}, {"name": "任務說明", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.2jsjgw97z0tc"}, {"name": "組隊說明", "url": "https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.24zxd1dnbc7u"}];
 window.ROLES = [
  {
   "id": 1,
@@ -186,8 +189,8 @@ window.ROLES = [
    "全場計時不暫停"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：組隊說明 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：任務說明 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.24zxd1dnbc7u\" target=\"_blank\" rel=\"noopener\">題庫規則：組隊說明 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.2jsjgw97z0tc\" target=\"_blank\" rel=\"noopener\">題庫規則：任務說明 分頁</a>"
   ]
  },
  {
@@ -238,8 +241,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
   ]
  },
  {
@@ -291,8 +294,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
   ]
  },
  {
@@ -344,8 +347,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
   ]
  },
  {
@@ -396,8 +399,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
   ]
  },
  {
@@ -447,8 +450,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>"
   ]
  },
  {
@@ -500,8 +503,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.9j6h9vqty491\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>"
   ]
  },
  {
@@ -553,8 +556,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.oa5yxqd2dmdp\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>"
   ]
  },
  {
@@ -606,8 +609,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
   ]
  },
  {
@@ -657,8 +660,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
   ]
  },
  {
@@ -710,8 +713,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
   ]
  },
  {
@@ -763,8 +766,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>"
   ]
  },
  {
@@ -815,8 +818,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
   ]
  },
  {
@@ -867,8 +870,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
   ]
  },
  {
@@ -919,8 +922,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
   ]
  },
  {
@@ -971,8 +974,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1023,8 +1026,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1075,8 +1078,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1127,8 +1130,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1180,8 +1183,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1233,8 +1236,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1285,8 +1288,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1336,8 +1339,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1388,8 +1391,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1441,8 +1444,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1494,8 +1497,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1547,8 +1550,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1599,8 +1602,8 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>"
   ]
  },
  {
@@ -1641,7 +1644,7 @@ window.ROLES = [
    "要上廁所：舉手或 LINE 通知裁判長，等機動裁判來代班"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>"
   ]
  },
  {
@@ -1671,14 +1674,14 @@ window.ROLES = [
    "題目內容不外流、不拍照"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.9j6h9vqty491\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.oa5yxqd2dmdp\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
   ]
  },
  {
@@ -1708,14 +1711,14 @@ window.ROLES = [
    "題目內容不外流、不拍照"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.9j6h9vqty491\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.oa5yxqd2dmdp\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
   ]
  },
  {
@@ -1745,14 +1748,14 @@ window.ROLES = [
    "題目內容不外流、不拍照"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>",
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0\" target=\"_blank\" rel=\"noopener\">題庫規則：新秀 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax\" target=\"_blank\" rel=\"noopener\">題庫規則：進階 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h\" target=\"_blank\" rel=\"noopener\">題庫規則：高手 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.9j6h9vqty491\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.oa5yxqd2dmdp\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
   ]
  },
  {
@@ -1784,14 +1787,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -1823,14 +1826,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -1862,14 +1865,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -1901,14 +1904,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -1940,14 +1943,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -1979,14 +1982,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2018,14 +2021,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2057,14 +2060,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2096,14 +2099,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2135,14 +2138,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2174,14 +2177,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2210,14 +2213,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2246,14 +2249,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2282,14 +2285,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2318,14 +2321,14 @@ window.ROLES = [
    "熟讀相撲規則與本站積分制"
   ],
   "watch": [
-   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 理事長；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
+   "相撲場地 80×80 cm，四周黑線寬 10 cm；紅藍啟動區在對角，外框 25 cm、內框 15 cm，離黑線 2 cm（11/8 賽事主辦；示意圖：03_賽前須知\\公告與教練須知\\相撲場地示意圖\\相撲場地示意圖_80x80.png）",
    "比賽開始後選手要退到離台 50 公分外",
    "機器人先碰任一條四周黑線才能進攻；碰到場外地面就輸（浮空不算）",
    "時間到沒分勝負：判重量輕的機器人贏這一回合（算 1 分）；同重平手雙方 0 分（秤重記錄在計分系統裡）",
    "輪到時 1 分鐘未到判缺賽 0:3；回合之間最多 1 分鐘（雙方都準備好可提早開始）、維修以 1 分鐘為限"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu\" target=\"_blank\" rel=\"noopener\">題庫規則：相撲 分頁</a>"
   ]
  },
  {
@@ -2365,7 +2368,7 @@ window.ROLES = [
    "看不清楚時可以請選手等一下，用手機錄影輔助"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：循線 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.nzvhawqca115\" target=\"_blank\" rel=\"noopener\">題庫規則：循線 分頁</a>"
   ]
  },
  {
@@ -2405,7 +2408,7 @@ window.ROLES = [
    "看不清楚時可以請選手等一下，用手機錄影輔助"
   ],
   "read": [
-   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/\" target=\"_blank\" rel=\"noopener\">題庫規則：循線 分頁</a>"
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.nzvhawqca115\" target=\"_blank\" rel=\"noopener\">題庫規則：循線 分頁</a>"
   ]
  },
  {
@@ -2419,7 +2422,7 @@ window.ROLES = [
    "08:00–08:15 工作會報：跟裁判長分工（裁判長管裁判與判決，組長管場務、賽務與機動人員）",
    "比賽中巡場：各崗位求援（缺人、要東西、換班上廁所）找組長；派機動人員去支援，記下誰去了哪裡",
    "12:15–13:15 午餐輪班：排各崗位輪流吃飯，服務台、門口、維修區不能同時空著",
-   "11:45–12:15 頒獎：帶來賓到 6 座分區頒獎背景就位、巡場（JBC 場地裁判帶隊過來，來賓頒未來工程師證書）（11/8 理事長）"
+   "11:45–12:15 頒獎：帶來賓到 6 座分區頒獎背景就位、巡場（JBC 場地裁判帶隊過來，來賓頒未來工程師證書）（11/8 賽事主辦）"
   ],
   "pm": [
    "同上午（下午組別）",
@@ -2451,7 +2454,7 @@ window.ROLES = [
    "08:00–08:15 工作會報：跟裁判長分工（裁判長管裁判與判決，組長管場務、賽務與機動人員）",
    "比賽中巡場：各崗位求援（缺人、要東西、換班上廁所）找組長；派機動人員去支援，記下誰去了哪裡",
    "12:15–13:15 午餐輪班：排各崗位輪流吃飯，服務台、門口、維修區不能同時空著",
-   "11:45–12:15 頒獎：帶來賓到 6 座分區頒獎背景就位、巡場（JBC 場地裁判帶隊過來，來賓頒未來工程師證書）（11/8 理事長）"
+   "11:45–12:15 頒獎：帶來賓到 6 座分區頒獎背景就位、巡場（JBC 場地裁判帶隊過來，來賓頒未來工程師證書）（11/8 賽事主辦）"
   ],
   "pm": [
    "同上午（下午組別）",
@@ -2515,7 +2518,7 @@ window.ROLES = [
    "08:15–08:50 證書依組別排好；主舞台的獎盃、每位隊員獎牌、大字報依組別、名次備好（教育局獎狀賽後寄，不放主舞台袋）",
    "<b>相撲開打前核對</b> 09:30–10:00：到相撲區跟各台裁判確認每隊秤重都已輸入計分系統、對戰表（對戰順序已排好（籤號＝隊伍編號順序，不抽籤））正確、缺賽的隊伍已標記；10:00 開打",
    "11:00–11:20 收 JBC 裁判送來的計分表（取代小組長收表）：確認每張都有選手簽名，依組別、編號歸檔",
-   "11:20–11:45 依獲獎名單分袋：主舞台 1 袋（教育局前五名的獎盃、每位隊員獎牌、大字報，依組別→名次；不含教育局獎狀）；6 個分區頒獎背景用的未來工程師證書<b>賽前就依裁判分袋放在各 JBC 場地裁判位置上</b>（自己的證書袋（依裁判分袋，一開始就放在你的裁判位置上）；11/8 理事長），沒領走的收回；<b>相撲／循線參賽證明（依組別→隊伍）放在各組相撲決賽台</b>；教育局獎狀、聯盟優勝、佳作（含相撲、循線）獎狀與探索工程師證書另外收好，賽後寄",
+   "11:20–11:45 依獲獎名單分袋：主舞台 1 袋（教育局前五名的獎盃、每位隊員獎牌、大字報，依組別→名次；不含教育局獎狀）；6 個分區頒獎背景用的未來工程師證書<b>賽前就依裁判分袋放在各 JBC 場地裁判位置上</b>（自己的證書袋（依裁判分袋，一開始就放在你的裁判位置上）；11/8 賽事主辦），沒領走的收回；<b>相撲／循線參賽證明（依組別→隊伍）放在各組相撲決賽台</b>；教育局獎狀、聯盟優勝、佳作（含相撲、循線）獎狀與探索工程師證書另外收好，賽後寄",
    "11:45–12:15 主舞台：跟 A1 一起依組別、名次備好獎盃與每位隊員獎牌（大字報給隊伍拿著拍照），上台時遞給頒獎人"
   ],
   "pm": [
@@ -2544,7 +2547,7 @@ window.ROLES = [
   "short": "工作人員報到、廣播、失物、醫藥箱、便當",
   "group": "賽務組",
   "am": [
-   "服務台位置：維多利亞廳門口進來左手邊（11/8 理事長）",
+   "服務台位置：維多利亞廳門口進來左手邊（11/8 賽事主辦）",
    "08:00 工作人員簽到、發工作證（背心）",
    "依時間表廣播：入場、清場、開賽、30 分鐘提醒、停止挑戰、頒獎",
    "回答家長問題、失物招領；家長要送東西給選手：記下單位、選手姓名，請門口引導送進去",

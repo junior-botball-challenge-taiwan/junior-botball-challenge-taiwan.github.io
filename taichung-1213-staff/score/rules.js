@@ -4,7 +4,7 @@
 //   basic:<隊號>:<1|2>           {done, at}            基礎變化題 1、2 完成（新秀／進階／高手）
 //   mys:<隊號>:<輸入者>.<n>      {s, c:[子項], at, void} 神秘題一次挑戰（輸入者＝崗位代號，例 A05.3；同一隊不同手機不會撞號）
 //   task:<隊號>:<題號>           {t:["S"|"F", …]}      啟蒙／探索：每題 2 次機會，S 成功、F 失敗
-//   draw:<組>                    {lots:{籤號:隊號}}    相撲抽籤（只給 fixedDraw 不是 true 的組用）；11/5 晚理事長定「不抽籤、籤號＝隊伍編號順序」→ 各組 fixedDraw:true，用 data.js 的 lotTeams
+//   draw:<組>                    {lots:{籤號:隊號}}    相撲抽籤（只給 fixedDraw 不是 true 的組用）；11/5 晚賽事主辦定「不抽籤、籤號＝隊伍編號順序」→ 各組 fixedDraw:true，用 data.js 的 lotTeams
 //   sumo:<組>:<輪>:<台>          {r:[每局…]}           相撲預賽一場（11/7 起三回合全打、每贏一回合 1 分）：R 紅勝、B 藍勝、TR/TB 時間到紅/藍較輕、T0 同重、XR/XB 對手缺賽或逾時
 //   weight:<隊號>                {g}                   秤重（公克），同分時輕者在前
 //   final:<組>:<SF1|SF2|P3|F>    {rounds, red, blue, adminRounds}   決賽：SF1＝1 vs 4、SF2＝2 vs 3、P3＝季殿軍戰、F＝冠亞軍戰
@@ -15,11 +15,11 @@
   "use strict";
 
   // ---------- 設定（計分台可改；沒設定就用這裡的預設）----------
-  // 假設（待理事長決定）：神秘題滿分 100；上午 09:30、下午 14:00 開始；開始 30 分鐘後開放神秘題；循線每隊 3 次取最好（11/5 理事長定）；
-  //   相撲／循線：前八強（扣掉教育局前五名）＝優勝、之後的名次＝佳作（11/7 理事長；round 設定已不用於相撲循線）；
+  // 假設（待賽事主辦決定）：神秘題滿分 100；上午 09:30、下午 14:00 開始；開始 30 分鐘後開放神秘題；循線每隊 3 次取最好（11/5 賽事主辦定）；
+  //   相撲／循線：前八強（扣掉教育局前五名）＝優勝、之後的名次＝佳作（11/7 賽事主辦；round 設定已不用於相撲循線）；
   //   神秘題「得分 ≥50% 優勝、≥20% 佳作」只給沒拿到前五名的隊伍（top5Only:true＝一隊只拿一張名次獎）
   const DEFAULT_CFG = { mmax: 100, am: "09:30", pm: "14:00", gate: 30, lineTries: 2, round: "ceil", top5Only: true, items: [], open: { am: false, pm: false } };
-  const SUMO_PTS = { BOUT: 1, TIE: 0 };       // 11/7 理事長：相撲預賽三回合全打、算總積分：每贏一回合 1 分（時間到判輕者贏也算）、同重平手 0 分；決賽仍三戰兩勝
+  const SUMO_PTS = { BOUT: 1, TIE: 0 };       // 11/7 賽事主辦：相撲預賽三回合全打、算總積分：每贏一回合 1 分（時間到判輕者贏也算）、同重平手 0 分；決賽仍三戰兩勝
   const LINE_MAX_SEC = 150;                   // 循線 150 秒上限：超過的圈不算
   const RANK_ZH = ["", "第一名", "第二名", "第三名", "第四名", "第五名"];
   const EDU = "臺中市政府教育局", ALLY = "臺灣機器人教育聯盟", ASIA = "Botball亞洲組委會";
@@ -32,7 +32,7 @@
     c.items = Array.isArray(c.items) ? c.items : [];
     return c;
   }
-  // 11/18 理事長：JBC 場地組的隊伍編號＝座位代碼（X-035E、X-001J、J-001E…），前綴是比賽區不是組別
+  // 11/18 賽事主辦：JBC 場地組的隊伍編號＝座位代碼（X-035E、X-001J、J-001E…），前綴是比賽區不是組別
   //   （X-035E 國小新秀、X-001J 國中新秀同區不同組）→ 組別一律查 data.js 的 teams（每隊的 gk 欄）；查不到才退回前綴（啟蒙／探索／相撲／循線）
   const GKX = typeof WeakMap !== "undefined" ? new WeakMap() : null;
   function gkIndex(D) {
@@ -144,7 +144,7 @@
   // 三戰兩勝：一方先拿 2 局就結束；打滿 3 局（含同重平局）也結束
   function boDone(r) { const p = tally(r); return p.red >= 2 || p.blue >= 2 || p.n >= 3; }
   function boOutcome(r) { if (!boDone(r)) return null; const p = tally(r); return p.red > p.blue ? "R" : p.blue > p.red ? "B" : "D"; }
-  // 11/7 理事長：預賽（單循環）三回合全打，打滿 3 回合才算完；這一輪的勝負（給勝-和-敗統計用）看回合數
+  // 11/7 賽事主辦：預賽（單循環）三回合全打，打滿 3 回合才算完；這一輪的勝負（給勝-和-敗統計用）看回合數
   function rrDone(r) { return tally(r).n >= 3; }
   function rrOutcome(r) { if (!rrDone(r)) return null; const p = tally(r); return p.red > p.blue ? "R" : p.blue > p.red ? "B" : "D"; }
   const matchKey = (gk, m) => "sumo:" + gk + ":" + m[0] + ":" + m[1];
@@ -340,10 +340,10 @@
     } else if (g.kind === "sumo" || g.kind === "line") {
       const R_ = g.kind === "sumo" ? sumoRanking(D, st, gk) : lineRanking(D, st, gk);
       const ranked = R_.rows.filter((r) => r.rank != null);
-      // 11/7 理事長：相撲、循線 前八強（扣掉教育局前五名）＝優勝，之後的名次＝佳作（取代原本前 50%／80%）
+      // 11/7 賽事主辦：相撲、循線 前八強（扣掉教育局前五名）＝優勝，之後的名次＝佳作（取代原本前 50%／80%）
       ranked.forEach((r) => {
         if (edu(r)) add(r, EDU, RANK_ZH[r.rank], "edu");
-        else if (g.noEdu && r.rank <= 5) add(r, ALLY, RANK_ZH[r.rank], "rank", "無教育局獎狀：名次由聯盟頒發");   // 11/7 理事長：高中循線第一、二名＝聯盟名次獎狀＋獎盃
+        else if (g.noEdu && r.rank <= 5) add(r, ALLY, RANK_ZH[r.rank], "rank", "無教育局獎狀：名次由聯盟頒發");   // 11/7 賽事主辦：高中循線第一、二名＝聯盟名次獎狀＋獎盃
         else if (r.rank <= 8) add(r, ALLY, "優勝", "win", "前八強（第 " + r.rank + " 名）");
         else add(r, ALLY, "佳作", "merit", "第 " + r.rank + " 名（前八強以後）");
       });

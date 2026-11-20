@@ -49,6 +49,9 @@ table.tb th,table.tb td{border:1px solid var(--line);padding:5px 7px;text-align:
 .mute{color:var(--mute);font-size:.9rem}
 .inp{font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);max-width:100%}
 .hide{display:none}
+.alltabs{border:1px solid var(--line);border-radius:10px;padding:4px 14px 12px;margin:18px 0 6px}
+.alltabs .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.alltabs .tabs a{display:inline-block;padding:7px 12px;border:1.5px solid var(--brand);border-radius:8px;color:var(--brand);font-weight:600;text-decoration:none}
 .login{background:var(--ok-bg);border:1px solid var(--ok);border-radius:10px;padding:10px 14px;margin:12px 0 0;font-size:.95rem}
 .roles button[disabled]{opacity:.35;cursor:not-allowed}
 footer{color:var(--mute);font-size:.8rem;text-align:center;padding:20px 16px}
@@ -172,7 +175,7 @@ footer{color:var(--mute);font-size:.8rem;text-align:center;padding:20px 16px}
 <li>排名：最終圈累計秒數<b>最接近目標</b>者勝（只比差距），再比次終圈、依序往下。</li>
 </ul>
 <div class="eg"><b>情境</b>：目標 75 秒，A 74.80、B 75.30 → A 差 0.20、B 差 0.30，<b>A 在前</b>。看不清楚時可用手機錄影輔助。</div>
-</div><div class="quiz" id="quiz3"></div></section>
+</div><div class="alltabs" id="allTabs"><h3>全部組別題目與規則（12 個）</h3><p class="mute">台灣賽題庫 Google 文件，每個連結開新分頁、直接到那個組別的分頁，沒登入 Google 也打得開。不是你崗位的組別也可以看，當天支援別區或回答選手問題時用得到；測驗只考你崗位的題目。</p><div class="tabs"><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m" target="_blank" rel="noopener">啟蒙A</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.9j6h9vqty491" target="_blank" rel="noopener">啟蒙B</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.oa5yxqd2dmdp" target="_blank" rel="noopener">啟蒙C</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33" target="_blank" rel="noopener">探索A</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq" target="_blank" rel="noopener">探索B</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.0" target="_blank" rel="noopener">新秀</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.8s2kqqy8zax" target="_blank" rel="noopener">進階</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.js912pjetk1h" target="_blank" rel="noopener">高手</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.h1bupsb8cxxu" target="_blank" rel="noopener">相撲</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.nzvhawqca115" target="_blank" rel="noopener">循線</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.2jsjgw97z0tc" target="_blank" rel="noopener">任務說明</a><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.24zxd1dnbc7u" target="_blank" rel="noopener">組隊說明</a></div></div><div class="quiz" id="quiz3"></div></section>
 
 <section class="ch" id="ch4"><h2>第 4 章　計分系統操作</h2>
 <h3>登入（每個崗位都一樣）</h3>
@@ -233,12 +236,12 @@ try { const v = JSON.parse(localStorage.getItem(KEY) || "null"); if (v && v.ans)
 if (!S.chk) S.chk = {};
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 const $ = (id) => document.getElementById(id);
-// 11/20 理事長：從工作人員專區登入進來（同網域 sessionStorage，電話不放網址）→ 鎖定大會指派的測驗類別、填好暱稱；直接打開（沒登入）照舊自由練習
+// 11/20 賽事主辦：從工作人員專區登入進來（同網域 sessionStorage，電話不放網址）→ 鎖定大會指派的測驗類別、填好暱稱；直接打開（沒登入）照舊自由練習
 let LOGIN = null;
 try { LOGIN = JSON.parse(sessionStorage.getItem("jbc1213-staff-login") || "null"); } catch (e) {}
 if (LOGIN && !LOGIN.nick) LOGIN = null;
 let LOCK = LOGIN ? (LOGIN.track && LOGIN.track !== "共同" ? LOGIN.track : "") : null;   // null＝沒鎖；""＝只考共同題
-// 11/20 晚理事長：L1、L2 要考兩種（循線＋JBC 場地裁判）→ 只能在大會指派的這幾種之間切換
+// 11/20 晚賽事主辦：L1、L2 要考兩種（循線＋JBC 場地裁判）→ 只能在大會指派的這幾種之間切換
 const ALLOW = LOGIN ? (LOGIN.tracks && LOGIN.tracks.length ? LOGIN.tracks : [LOGIN.track || "共同"]).map((t) => (t === "共同" ? "" : t)) : null;
 if (LOCK !== null && S.role !== LOCK) { S.role = LOCK; S.res = null; save(); }
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
