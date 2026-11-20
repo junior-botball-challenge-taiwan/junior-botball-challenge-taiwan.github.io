@@ -65,7 +65,9 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap"></noscript>
 <style>
 /* 版面：「工程筆記本」。方格紙底、Botguy 紅、深藍墨水、程式碼字體只用在時間與編號這類資料上；單欄 70rem，左對齊。 */
 :root{
@@ -201,7 +203,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
 <a class="skip" href="#main" data-i18n="skip">跳到主要內容</a>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Junior Botball Challenge Taiwan"><img src="jbc-logo.png" width="400" height="158" alt="Junior Botball Challenge"></a>
+    <a class="brand" href="#top" aria-label="Junior Botball Challenge Taiwan"><img src="jbc-logo.webp" width="400" height="158" alt="Junior Botball Challenge"></a>
     <nav class="nav" aria-label="主選單">
       <a href="#apply" data-i18n="n1">報名</a><a href="#day" data-i18n="n2">當天賽程</a><a href="#rules" data-i18n="n3">競賽規則</a><a href="#history" data-i18n="n4">歷屆回顧</a><a href="international.html" data-i18n="n5">國外賽</a><a href="explorer/" data-i18n="n7">Botball Explorer</a><a href="botball/" data-i18n="n8">Botball</a><a href="#contact" data-i18n="n6">聯絡</a>
     </nav>
@@ -232,7 +234,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
         </div>
       </div>
       <figure class="shot">
-        <img src="img/field.jpg" width="1200" height="980" alt="Botball 比賽現場，學生蹲在場地上調整機器人" fetchpriority="high">
+        <img src="img/field.webp" srcset="img/field-700.webp 700w, img/field.webp 1200w" sizes="100vw" width="1200" height="980" alt="Botball 比賽現場，學生蹲在場地上調整機器人" fetchpriority="high">
         <figcaption data-i18n="cap">Botball 比賽現場：選手在場地上調整機器人</figcaption>
       </figure>
     </div>
@@ -291,11 +293,11 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
       </div>
       <div class="years">
         <article class="year">
-          <img src="img/2025.jpg" width="1000" height="750" alt="2025 年 JBC 選手合影" loading="lazy">
+          <img src="img/2025.webp" width="1000" height="750" alt="2025 年 JBC 選手合影" loading="lazy">
           <div class="b"><span class="y">2025</span><h3 data-i18n="y25">2025 STEM 科技教育競賽</h3><p data-i18n="y25d">在葳格國際會議中心，超過百支隊伍上場挑戰，學生在壓力下冷靜修正程式。</p><a href="https://www.youtube.com/watch?v=rcE14MQA5Xs" data-i18n="watch">觀看精華影片</a></div>
         </article>
         <article class="year">
-          <img src="img/2024.jpg" width="1000" height="750" alt="2024 年臺灣隊在 GCER 獲得第三名" loading="lazy">
+          <img src="img/2024.webp" width="1000" height="750" alt="2024 年臺灣隊在 GCER 獲得第三名" loading="lazy">
           <div class="b"><span class="y">2024</span><h3 data-i18n="y24">2024 JBC 挑戰賽</h3><p data-i18n="y24d">許多選手的第一場機器人比賽，重點在啟發與實作。</p><a href="https://www.youtube.com/watch?v=-pvjUm5lbAI" data-i18n="watch">觀看精華影片</a></div>
         </article>
       </div>
