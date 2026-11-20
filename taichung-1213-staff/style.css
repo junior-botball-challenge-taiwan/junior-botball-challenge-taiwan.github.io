@@ -82,6 +82,7 @@ footer { padding: 28px 0 40px; color: var(--mute); font-size: 14px; }
 .rows { display: grid; gap: 10px; }
 .row { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: #fff; display: grid; gap: 10px; }
 .row.arrange { background: #fff8e6; border-color: #f1d58a; }
+.arrange-job { margin: 6px 0 6px 1.3em; padding: 0; font-size: 14.5px; }   /* 11/20 第 5 輪：機動人員組工作內容 */
 .row.is-taken { background: #fafbfc; }
 .row-head { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
 .row-title { display: grid; }

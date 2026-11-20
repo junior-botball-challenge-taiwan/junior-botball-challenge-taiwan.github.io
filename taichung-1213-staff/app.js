@@ -2,7 +2,9 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const ROLES = window.ROLES, EV = window.EVENT;
-  const ARRANGE = "A", ARRANGE_NAME = "由主辦單位安排崗位（機動人員）";   // 11/8 賽事主辦：派去哪個裁判崗位都可以，或當天當機動、隨時派任務（可多人）
+  // 11/20 第 5 輪賽事主辦：「由主辦單位安排（機動人員）」改成「機動人員組」（可多人；沒崗位的人可以自己選，已排好崗位的人不能自己換；測驗考共同題）
+  const ARRANGE = "A", ARRANGE_NAME = "機動人員組";
+  const ARRANGE_JOB = ["比賽前有夥伴退出時，馬上頂上他的崗位", "當天現場收拾道具、協助場地復原"];
   const FIXED = window.FIXED || {};                         // 主辦指定且已有人：{ id: 暱稱 }（組長）
   const RESERVED = new Set((window.RESERVED || []).map(String)); // 主辦指定、還沒有人：不開放認領
   const FIXED_NAMES = new Set(Object.values(FIXED));
@@ -54,7 +56,8 @@
 
   // ---------- 後台：正式（Apps Script）或示範模式 ----------
   const demo = !window.API_URL;
-  const DEMO_STAFF = { "示範-小明": "0912345678", "示範-小華": "0922333444", "示範-阿美": "0933111222" };
+  const DEMO_STAFF = { "示範-小明": "0912345678", "示範-小華": "0922333444", "示範-阿美": "0933111222", "示範-阿強": "0944555666" };
+  const DEMO_ARRANGE = ["示範-阿強"];   // 示範模式的機動人員組（阿美還沒排，可以自己選空缺或機動人員組）
   const DEMO_EXP = new Set(["示範-小明"]);   // 示範模式：只有小明有賽事經驗（可認領 G1、G2）
   const DEMO_ASSIGN = { "49": "示範-小明", "2": "示範-小華" };   // 示範模式的大會指派：小明 L2（上午 JBC 機動、下午循線）、小華 J01、阿美還沒排
   const DEMO_QUIZ = { "示範-小明": { score: 92, pass: true, track: "循線", byTrack: { "循線": { score: 92, pass: true } } } };   // 示範：小明循線已及格、JBC 還沒考
@@ -74,7 +77,7 @@
   const norm = (p) => { let d = String(p || "").replace(/\D/g, ""); if (d.startsWith("886")) d = "0" + d.slice(3); return d; };
 
   async function apiStatus() {
-    if (demo && ASSIGN) return { open: true, openAt: EV.openAt, now: new Date().toISOString(), nicknames: Object.keys(DEMO_STAFF), claims: { ...demoClaims() }, arrange: [], quiz: { ...DEMO_QUIZ }, selfClaim: true };
+    if (demo && ASSIGN) return { open: true, openAt: EV.openAt, now: new Date().toISOString(), nicknames: Object.keys(DEMO_STAFF), claims: { ...demoClaims() }, arrange: DEMO_ARRANGE.slice(), quiz: { ...DEMO_QUIZ }, selfClaim: true };
     if (demo) return { open: demoOpen() || Date.now() >= new Date(EV.openAt).getTime(), openAt: EV.openAt, now: new Date().toISOString(), nicknames: Object.keys(DEMO_STAFF), ...demoLoad() };
     const res = await fetch(window.API_URL, { cache: "no-store" });
     return res.json();
@@ -87,7 +90,8 @@
       const dc = demoClaims(), id = Object.keys(dc).find((k) => dc[k] === nickname), r = id && byId[id];
       const tracks = r ? tracksOf(r.code) : ["共同"], bt = (DEMO_QUIZ[nickname] || {}).byTrack || {}, quizzes = {};
       tracks.forEach((t) => (quizzes[t] = bt[t] || null));
-      return { ok: true, nickname, roleId: r ? r.id : null, code: r ? r.code : "", roleName: r ? r.code + " " + r.title : "大會安排中", track: tracks[0], tracks, assigned: !!r,
+      const mobile = !r && DEMO_ARRANGE.includes(nickname);
+      return { ok: true, nickname, roleId: r ? r.id : null, code: r ? r.code : mobile ? ARRANGE : "", roleName: r ? r.code + " " + r.title : mobile ? ARRANGE_NAME : "大會安排中", track: tracks[0], tracks, assigned: !!r, mobile,
         quiz: quizzes[tracks[0]], quizzes, allPass: tracks.every((t) => quizzes[t] && quizzes[t].pass) };
     }
     const res = await fetch(window.API_URL, { method: "POST", body: JSON.stringify({ action: "me", nickname, phone }) });
@@ -98,7 +102,8 @@
     const v = loadLogin() || {}, req = { action: "claim", nickname: me ? me.nickname : "", phone: v.phone || "", roleId };
     if (demo) {
       const c = demoClaims(), id = String(roleId);
-      if (Object.keys(c).some((k) => c[k] === req.nickname)) return { ok: false, message: ASSIGN_MSG };
+      if (Object.keys(c).some((k) => c[k] === req.nickname) || DEMO_ARRANGE.includes(req.nickname)) return { ok: false, message: ASSIGN_MSG };
+      if (id === ARRANGE) { DEMO_ARRANGE.push(req.nickname); return { ok: true, message: "已加入 " + ARRANGE_NAME + "，可以開始測驗了（考共同題）", claims: { ...c }, arrange: DEMO_ARRANGE.slice() }; }
       if (RESERVED.has(id)) return { ok: false, message: "這個崗位由主辦單位指定" };
       if (c[id]) return { ok: false, message: "這個崗位已經有人了，請選其他空缺" };
       if (EXP_ONLY.has(id) && !DEMO_EXP.has(req.nickname)) return { ok: false, message: EXP_MSG };
@@ -160,7 +165,7 @@
   function whereIs() {
     const m = {};
     for (const id in state.claims) m[state.claims[id]] = byId[id] ? byId[id].code : "#" + pad(id);
-    (state.arrange || []).forEach((n) => (m[n] = "主辦安排"));
+    (state.arrange || []).forEach((n) => (m[n] = ARRANGE_NAME));
     return m;
   }
 
@@ -214,8 +219,13 @@
 
   function arrangeRow() {
     const a = state.arrange || [], u = ui[ARRANGE] || {};
-    if (ASSIGN) return a.length ? '<div class="row arrange"><div class="row-head"><span class="num star">★</span><div class="row-title"><span class="title">' + ARRANGE_NAME +
-      '</span><span class="short">由主辦單位派任務（機動人員）</span></div><span class="badge free">' + a.length + ' 人</span></div><p class="names">' + a.map(esc).join("、") + "</p></div>" : "";
+    if (ASSIGN) {   // 11/20 第 5 輪：機動人員組卡＝工作內容＋人數＋名單；沒崗位的人登入後可以加入
+      const join = canSelfClaim() ? '<div class="act"><button type="button" class="small" data-act="selfclaim" data-key="' + ARRANGE + '">我要加入機動人員組（' + esc(me.nickname) + "）</button></div>"
+        : selfOn() && state.loaded ? '<div class="act"><span class="who vac">還沒有崗位的人，在上面「我的崗位與測驗」登入後就能加入（可多人）</span></div>' : "";
+      return '<div class="row arrange"><div class="row-head"><span class="num star">★</span><div class="row-title"><span class="title">' + ARRANGE_NAME +
+        '</span><span class="short">可多人・測驗考共同題</span></div><span class="badge free">' + a.length + ' 人</span></div><ul class="arrange-job">' + ARRANGE_JOB.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>" +
+        '<p class="names">' + (a.length ? "名單：" + a.map((n) => esc(n) + friendTag(n)).join("、") : "目前還沒有人") + "</p>" + join + "</div>";
+    }
     return '<div class="row arrange"><div class="row-head">' +
       '<span class="num star">★</span><div class="row-title"><span class="title">' + ARRANGE_NAME + '</span>' +
       '<span class="short">哪裡都可以！由主辦單位幫你安排崗位：派你去任何一個裁判位置，或當機動人員、當天由組長隨時派任務（可多人）</span></div>' +
@@ -300,7 +310,7 @@
     const claims = state.claims || {}, arrange = state.arrange || [];
     const taken = Object.keys(claims).filter((k) => byId[k]).length;
     const open = ROLES.length - RESERVED.size;
-    $("countText").textContent = ASSIGN ? "大會已安排 " + taken + " / " + open + " 個崗位" + (selfOn() && state.loaded ? "・空缺 " + vacantRoles().length + " 個" : "") + (arrange.length ? "・機動人員 " + arrange.length + " 人" : "")
+    $("countText").textContent = ASSIGN ? "大會已安排 " + taken + " / " + open + " 個崗位" + (selfOn() && state.loaded ? "・空缺 " + vacantRoles().length + " 個" : "") + "・機動人員組 " + arrange.length + " 人"
       : "已認領 " + taken + " / " + open + "・主辦安排 " + arrange.length + " 人" + (state.nicknames.length ? "・已填 " + (taken + arrange.length) + " / " + state.nicknames.length + " 人" : "");
     $("lockbox").hidden = ASSIGN || state.open;
     loginNicks();
@@ -380,9 +390,10 @@
     };
     const head = r ? '<div class="row-head"><span class="num" style="background:' + (GROUP_COLOR[r.group] || "#555") + '">' + esc(r.code) + "</span>" +
         '<div class="row-title"><span class="title">' + esc(r.title) + '</span><span class="short">' + esc(r.short) + "</span></div></div>"
-      : '<div class="row-head"><span class="num star">…</span><div class="row-title"><span class="title">大會安排中</span><span class="short">崗位排好或你自己認領空缺後會在這裡顯示；可以先考共同須知題</span></div></div>';
+      : me.mobile ? '<div class="row-head"><span class="num star">★</span><div class="row-title"><span class="title">' + ARRANGE_NAME + '</span><span class="short">' + ARRANGE_JOB.map(esc).join("；") + "（測驗考共同題）</span></div></div>"
+      : '<div class="row-head"><span class="num star">…</span><div class="row-title"><span class="title">大會安排中</span><span class="short">你可以自己認領空缺崗位，或加入機動人員組；可以先考共同須知題</span></div></div>';
     const flash = claimMsg ? '<p class="row-msg ' + (claimMsg.ok ? "ok" : "err") + '">' + esc(claimMsg.text) + "</p>" : "";
-    box.innerHTML = '<p class="hello">👋 ' + esc(me.nickname) + (r ? "，這是大會幫你排好的崗位" : "，你的崗位大會還在安排") + "</p>" + friendTag(me.nickname) + flash + head + claimBoxHTML() +
+    box.innerHTML = '<p class="hello">👋 ' + esc(me.nickname) + (r ? "，這是大會幫你排好的崗位" : me.mobile ? "，你在機動人員組" : "，你還沒有崗位") + "</p>" + friendTag(me.nickname) + flash + head + claimBoxHTML() +
       '<div class="quizbox">' + (tracks.length > 1 ? '<p class="qline"><b>你的崗位要考 ' + tracks.length + " 種測驗，兩種都要及格</b>（" + tracks.map((t) => esc(TRACK_LABEL[t] || t)).join("＋") + "，各自交卷）</p>" : "") +
       tracks.map(quizOne).join("") +
       '<p class="row-hint">測驗已在 11/20 歸零，之前考過的也請照新崗位再考一次；80 分及格、可以重考，以最高分為準。交卷時再輸入一次手機號碼確認本人。</p></div>' +
@@ -406,18 +417,20 @@
     if ((state.arrange || []).includes(me.nickname)) return "";   // 主辦安排分頁上的人由大會派
     if (!state.loaded) return '<div class="claimbox"><p class="qline">崗位讀取中…</p></div>';
     const v = vacantRoles();
-    if (!v.length) return '<div class="claimbox"><p class="qline"><b>' + FULL_MSG + "</b></p></div>";
-    return '<div class="claimbox"><p class="qline"><b>可以自己認領空缺崗位</b>（一崗一人、先送先得；認領後就是你的崗位，要換要在工作人員 LINE 群組告訴大會）</p><ul class="vac-list">' +
+    const mob = '<li><span class="num star">★</span><span class="vt">' + ARRANGE_NAME + "（可多人；" + esc(ARRANGE_JOB.join("、")) + '；考共同題）</span><button type="button" class="small" data-act="selfclaim" data-key="' + ARRANGE + '">加入機動人員組</button></li>';
+    if (!v.length) return '<div class="claimbox"><p class="qline"><b>' + FULL_MSG + '</b></p><p class="qline">也可以先加入機動人員組：</p><ul class="vac-list">' + mob + "</ul></div>";
+    return '<div class="claimbox"><p class="qline"><b>可以自己認領空缺崗位，或加入機動人員組</b>（崗位一崗一人、先送先得；選了就是你的工作，要換要在工作人員 LINE 群組告訴大會）</p><ul class="vac-list">' +
       v.map((x) => '<li><span class="num" style="background:' + (GROUP_COLOR[x.group] || "#555") + '">' + esc(x.code) + '</span><span class="vt">' + esc(x.title) +
-        (EXP_ONLY.has(String(x.id)) ? "（限有賽事經驗者）" : "") + '</span><button type="button" class="small" data-act="selfclaim" data-key="' + x.id + '">認領這格</button></li>').join("") + "</ul></div>";
+        (EXP_ONLY.has(String(x.id)) ? "（限有賽事經驗者）" : "") + '</span><button type="button" class="small" data-act="selfclaim" data-key="' + x.id + '">認領這格</button></li>').join("") + mob + "</ul></div>";
   }
   async function selfClaim(id) {
-    const x = byId[String(id)]; if (!x || !canSelfClaim()) return;
-    if (!confirm("確定要認領「" + x.code + " " + x.title + "」嗎？\n認領後就是你的崗位，網站不能自己換；要換請在工作人員 LINE 群組告訴大會。")) return;
+    const isMob = String(id) === ARRANGE, x = isMob ? { code: "★", title: ARRANGE_NAME } : byId[String(id)]; if (!x || !canSelfClaim()) return;
+    if (!confirm((isMob ? "確定要加入「" + ARRANGE_NAME + "」嗎？" : "確定要認領「" + x.code + " " + x.title + "」嗎？") + "\n選了就是你的工作，網站不能自己換；要換請在工作人員 LINE 群組告訴大會。")) return;
     claimMsg = { text: "送出中…", ok: true }; renderMe();
     try {
       const res = await apiClaim(String(id));
       if (res.claims) state.claims = withFixed(res.claims);
+      if (res.arrange) state.arrange = res.arrange;
       claimMsg = { text: res.message || (res.ok ? "已認領" : "認領失敗"), ok: !!res.ok };
       const v = loadLogin();
       if (res.ok && v) await doLogin(v.nick, v.phone, true);   // 重新登入：拿到新崗位與要考的測驗類別
