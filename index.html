@@ -65,27 +65,29 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"></noscript>
 <style>
-/* 版面：「工程筆記本」。方格紙底、Botguy 紅、深藍墨水、程式碼字體只用在時間與編號這類資料上；單欄 70rem，左對齊。 */
+/* 版面：「工程筆記本」。整頁淡方格紙（首屏格線較深）、區塊標題貼紅色紙膠帶（只用在 h2）、條列取代等寬卡片、
+   等寬字只用在時間與編號；字重 400／500／600。單欄 70rem，左對齊，間距都是 4 的倍數。 */
 :root{
-  --paper:#fbfcfe; --grid:#e3e9f2; --ink:#16213a; --muted:#56607a; --line:#d5dce8; --card:#fff;
-  --red:#c8102e; --red-d:#9e0c24; --red-soft:#fdecef; --blue:#1d4ed8; --amber:#b45309;
+  --paper:#fbfcfe; --grid:#e3e9f2; --grid-soft:#eef2f8; --ink:#16213a; --muted:#56607a; --line:#d5dce8; --dash:#c3ccdb; --card:#fff;
+  --red:#c8102e; --red-d:#9e0c24; --tape:rgba(200,16,46,.15); --blue:#1d4ed8;
   --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   --r:12px; --w:70rem;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-body{margin:0;background:var(--paper);color:var(--ink);font:400 1rem/1.75 var(--sans);-webkit-font-smoothing:antialiased}
+body{margin:0;background-color:var(--paper);background-image:linear-gradient(var(--grid-soft) 1px,transparent 1px),linear-gradient(90deg,var(--grid-soft) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font:400 1rem/1.75 var(--sans);-webkit-font-smoothing:antialiased}
 img{max-width:100%;height:auto;display:block}
 a{color:var(--blue)}
+b,strong{font-weight:600}
 a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:6px}
-h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance}
+h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance;font-weight:600}
 .wrap{max-width:var(--w);margin:0 auto;padding-inline:20px}
-.mono{font-family:var(--mono)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 12px;z-index:100}.skip:focus{left:8px}
 
 .top{position:sticky;top:0;z-index:50;background:rgba(251,252,254,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
@@ -93,106 +95,126 @@ h1,h2,h3{line-height:1.3;margin:0;text-wrap:balance}
 .brand{display:flex;align-items:center;min-height:44px}
 .brand img{width:112px;height:auto}
 .nav{margin-left:auto;display:flex;gap:2px}
-.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 11px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;white-space:nowrap}
+.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:8px;text-decoration:none;color:var(--ink);font-weight:500;white-space:nowrap;transition:background-color .15s}
 .nav a:hover{background:#eef2f8}
 .lang{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
-.lang button{min-height:44px;min-width:44px;border:0;background:#fff;font:700 .85rem var(--sans);color:var(--muted);cursor:pointer}
+.lang button{min-height:44px;min-width:44px;border:0;background:#fff;font:600 .85rem var(--sans);color:var(--muted);cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--ink);color:#fff}
 .menu{display:none}
-.menu summary{list-style:none;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:500;background:#fff}
+.menu summary{list-style:none;display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:500;background:#fff}
 .menu summary::-webkit-details-marker{display:none}
 .menu[open] .panel{position:absolute;left:0;right:0;top:64px;background:#fff;border-bottom:1px solid var(--line);padding:8px 20px 16px;display:grid}
 .menu .panel a{min-height:48px;display:flex;align-items:center;text-decoration:none;color:var(--ink);font-weight:500;border-bottom:1px solid #eef1f5}
 @media (max-width:960px){.nav{display:none}.menu{display:block;margin-left:auto}}
 
-/* 第一屏：方格紙 */
+/* 第一屏：較深的方格紙＋拍立得照片 */
 .hero{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;border-bottom:1px solid var(--line);padding-block:40px}
-.hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
-.kicker{font:700 .82rem/1 var(--mono);color:var(--red);letter-spacing:.04em}
-.hero h1{font-size:clamp(2rem,4.6vw,3.1rem);font-weight:900;margin-top:12px}
-.hero h1 .en{display:block;font:700 clamp(1rem,2vw,1.2rem)/1.4 var(--mono);color:var(--muted);margin-top:6px}
-.hero .lead{font-size:1.1rem;color:var(--muted);margin:14px 0 20px;max-width:32em}
-.event{background:#fff;border:2px solid var(--ink);border-radius:var(--r);padding:16px 18px;display:grid;gap:6px;max-width:30rem;box-shadow:6px 6px 0 var(--red)}
-.event .row{display:grid;grid-template-columns:4.5rem 1fr;gap:8px;align-items:baseline}
-.event .k{font:700 .78rem/1.6 var(--mono);color:var(--red)}
-.event .v{font-weight:700}
+.hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.kicker{font:500 .9rem/1.4 var(--sans);color:var(--red-d)}
+.hero h1{font-size:clamp(2rem,4.6vw,3rem);font-weight:600;margin-top:12px}
+.hero h1 .en{display:block;font:500 clamp(1rem,2vw,1.2rem)/1.4 var(--mono);color:var(--muted);margin-top:8px}
+.hero .lead{font-size:1.1rem;color:var(--muted);margin:16px 0 20px;max-width:32em}
+.event{background:#fff;border:1px solid var(--ink);border-radius:var(--r);padding:4px 20px;max-width:30rem}
+.event .row{display:grid;grid-template-columns:4rem 1fr;gap:8px;align-items:baseline;padding-block:8px}
+.event .row+.row{border-top:1px dashed var(--dash)}
+.event .k{font-size:.9rem;font-weight:500;color:var(--red-d)}
+.event .v{font-weight:600}
 .event .v small{display:block;font-weight:400;color:var(--muted);font-size:.9rem}
-.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:10px;font-weight:700;text-decoration:none;border:2px solid var(--ink)}
+.event .v.off{font-weight:500;color:var(--muted)}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 24px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid var(--ink);transition:background-color .15s,border-color .15s}
 .btn.primary{background:var(--red);border-color:var(--red);color:#fff}
 .btn.primary:hover{background:var(--red-d);border-color:var(--red-d)}
 .btn.ghost{background:#fff;color:var(--ink)}
-.btn.closed{background:#eceef2;border-color:#c9cdd5;color:#555c68;cursor:not-allowed}
-.shot{margin:0;background:#fff;padding:10px 10px 8px;border:1px solid var(--line);border-radius:6px;transform:rotate(1.2deg);box-shadow:0 14px 30px -18px rgba(22,33,58,.5);position:relative}
+.btn.ghost:hover{background:#eef2f8}
+.shot{margin:0;background:#fff;padding:12px 12px 8px;border:1px solid var(--line);border-radius:6px;transform:rotate(1.2deg);box-shadow:0 14px 30px -18px rgba(22,33,58,.5);position:relative}
 .shot::before{content:"";position:absolute;top:-12px;left:50%;width:96px;height:24px;margin-left:-48px;background:rgba(200,16,46,.18);border:1px solid rgba(200,16,46,.25);transform:rotate(-2deg)}
 .shot figcaption{font-size:.82rem;color:var(--muted);padding-top:8px}
 @media (max-width:900px){.hero .grid{grid-template-columns:1fr;gap:28px}.hero{padding-block:24px}.shot{transform:none}}
 
-section{padding-block:52px}
-.head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.head h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:900}
-.head h2 .n{font:700 .9rem var(--mono);color:var(--red);display:block;margin-bottom:4px}
+/* 區塊標題：紅色紙膠帶（簽名細節，只用在這裡） */
+section{padding-block:56px}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin-bottom:24px}
+.tape{display:inline-block;margin-left:-4px;padding:4px 24px 4px 20px;background:var(--tape);font-size:clamp(1.375rem,2.6vw,1.75rem);font-weight:600;color:var(--ink);transform:rotate(-1deg);clip-path:polygon(0 0,100% 0,98.5% 25%,100% 50%,98.5% 75%,100% 100%,0 100%,1.5% 75%,0 50%,1.5% 25%)}
 .head p{margin:0;color:var(--muted)}
+.head a{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
 
-/* 報名步驟 */
-.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:s}
-.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.steps li::before{content:"0" counter(s);font:700 1.6rem/1 var(--mono);color:var(--red)}
+/* 報名：筆記本條列 */
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;border-top:1px solid var(--ink)}
+.steps li{counter-increment:s;display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:0 16px;align-items:center;padding-block:12px;border-bottom:1px dashed var(--dash)}
+.steps li::before{content:"0" counter(s);grid-row:1/3;font:500 1.25rem/1 var(--mono);color:var(--red)}
 .steps h3{font-size:1.05rem}
-.steps p{margin:0;color:var(--muted);font-size:.93rem;flex:1}
-.steps a{display:inline-flex;align-items:center;min-height:44px;font-weight:700;text-decoration:none}
-.steps .closed{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:var(--muted)}
-.extra{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px 20px;color:var(--muted);font-size:.95rem}
-.extra a{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
-@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
-@media (max-width:520px){.steps{grid-template-columns:1fr}.steps li{display:grid;grid-template-columns:48px 1fr;gap:2px 12px;padding:14px 16px}.steps li::before{grid-row:1/4;align-self:start;padding-top:2px}}
+.steps p{margin:0;color:var(--muted);font-size:.95rem;grid-column:2}
+.steps a,.steps .closed{grid-column:3;grid-row:1/3;display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+.steps a{text-decoration:none}
+.steps a:hover{text-decoration:underline}
+.steps .closed{color:var(--muted)}
+.extra{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:0 8px;color:var(--muted);font-size:.95rem}
+.extra a{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+@media (max-width:600px){.steps li{grid-template-columns:40px minmax(0,1fr)}.steps li::before{grid-row:1/4;align-self:start;padding-top:4px}.steps a,.steps .closed{grid-column:2;grid-row:auto}}
 
-/* 當天賽程 */
-.day{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.day p{margin:0;padding:16px 20px}
-.day p+p{border-top:1px solid var(--line)}
-.day .dl{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
-@media (max-width:520px){.day p{padding:14px 16px}}
+/* 當天賽程：手寫時間軸，時間用等寬字，每列 48px 對齊方格 */
+.tl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 48px}
+.sess h3{font-size:1.1rem;padding-bottom:8px;border-bottom:1px solid var(--ink)}
+.sess ol{list-style:none;margin:0;padding:0}
+.sess li{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:stretch;border-bottom:1px dashed var(--dash)}
+.sess time{display:flex;align-items:center;min-height:48px;font:500 1rem var(--mono);font-variant-numeric:tabular-nums;color:var(--red-d)}
+.sess li span{display:flex;align-items:center;min-height:48px;padding:8px 0 8px 16px;border-left:2px solid var(--red)}
+.notes{margin-top:24px;max-width:48rem}
+.notes p{margin:0 0 8px;color:var(--muted)}
+.notes .dl{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+@media (max-width:700px){.tl{grid-template-columns:1fr}}
 
-/* 規則 */
-.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.rule{background:#fff;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:var(--r);padding:16px 18px;min-width:0}
-.rule h3{font-size:1rem}
-.rule p{margin:4px 0 0;color:var(--muted);font-size:.95rem}
-@media (max-width:900px){.rules{grid-template-columns:1fr 1fr}}
-@media (max-width:520px){.rules{grid-template-columns:1fr}}
-.path{margin-top:18px;background:var(--red-soft);border:1px solid #f6c5cf;border-radius:var(--r);padding:16px 20px;display:grid;gap:6px}
-.path b{color:var(--red-d)}
+/* 規則：左邊條列（寬）、右邊晉級路線（窄） */
+.rules-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:24px 40px;align-items:start}
+.rules{margin:0;border-top:1px solid var(--ink)}
+.rules div{display:grid;grid-template-columns:8rem minmax(0,1fr);gap:4px 16px;padding-block:12px;border-bottom:1px dashed var(--dash)}
+.rules dt{font-weight:600}
+.rules dd{margin:0;color:var(--muted)}
+.path{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.path h3{font-size:1.05rem;margin-bottom:8px}
+.path ol{margin:0;padding-left:20px;display:grid;gap:8px}
+.path li::marker{font-family:var(--mono);color:var(--red-d)}
+.path b{display:block}
+.path span{color:var(--muted);font-size:.95rem}
+@media (max-width:860px){.rules-grid{grid-template-columns:1fr}}
+@media (max-width:520px){.rules div{grid-template-columns:1fr}}
 
-/* 歷屆回顧 */
-.video{position:relative;aspect-ratio:16/9;width:100%;max-width:860px;border-radius:var(--r);overflow:hidden;background:#0d1426;margin-bottom:20px}
+/* 歷屆回顧：影片（寬）＋數字（窄），年份改成橫列 */
+.hist-top{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:24px 40px;align-items:center;margin-bottom:32px}
+.video{position:relative;aspect-ratio:16/9;width:100%;border-radius:var(--r);overflow:hidden;background:#0d1426}
 .video a,.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .video a{display:grid;place-items:center;text-decoration:none}
 .video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
-.video .play{position:relative;display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--ink);font-weight:700;padding:12px 20px;border-radius:999px;min-height:48px}
-.years{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.year{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;min-width:0}
-.year img{aspect-ratio:4/3;object-fit:cover;width:100%}
-.year .b{padding:16px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
-.year .y{font:700 .85rem var(--mono);color:var(--red)}
-.year p{margin:0;color:var(--muted);font-size:.95rem;flex:1}
-.year a{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
-.stat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
-.stat b{display:block;font:700 1.8rem/1.2 var(--mono);color:var(--ink)}
-.stat span{color:var(--muted);font-size:.9rem}
+.video .play{position:relative;display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--ink);font-weight:600;padding:12px 20px;border-radius:10px;min-height:48px}
+.stats{margin:0;border-top:1px solid var(--ink)}
+.stats div{display:grid;grid-template-columns:6.5rem minmax(0,1fr);align-items:baseline;gap:16px;padding-block:12px;border-bottom:1px dashed var(--dash)}
+.stats dt{order:2;color:var(--muted)}
+.stats dd{order:1;margin:0;font:500 2rem/1.2 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.years{display:grid;gap:24px}
+.year{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:24px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.year img{aspect-ratio:4/3;object-fit:cover;width:100%;border-radius:4px}
+.year .b{display:flex;flex-direction:column;gap:4px;padding-right:12px}
+.year .y{font:500 .9rem var(--mono);color:var(--red-d)}
+.year h3{font-size:1.15rem}
+.year p{margin:0;color:var(--muted)}
+.year a{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+@media (max-width:860px){.hist-top{grid-template-columns:1fr}}
+@media (max-width:600px){.year{grid-template-columns:1fr;gap:12px}.year .b{padding:0 4px 4px}}
 
-/* 聯絡 */
-.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.contact a{display:flex;flex-direction:column;justify-content:center;min-height:68px;padding:12px 16px;background:#fff;border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:var(--ink);min-width:0}
-.contact small{color:var(--muted);font-size:.8rem}
-.contact b{overflow-wrap:anywhere}
+/* 聯絡：兩欄條列 */
+.contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px;border-top:1px solid var(--ink)}
+.contact a{display:grid;grid-template-columns:6.5rem minmax(0,1fr);align-items:center;gap:16px;min-height:56px;border-bottom:1px dashed var(--dash);text-decoration:none;color:var(--ink);min-width:0}
+.contact a:hover b{color:var(--blue)}
+.contact small{font:500 .85rem var(--mono);color:var(--muted)}
+.contact b{font-weight:500;overflow-wrap:anywhere}
+@media (max-width:700px){.contact{grid-template-columns:1fr}}
 
-footer{border-top:1px solid var(--line);padding-block:24px 96px;font-size:.9rem;color:var(--muted)}
-footer .wrap{display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center}
+footer{border-top:1px solid var(--line);background:var(--paper);padding-block:24px 96px;font-size:.9rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;align-items:center}
 footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44px}
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;gap:10px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border-top:1px solid var(--line)}
-.dock a,.dock .btn{flex:1;min-height:48px}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;gap:12px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border-top:1px solid var(--line)}
+.dock a,.dock .btn{flex:1;min-height:48px;padding-inline:12px}
 @media (max-width:900px){.dock{display:flex}}
 @media (min-width:901px){footer{padding-bottom:24px}}
 </style>
@@ -225,11 +247,12 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
         <h1><span data-i18n="h1">JBC 臺灣區機器人挑戰賽</span><span class="en">Junior Botball Challenge Taiwan</span></h1>
         <p class="lead" data-i18n="lead">自己寫程式、讓機器人自主完成任務。不限平台，國小到高中都能參加，成績優異者可銜接 GCER 美國全球總決賽。</p>
         <div class="event" aria-label="比賽資訊">
-          <div class="row"><span class="k">DATE</span><span class="v" data-i18n="date">2026 年 12 月 13 日（日）</span></div>
-          <div class="row"><span class="k">PLACE</span><span class="v"><span data-i18n="place">葳格國際會議中心</span><small data-i18n="addr">臺中市北屯區軍福十八路 328 號</small></span></div>
+          <div class="row"><span class="k" data-i18n="k-date">日期</span><span class="v" data-i18n="date">2026 年 12 月 13 日（日）</span></div>
+          <div class="row"><span class="k" data-i18n="k-place">地點</span><span class="v"><span data-i18n="place">葳格國際會議中心</span><small data-i18n="addr">臺中市北屯區軍福十八路 328 號</small></span></div>
+          <div class="row"><span class="k" data-i18n="k-reg">報名</span><span class="v off" data-i18n="reg-v">已截止</span></div>
         </div>
         <div class="btns">
-          <span class="btn closed" role="link" aria-disabled="true" data-i18n="cta1">報名已截止</span>
+          <a class="btn primary" href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="cta-line">加入 LINE 等下一場通知</a>
           <a class="btn ghost" href="https://drive.google.com/drive/folders/1B7hhfJ3Ua2CyPPmKw17oYh9i8j2RODKG?usp=sharing" data-i18n="cta2">報名簡章</a>
         </div>
       </div>
@@ -242,7 +265,7 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
 
   <section id="apply">
     <div class="wrap">
-      <div class="head"><h2><span class="n">STEP 01–04</span><span data-i18n="apply-h">報名 4 步驟</span></h2></div>
+      <div class="head"><h2 class="tape" data-i18n="apply-h">報名 4 步驟</h2></div>
       <ol class="steps">
         <li><h3 data-i18n="s1">看簡章</h3><p data-i18n="s1d">確認組別、費用與報名期限。</p><a href="https://drive.google.com/drive/folders/1B7hhfJ3Ua2CyPPmKw17oYh9i8j2RODKG?usp=sharing" data-i18n="s1a">打開簡章</a></li>
         <li><h3 data-i18n="s2">線上報名</h3><p data-i18n="s2d">填寫隊伍與選手資料。</p><span class="closed" data-i18n="s2a">報名已截止</span></li>
@@ -255,11 +278,27 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
 
   <section id="day" style="padding-top:0">
     <div class="wrap">
-      <div class="head"><h2><span class="n">12/13 SUN</span><span data-i18n="day-h">當天賽程</span></h2></div>
-      <div class="day">
+      <div class="head"><h2 class="tape" data-i18n="day-h">當天賽程</h2><p class="mono">2026.12.13</p></div>
+      <div class="tl">
+        <div class="sess">
+          <h3 data-i18n="day-am">上午場</h3>
+          <ol>
+            <li><time datetime="2026-12-13T09:00">09:00</time><span data-i18n="t-in">入場</span></li>
+            <li><time datetime="2026-12-13T11:25">11:25</time><span data-i18n="t-end">比賽全部結束，開放家長入場觀禮</span></li>
+            <li><time datetime="2026-12-13T11:45">11:45</time><span data-i18n="t-award">頒獎</span></li>
+          </ol>
+        </div>
+        <div class="sess">
+          <h3 data-i18n="day-pm">下午場</h3>
+          <ol>
+            <li><time datetime="2026-12-13T13:30">13:30</time><span data-i18n="t-in">入場</span></li>
+            <li><time datetime="2026-12-13T16:20">16:20</time><span data-i18n="t-end">比賽全部結束，開放家長入場觀禮</span></li>
+            <li><time datetime="2026-12-13T16:30">16:30–17:00</time><span data-i18n="t-award">頒獎</span></li>
+          </ol>
+        </div>
+      </div>
+      <div class="notes">
         <p data-i18n="day-note">隊伍組別及賽程已公告（2026/11/08），各隊組別、隊伍編號、座位與詳細流程請見公告。</p>
-        <p><b data-i18n="day-am">上午場</b>　<span data-i18n="day-amd">09:00 入場、11:45 頒獎</span></p>
-        <p><b data-i18n="day-pm">下午場</b>　<span data-i18n="day-pmd">13:30 入場、16:30–17:00 頒獎</span></p>
         <p data-i18n="day-parent">家長入場：開幕式時家長可陪同選手入座，比賽開始後請離開比賽會場；比賽全部結束後（上午場 11:25、下午場 16:20）開放家長入場觀禮。</p>
         <p><a class="dl" href="files/jbc-taichung-1213-teams-schedule-20261108.pdf" data-i18n="day-dl">下載：隊伍組別及賽程公告（2026/11/08，PDF）</a></p>
       </div>
@@ -268,28 +307,40 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
 
   <section id="rules" style="padding-top:0">
     <div class="wrap">
-      <div class="head"><h2><span class="n">RULES</span><span data-i18n="rules-h">競賽規則</span></h2><p><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.24zxd1dnbc7u#heading=h.enjhjnwujonh" data-i18n="rules-link">查看最新規則</a></p></div>
-      <div class="rules">
-        <div class="rule"><h3 data-i18n="r1">組隊級別</h3><p data-i18n="r1d">啟蒙級、探索級、入門級、新秀組、進階組、高手組。</p></div>
-        <div class="rule"><h3 data-i18n="r2">機器人規範</h3><p data-i18n="r2d">不限平台，器材自備，符合各級別零件規定。</p></div>
-        <div class="rule"><h3 data-i18n="r3">現場挑戰</h3><p data-i18n="r3d">90 分鐘內可多次測驗。</p></div>
-        <div class="rule"><h3 data-i18n="r4">成績判定</h3><p data-i18n="r4d">依任務完成度評分，認證達標可獲國際證書。</p></div>
-      </div>
-      <div class="path">
-        <div><b data-i18n="p1">未來工程師認證</b>　<span data-i18n="p1d">達標即具備國際賽資格。</span></div>
-        <div><b data-i18n="p2">GCER 全球總決賽</b>　<span data-i18n="p2d">2027 年 7 月於美國舉行。</span></div>
+      <div class="head"><h2 class="tape" data-i18n="rules-h">競賽規則</h2><p><a href="https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.24zxd1dnbc7u#heading=h.enjhjnwujonh" data-i18n="rules-link">查看最新規則</a></p></div>
+      <div class="rules-grid">
+        <dl class="rules">
+          <div><dt data-i18n="r1">組隊級別</dt><dd data-i18n="r1d">啟蒙級、探索級、入門級、新秀組、進階組、高手組。</dd></div>
+          <div><dt data-i18n="r2">機器人規範</dt><dd data-i18n="r2d">不限平台，器材自備，符合各級別零件規定。</dd></div>
+          <div><dt data-i18n="r3">現場挑戰</dt><dd data-i18n="r3d">90 分鐘內可多次測驗。</dd></div>
+          <div><dt data-i18n="r4">成績判定</dt><dd data-i18n="r4d">依任務完成度評分，認證達標可獲國際證書。</dd></div>
+        </dl>
+        <aside class="path" aria-labelledby="path-h">
+          <h3 id="path-h" data-i18n="path-h">晉級路線</h3>
+          <ol>
+            <li><b data-i18n="p1">未來工程師認證</b><span data-i18n="p1d">達標即具備國際賽資格。</span></li>
+            <li><b data-i18n="p2">GCER 全球總決賽</b><span data-i18n="p2d">2027 年 7 月於美國舉行。</span></li>
+          </ol>
+        </aside>
       </div>
     </div>
   </section>
 
   <section id="history" style="padding-top:0">
     <div class="wrap">
-      <div class="head"><h2><span class="n">HISTORY</span><span data-i18n="hist-h">歷屆回顧</span></h2><p><a href="https://www.youtube.com/@jbc__taiwan" data-i18n="yt">更多影片在 YouTube</a></p></div>
-      <div class="video">
-        <a href="https://youtu.be/GfGKOqLs-tU" class="yt" data-id="GfGKOqLs-tU">
-          <img src="https://i.ytimg.com/vi/GfGKOqLs-tU/hqdefault.jpg" width="480" height="360" alt="" loading="lazy">
-          <span class="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="play">播放 2026 台中站精華</span></span>
-        </a>
+      <div class="head"><h2 class="tape" data-i18n="hist-h">歷屆回顧</h2><p><a href="https://www.youtube.com/@jbc__taiwan" data-i18n="yt">更多影片在 YouTube</a></p></div>
+      <div class="hist-top">
+        <div class="video">
+          <a href="https://youtu.be/GfGKOqLs-tU" class="yt" data-id="GfGKOqLs-tU">
+            <img src="https://i.ytimg.com/vi/GfGKOqLs-tU/hqdefault.jpg" width="480" height="360" alt="" loading="lazy">
+            <span class="play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span data-i18n="play">播放 2026 台中站精華</span></span>
+          </a>
+        </div>
+        <dl class="stats">
+          <div><dt data-i18n="st1">累積參賽隊伍</dt><dd>200+</dd></div>
+          <div><dt data-i18n="st2">培訓選手</dt><dd>500+</dd></div>
+          <div><dt data-i18n="st3">國際認證獲獎</dt><dd>20+</dd></div>
+        </dl>
       </div>
       <div class="years">
         <article class="year">
@@ -301,17 +352,12 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
           <div class="b"><span class="y">2024</span><h3 data-i18n="y24">2024 JBC 挑戰賽</h3><p data-i18n="y24d">許多選手的第一場機器人比賽，重點在啟發與實作。</p><a href="https://www.youtube.com/watch?v=-pvjUm5lbAI" data-i18n="watch">觀看精華影片</a></div>
         </article>
       </div>
-      <div class="stats">
-        <div class="stat"><b>200+</b><span data-i18n="st1">累積參賽隊伍</span></div>
-        <div class="stat"><b>500+</b><span data-i18n="st2">培訓選手</span></div>
-        <div class="stat"><b>20+</b><span data-i18n="st3">國際認證獲獎</span></div>
-      </div>
     </div>
   </section>
 
   <section id="contact" style="padding-top:0">
     <div class="wrap">
-      <div class="head"><h2><span class="n">CONTACT</span><span data-i18n="ct-h">聯絡我們</span></h2><p data-i18n="ct-p">報名問題請先加入 LINE 群組詢問</p></div>
+      <div class="head"><h2 class="tape" data-i18n="ct-h">聯絡我們</h2><p data-i18n="ct-p">報名問題請先加入 LINE 群組詢問</p></div>
       <div class="contact">
         <a href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default"><small>LINE</small><b data-i18n="line">JBC 報名群組</b></a>
         <a href="https://www.facebook.com/BotballTaiwan/"><small>Facebook</small><b>Junior Botball Challenge Taiwan</b></a>
@@ -330,37 +376,38 @@ footer a{color:var(--muted);display:inline-flex;align-items:center;min-height:44
 </footer>
 
 <nav class="dock" aria-label="快速操作">
-  <span class="btn closed" role="link" aria-disabled="true" data-i18n="cta1">報名已截止</span>
-  <a class="btn ghost" href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="dock2">加入 LINE</a>
+  <a class="btn ghost" href="files/jbc-taichung-1213-teams-schedule-20261108.pdf" data-i18n="dock1">賽程公告</a>
+  <a class="btn primary" href="https://line.me/ti/g2/4KLjDA6pPbE8BBsQUPSQS2M3rLRNPWO0PVtz9A?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" data-i18n="dock2">加入 LINE</a>
 </nav>
 
 <script>
 var EN = {
   skip:'Skip to content', n1:'Register', n2:'Schedule', n3:'Rules', n4:'History', n5:'International', n7:'Botball Explorer', n8:'Botball', n6:'Contact', menu:'Menu',
-  kicker:'2026 STEM EDUCATION COMPETITION', h1:'JBC Taiwan Robotics Challenge',
+  kicker:'2026 STEM education competition', h1:'JBC Taiwan Robotics Challenge',
   lead:'Students write their own code so robots complete missions on their own. Any robot platform, open to elementary through high school. Top teams can advance to GCER, the global finals in the USA.',
+  'k-date':'Date', 'k-place':'Place', 'k-reg':'Sign-up',
   date:'Sunday, December 13, 2026', place:'Wagor International Convention Center', addr:'No. 328, Junfu 18th Rd., Beitun Dist., Taichung',
-  cta1:'Registration closed', cta2:'Competition guide', cap:'At a Botball event: students tune their robots on the field',
+  'reg-v':'Closed', 'cta-line':'Join LINE for the next event', cta2:'Competition guide', cap:'At a Botball event: students tune their robots on the field',
   'apply-h':'Register in 4 steps', s1:'Read the guide', s1d:'Check categories, fees and deadlines.', s1a:'Open the guide',
   s2:'Register online', s2d:'Fill in team and student details.', s2a:'Registration closed',
   s3:'Pay, then confirm', s3d:'After paying, submit the payment form.', s3a:'Payment form',
   s4:'Join the LINE group', s4d:'Event notices and task updates are posted there.', s4a:'Join group',
   'qb-t':'Practice tasks:', qb:'Question bank', 'day-h':'Event-day schedule',
   'day-note':'Team divisions and the official schedule have been announced (2026/11/08). See the announcement for each team\'s division, team number, seat and the full programme.',
-  'day-am':'Morning session', 'day-amd':'Entry 09:00, awards 11:45',
-  'day-pm':'Afternoon session', 'day-pmd':'Entry 13:30, awards 16:30–17:00',
+  'day-am':'Morning session', 'day-pm':'Afternoon session',
+  't-in':'Entry', 't-end':'All matches end, parents may enter to watch', 't-award':'Awards',
   'day-parent':'Parents: Parents may accompany players to their seats during the opening ceremony and must leave the competition hall once the competition begins. Parents may re-enter to watch the awards after all matches end (morning session 11:25, afternoon session 16:20).',
   'day-dl':'Download: Team divisions & schedule announcement (2026/11/08, PDF, Chinese)',
   'rules-h':'Rules', 'rules-link':'Latest rules', r1:'Categories', r1d:'Starter, Explorer, Entry, Novice, Intermediate, Advanced.',
   r2:'Robot specs', r2d:'Any robot platform. Bring your own kit, follow category rules.', r3:'Live challenge', r3d:'Multiple test runs within 90 minutes.',
   r4:'Scoring', r4d:'Scored by mission completion; qualifying teams receive an international certificate.',
-  p1:'Future Engineer Certification', p1d:'Meeting the standard qualifies a team for international events.', p2:'GCER Global Finals', p2d:'July 2027 in the USA.',
+  'path-h':'Path to the finals', p1:'Future Engineer Certification', p1d:'Meeting the standard qualifies a team for international events.', p2:'GCER Global Finals', p2d:'July 2027 in the USA.',
   'hist-h':'History', yt:'More videos on YouTube', play:'Play 2026 Taichung highlights',
   y25:'2025 STEM Education Competition', y25d:'Over 100 teams competed at the Wagor International Convention Center, fixing code calmly under pressure.', watch:'Watch highlights',
   y24:'2024 JBC Challenge', y24d:'The first robotics event for many students, focused on discovery and hands-on work.',
   st1:'Teams to date', st2:'Students trained', st3:'International certifications',
   'ct-h':'Contact', 'ct-p':'For registration questions, ask in the LINE group first', line:'JBC registration group',
-  org:'Organizer: Taiwan Smart Programming AI Robotics & Knowledge Association (SPARK) | MOI registration No. 1130027903', 'org-link':'SPARK website', privacy:'Privacy policy', dock2:'Join LINE'
+  org:'Organizer: Taiwan Smart Programming AI Robotics & Knowledge Association (SPARK) | MOI registration No. 1130027903', 'org-link':'SPARK website', privacy:'Privacy policy', dock1:'Schedule (PDF)', dock2:'Join LINE'
 };
 function setLang(l){
   document.querySelectorAll('[data-i18n]').forEach(function(el){

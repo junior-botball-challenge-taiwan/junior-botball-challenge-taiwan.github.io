@@ -390,7 +390,7 @@ function renderSetup(){
   BE.MISSIONS.forEach(function(m){
     var on = declared.indexOf(m.id) >= 0, chips = '';
     m.stages.forEach(function(s,i){ chips += '<span class="chip">'+S[lang].stageNames[i]+' '+s.pts+' <span class="jb '+s.j+'">'+(s.j==='L'?t('live'):t('fin'))+'</span></span>'; });
-    h += '<label class="pick'+(on?' on':'')+'"><input type="checkbox" data-id="'+m.id+'"'+(on?' checked':'')+'><span class="num">'+m.id+'</span><span class="b"><span class="nm">'+esc(mName(m))+(lang==='zh'?'<span class="en">'+esc(m.en)+'</span>':'')+'</span><span class="chips">'+chips+'</span></span><span class="tick" aria-hidden="true">✓</span></label>';
+    h += '<label class="pick'+(on?' on':'')+'"><input type="checkbox" data-id="'+m.id+'"'+(on?' checked':'')+'><span class="num">'+m.id+'</span><span class="b"><span class="nm">'+esc(mName(m))+(lang==='zh'?'<span class="en">'+esc(m.en)+'</span>':'')+'</span><span class="chips">'+chips+'</span></span><span class="tick" aria-hidden="true">'+(on?'✓':'')+'</span></label>';
   });
   h += '</div><div class="startbar"><div class="in"><span>'+(full?t('allDone'):(declared.length?t('count',{n:declared.length,p:maxP}):t('needOne')))+'</span>';
   h += '<button type="button" class="tb pri" data-act="start"'+(full||!declared.length?' disabled':'')+'>'+t('start')+'</button></div></div></section>';
