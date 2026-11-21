@@ -27,7 +27,7 @@ window.SCORE_ST = {"1": {"am": "SUB", "pm": "SUB"}, "2": {"am": "A01", "pm": "P0
 window.GROUP_ORDER = ["裁判長", "JBC 場地裁判", "相撲裁判", "循線裁判", "賽務組", "場務組"];
 window.GROUP_COLOR = {"裁判長": "#12355b", "JBC 場地裁判": "#2E6DB4", "相撲裁判": "#B85C00", "循線裁判": "#5B7F2E", "賽務組": "#8E5BB5", "場務組": "#1E9E8F"};
 // 好友組（friend_groups.py 的 GROUPS，v16）：一組一色；網頁用暱稱對到組別，顯示色塊＋「好友組 F05」字樣
-window.FRIEND_GROUPS = [{"id": "F01", "label": "F01", "color": "#e6194b", "nicks": ["勤益-瑋恩", "勤益-建豪", "勤益-昀蓁", "勤益-渂蓁"]}, {"id": "F02", "label": "F02", "color": "#3cb44b", "nicks": ["勤益-愉珊", "國軍-友睿", "勤益-宇哲"]}, {"id": "F03", "label": "F03＋F16", "color": "#4363d8", "nicks": ["勤益-芊英", "勤益-鈺綺", "勤益-科融", "勤益-鈺昕"]}, {"id": "F04", "label": "F04", "color": "#f58231", "nicks": ["勤益-淑妤", "勤益-品嫻", "勤益-詮玗", "勤益-妙華", "勤益-采余", "勤益-依亭", "勤益-亞哲", "勤益-廷芳"]}, {"id": "F05", "label": "F05", "color": "#911eb4", "nicks": ["勤益-杰佾", "勤益-騏福", "勤益-宏暉", "勤益-景立"]}, {"id": "F07", "label": "F07", "color": "#42d4f4", "nicks": ["勤益-柏豪", "勤益-宇廷"]}, {"id": "F08", "label": "F08", "color": "#f032e6", "nicks": ["逢甲-皓安", "逢甲-苡喬"]}, {"id": "F09", "label": "F09", "color": "#bfef45", "nicks": ["嶺東-榮財", "嶺東-程宜"]}, {"id": "F10", "label": "F10", "color": "#9a6324", "nicks": ["勤益-茂笙", "勤益-議澤"]}, {"id": "F11", "label": "F11", "color": "#469990", "nicks": ["勤益-品振", "勤益-杰楓", "勤益-佑昇"]}, {"id": "F12", "label": "F12", "color": "#000075", "nicks": ["勤益-守正", "勤益-咏芸"]}, {"id": "F13", "label": "F13", "color": "#808000", "nicks": ["勤益-冠銘", "勤益-景薇"]}, {"id": "F15", "label": "F15", "color": "#fabed4", "nicks": ["靜宜-壹婷", "逢甲-東豫"]}, {"id": "F18", "label": "F18", "color": "#ffe119", "nicks": ["聯大-家量", "聯大-宣至"]}];
+window.FRIEND_GROUPS = [{"id": "F01", "label": "F01", "color": "#e6194b", "nicks": ["勤益-瑋恩", "勤益-建豪", "勤益-昀蓁", "勤益-渂蓁"]}, {"id": "F02", "label": "F02", "color": "#3cb44b", "nicks": ["勤益-愉珊", "國軍-友睿", "勤益-宇哲"]}, {"id": "F03", "label": "F03＋F16", "color": "#4363d8", "nicks": ["勤益-芊英", "勤益-鈺綺", "勤益-科融", "勤益-鈺昕"]}, {"id": "F04", "label": "F04", "color": "#f58231", "nicks": ["勤益-淑妤", "勤益-品嫻", "勤益-詮玗", "勤益-妙華", "勤益-采余", "勤益-依亭", "勤益-亞哲", "勤益-廷芳"]}, {"id": "F05", "label": "F05", "color": "#911eb4", "nicks": ["勤益-杰佾", "勤益-騏福", "勤益-宏暉", "勤益-景立"]}, {"id": "F07", "label": "F07", "color": "#42d4f4", "nicks": ["勤益-柏豪", "勤益-宇廷"]}, {"id": "F08", "label": "F08", "color": "#f032e6", "nicks": ["逢甲-皓安", "逢甲-苡喬"]}, {"id": "F09", "label": "F09", "color": "#bfef45", "nicks": ["嶺東-榮財", "嶺東-程宜"]}, {"id": "F10", "label": "F10", "color": "#9a6324", "nicks": ["勤益-茂笙", "勤益-議澤"]}, {"id": "F11", "label": "F11", "color": "#469990", "nicks": ["勤益-品振", "勤益-杰楓", "勤益-佑昇"]}, {"id": "F12", "label": "F12", "color": "#000075", "nicks": ["勤益-守正", "勤益-咏芸"]}, {"id": "F13", "label": "F13", "color": "#808000", "nicks": ["勤益-冠銘", "勤益-景薇"]}, {"id": "F15", "label": "F15", "color": "#fabed4", "nicks": ["靜宜-壹婷", "逢甲-東豫"]}, {"id": "F18", "label": "F18", "color": "#ffe119", "nicks": ["聯大-家量", "聯大-宣至", "聯大-羿辰"]}, {"id": "F19", "label": "F19", "color": "#dcbeff", "nicks": ["中科大-廷均", "中科大-柏宏"]}];
 window.COMMON = [
  "08:00 到維多利亞廳服務台（門口進來左手邊；11/8 賽事主辦）報到、簽到，領工作證（背心）；08:00–08:15 全員工作會報、08:15–08:50 場地檢查",
  "工作時間 08:00–17:00（跟招募表單一樣）；16:30–17:00 交接、歸還工作證，17:00 簽退（下午 JBC 場地裁判 16:30 帶隊到分區頒獎背景頒完未來工程師證書再交接；11/8 賽事主辦）。下午頒獎尾段與撤場由主辦核心人員（組長 G1、G2＋大會計分台（協會人員）＋協會／少伯同仁）負責，願意留下的志工協助頒獎尾段與撤場到 18:30",
@@ -2478,8 +2478,8 @@ window.ROLES = [
  {
   "id": 52,
   "code": "F1",
-  "title": "機動＋維修區",
-  "short": "維修區（頒獎舞台右側）看管、全場補位、急救待命",
+  "title": "大會協助人員（維修區＋機動）",
+  "short": "大會協助人員：維修區（頒獎舞台右側）看管、全場補位、急救待命",
   "group": "場務組",
   "am": [
    "08:15–08:50 維修區（頒獎舞台右側）桌椅就位",
@@ -2501,5 +2501,41 @@ window.ROLES = [
    "受傷的小朋友不能落單"
   ],
   "read": []
+ },
+ {
+  "id": 53,
+  "code": "Y1",
+  "title": "幼兒組組長",
+  "short": "帶啟蒙組、探索組：協調場地與工作人員、巡場補位、照顧小朋友",
+  "group": "賽務組",
+  "am": [
+   "08:00 報到、領工作證，跟組長 G1、G2 一起點名",
+   "08:00–08:15 工作會報：跟裁判長、組長 G1、G2 分工（裁判長管判決，幼兒組組長管啟蒙、探索組的場務）",
+   "上午協助組長 G1、G2 巡場：哪裡缺人就補位；先熟悉下午啟蒙、探索組的場地和動線"
+  ],
+  "pm": [
+   "13:30–13:45 下午場入場：帶啟蒙、探索組的選手和教練到座位（教練可以在場邊協助，但不能指導）",
+   "14:00–15:30 啟蒙／探索比賽中巡場：缺人、要東西、小朋友需要幫忙都找你；派機動人員支援，判決問題找裁判長",
+   "啟蒙、探索組比完：協助收拾道具、帶小朋友離場",
+   "16:30–17:00 交接：計分表、道具交給主辦核心人員，歸還工作證，17:00 簽退；願意留下的志工協助頒獎尾段與撤場到 18:30（主辦核心（組長 G1、G2、大會計分台（協會人員））負責）"
+  ],
+  "bring": [
+   "手機（工作人員 LINE 群組）、行動電源"
+  ],
+  "need": [
+   "有耐心、會跟小朋友和教練溝通",
+   "熟讀啟蒙／探索 2 次機會判定"
+  ],
+  "watch": [
+   "判決、成績的問題不自己回答：判決找裁判長、成績找大會計分台",
+   "小朋友不能落單；受傷、走失先處理再通報"
+  ],
+  "read": [
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.o19mteinr68m\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.9j6h9vqty491\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙B 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.oa5yxqd2dmdp\" target=\"_blank\" rel=\"noopener\">題庫規則：啟蒙C 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.3lncqjww4m33\" target=\"_blank\" rel=\"noopener\">題庫規則：探索A 分頁</a>",
+   "<a href=\"https://docs.google.com/document/d/1isL4PLwy8q3PvW-gpLOKPoVwIaVrX9-dNvwRcoZbD04/edit?tab=t.f4g9488nehxq\" target=\"_blank\" rel=\"noopener\">題庫規則：探索B 分頁</a>"
+  ]
  }
 ];
