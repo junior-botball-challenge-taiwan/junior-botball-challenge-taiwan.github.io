@@ -236,6 +236,67 @@
       "</div>";
   }
 
+  // ---------- 11/24 賽事主辦：依組別分頁籤（快速找到自己的位置；名單跟著後台認領／機動人員組） ----------
+  const GTABS = [
+    { key: "jbc", name: "JBC 場地裁判", has: (r) => /^J\d/.test(r.code) },
+    { key: "jm", name: "JBC 機動裁判", has: (r) => /^JM/.test(r.code) },
+    { key: "sumo", name: "相撲裁判", has: (r) => /^S\d/.test(r.code) },
+    { key: "line", name: "循線裁判", has: (r) => /^L\d/.test(r.code) },
+    { key: "lead", name: "組長與大會", has: (r) => !/^[JSL]/.test(r.code) },
+    { key: "mob", name: ARRANGE_NAME, mobile: true },
+  ];
+  let gtab = "jbc", gtabMe = null, gHit = "";
+  const tabOfNick = (n) => {
+    if ((state.arrange || []).includes(n)) return "mob";
+    const id = Object.keys(state.claims || {}).find((k) => state.claims[k] === n), r = id && byId[id];
+    const t = r && GTABS.find((x) => !x.mobile && x.has(r));
+    return t ? t.key : null;
+  };
+  function renderTabs() {
+    const bar = $("gtabs"), panel = $("gpanel"); if (!bar || !panel) return;
+    if (me && gtabMe !== me.nickname) { gtabMe = me.nickname; gtab = tabOfNick(me.nickname) || gtab; }   // 登入後自動切到自己的組別
+    const claims = state.claims || {}, arrange = state.arrange || [];
+    const cnt = (t) => (t.mobile ? arrange.length : ROLES.filter(t.has).length);
+    bar.innerHTML = GTABS.map((t) => '<button type="button" role="tab" class="gtab' + (t.key === gtab ? " on" : "") + '" aria-selected="' + (t.key === gtab) + '" data-tab="' + t.key + '">' +
+      esc(t.name) + '<span class="gc">' + cnt(t) + (t.mobile ? " 人" : " 格") + "</span></button>").join("");
+    const myNick = me ? me.nickname : "";
+    const mark = (n) => (n && n === myNick ? '<span class="you">你</span>' : "");
+    const tab = GTABS.find((t) => t.key === gtab) || GTABS[0];
+    if (tab.mobile) {
+      panel.innerHTML = '<p class="gnote">' + esc(ARRANGE_JOB.join("；")) + "。測驗考共同題。</p>" +
+        (arrange.length ? '<ul class="glist">' + arrange.map((n) => '<li class="gi' + (n === myNick || n === gHit ? " hit" : "") + '" data-nick="' + esc(n) + '"><span class="num star">★</span><span class="gn">' + esc(n) + mark(n) + friendTag(n) + "</span></li>").join("") + "</ul>"
+          : '<p class="load">目前還沒有人</p>');
+      return;
+    }
+    let lastZone = "";
+    const items = ROLES.filter(tab.has).map((r) => {
+      const id = String(r.id), n = claims[id] || "";
+      const zone = tab.key === "jbc" ? ((r.am[0] || "").match(/第 ?\d+ ?區/) || [""])[0] : "";
+      const head = zone && zone !== lastZone ? '<li class="gzone">' + esc(zone.replace(/\s/g, "")) + "</li>" : "";
+      if (zone) lastZone = zone;
+      const who = n ? esc(n) + mark(n) + friendTag(n) : RESERVED.has(id) ? '<span class="gv">主辦單位指定</span>' : '<span class="gv">空缺</span>';
+      return head + '<li class="gi' + (n && (n === myNick || n === gHit) ? " hit" : "") + '" data-nick="' + esc(n) + '">' +
+        '<span class="num" style="background:' + (GROUP_COLOR[r.group] || "#555") + '">' + esc(r.code) + "</span>" +
+        '<span class="gn">' + who + '</span><span class="gs">' + esc(r.short) + "</span>" +
+        '<button type="button" class="link" data-goto="' + esc(r.code) + '">看工作內容與位置</button></li>';
+    });
+    panel.innerHTML = '<ul class="glist">' + items.join("") + "</ul>";
+  }
+  function findInTabs(v) {
+    const msg = $("tabFindMsg"); v = String(v || "").trim(); gHit = "";
+    if (!v) { msg.textContent = ""; renderTabs(); return; }
+    const pool = Object.values(state.claims || {}).concat(state.arrange || []);
+    const exact = pool.filter((n) => n === v), hits = exact.length ? exact : pool.filter((n) => n.includes(v));
+    if (hits.length === 1) {
+      gHit = hits[0]; gtab = tabOfNick(gHit) || gtab; renderTabs();
+      msg.className = "row-msg ok"; msg.textContent = gHit + " 在「" + (GTABS.find((t) => t.key === gtab) || {}).name + "」";
+      const el = [...$("gpanel").querySelectorAll(".gi.hit")].find((x) => x.dataset.nick === gHit); if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else {
+      renderTabs(); msg.className = "row-msg err";
+      msg.textContent = hits.length ? "找到 " + hits.length + " 位：" + hits.slice(0, 5).join("、") + (hits.length > 5 ? "…" : "") + "，請打完整暱稱" : "找不到「" + v + "」，請確認暱稱（例：勤益-佳棋）";
+    }
+  }
+
   // ---------- 互動位置圖 ----------
   function mapHTML(sess, pins, labels) {
     return '<div class="mapwrap"><img src="map/' + sess + '.jpg" alt="' + (sess === "am" ? "上午" : "下午") + '場地圖" loading="lazy">' +
@@ -324,6 +385,7 @@
     $("rows").innerHTML = (filter === "全部" && !query ? arrangeRow() : "") + (shown.length ? shown.map(roleRow).join("") : "<p class='load'>找不到符合的崗位</p>");
     document.querySelectorAll("#rows details").forEach((d) => { if (openDetails.has(d.dataset.key) || (query && shown.length <= 3)) d.open = true; });
     if (activeKey && activeF) { const el = document.querySelector('#rows [data-key="' + activeKey + '"][data-f="' + activeF + '"]'); if (el) el.focus(); }
+    renderTabs();
   }
 
   function tick() {
@@ -377,6 +439,7 @@
     return q.pass ? '<span class="qs ok">✅ 已及格（最高 ' + q.score + " 分）</span>" : '<span class="qs ng">' + q.score + " 分，還沒及格（80 分及格，可以重考）</span>";
   }
   function renderMe() {
+    renderTabs();
     const box = $("myCard"), lg = $("loginBox");
     if (!me) { box.hidden = true; lg.hidden = false; return; }
     lg.hidden = true; box.hidden = false;
@@ -501,6 +564,19 @@
       const el = document.getElementById("row-" + code); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
+
+  $("gtabs").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-tab]"); if (!b) return;
+    gtab = b.dataset.tab; renderTabs();
+  });
+  $("gpanel").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-goto]"); if (!b) return;
+    const code = b.dataset.goto, r = ROLES.find((x) => x.code === code); if (!r) return;
+    filter = "全部"; query = code; $("search").value = code;
+    renderStatic(); renderDynamic();
+    const el = document.getElementById("row-" + code); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("tabFind").addEventListener("input", (e) => findInTabs(e.target.value));
 
   renderStatic(); bigMap(); refresh();
   setInterval(tick, 1000);

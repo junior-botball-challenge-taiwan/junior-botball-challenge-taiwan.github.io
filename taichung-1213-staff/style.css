@@ -200,3 +200,30 @@ button.link[data-act="map"] { color: var(--navy); }
 .ruletab-list { display: flex; flex-wrap: wrap; gap: 8px; }
 .ruletab-list a { display: inline-block; padding: 8px 12px; border: 1.5px solid var(--navy); border-radius: 10px; color: var(--navy); font-weight: 700; text-decoration: none; background: #fff; }
 .ruletab-list a:hover { background: #e7eef7; }
+
+/* 11/24 賽事主辦：依組別分頁籤（快速找到自己的位置） */
+.gtabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 12px; }
+.gtab { flex: 1 1 auto; min-height: 44px; border: 1.5px solid var(--line); background: #fff; color: var(--ink); border-radius: 10px; padding: 6px 12px; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.gtab .gc { font-size: 12.5px; font-weight: 400; color: var(--mute); }
+.gtab.on { background: var(--navy); border-color: var(--navy); color: #fff; }
+.gtab.on .gc { color: #c9d3de; }
+.gtab:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+.gpanel { border: 1px solid var(--line); border-radius: 12px; padding: 6px 12px; background: #fff; }
+.glist { list-style: none; margin: 0; padding: 0; }
+.gi { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 12px; padding: 10px 0; border-bottom: 1px solid var(--soft); }
+.gi:last-child { border-bottom: 0; }
+.gi .num { grid-row: span 2; }
+.gi .gn { font-weight: 700; font-size: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.gi .gs { grid-column: 2; color: var(--mute); font-size: 13.5px; }
+.gi .link { grid-column: 3; grid-row: 1 / span 2; font-size: 13.5px; white-space: nowrap; }
+.gi .gv { color: #b42a22; font-weight: 400; }
+.gi.hit { background: #fff8e1; box-shadow: inset 4px 0 0 var(--yellow); padding-left: 8px; border-radius: 6px; }
+.gi .you { background: var(--yellow); color: var(--navy); font-size: 12px; padding: 1px 8px; border-radius: 999px; }
+.gzone { padding: 12px 0 4px; font-weight: 700; color: var(--navy); border-bottom: 2px solid var(--navy); }
+.gnote { margin: 8px 0; color: var(--mute); font-size: 14px; }
+@media (max-width: 560px) {
+  .gtabs { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .gtab { font-size: 14px; padding: 6px 8px; }
+  .gi { grid-template-columns: auto 1fr; }
+  .gi .link { grid-column: 2; grid-row: auto; justify-self: start; padding: 4px 0; }
+}
