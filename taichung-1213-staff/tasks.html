@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>JBC 台中站 裁判看題目</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .tk-login { background: var(--soft); border-radius: 12px; padding: 16px; margin: 0 0 16px; }
+  .tk-login label { display: block; font-weight: 700; margin: 10px 0 4px; }
+  .tk-login input { width: 100%; max-width: 360px; font-size: 17px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; }
+  .tk-login button { margin-top: 12px; font-size: 17px; padding: 10px 22px; border: 0; border-radius: 10px; background: var(--navy); color: #fff; font-weight: 700; cursor: pointer; }
+  .tk-msg { margin: 10px 0 0; font-weight: 700; }
+  .tk-msg.err { color: #c92a2a; } .tk-msg.ok { color: #2b8a3e; }
+  .tk-warn { border-left: 5px solid var(--red); background: #fff4e6; padding: 10px 14px; border-radius: 8px; margin: 0 0 14px; }
+  .tk-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 12px; }
+  .tk-bar .who { font-weight: 700; }
+  .tk-bar button { font-size: 15px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 8px; background: #fff; cursor: pointer; }
+  .tk-jump { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+  .tk-jump a { display: inline-block; min-width: 36px; text-align: center; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; text-decoration: none; color: var(--navy); font-size: 14px; }
+  .tk-page { margin: 0 0 18px; scroll-margin-top: 10px; }
+  .tk-page h3 { font-size: 15px; color: var(--mute); margin: 0 0 4px; }
+  .tk-page canvas { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; background: #fafafa; }
+  .tk-page .ph { aspect-ratio: 1800 / 1273; display: flex; align-items: center; justify-content: center; color: var(--mute); border: 1px dashed var(--line); border-radius: 6px; }
+  canvas, .tk-page { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">JBC 開放挑戰台中站 2026</p>
+    <h1>裁判看題目</h1>
+    <p class="meta">今年各組題目與判定重點（裁判訓練圖文版）。只給裁判看，請勿截圖、拍照、轉傳。</p>
+    <div class="btns"><a class="btn-rule" href="./">← 回工作人員專區</a></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <div id="loginBox" class="tk-login" hidden>
+      <p>用報名時的暱稱＋手機號碼登入（跟工作人員專區一樣）。<br>臨時頂替的裁判：帳號和密碼請問裁判長。</p>
+      <label for="tkNick">暱稱（例：勤益-小明）</label>
+      <input id="tkNick" autocomplete="username" autocapitalize="off" spellcheck="false">
+      <label for="tkPw">手機號碼（緊急帳號填密碼）</label>
+      <input id="tkPw" type="password" inputmode="numeric" autocomplete="current-password">
+      <div><button type="button" id="tkGo">登入看題目</button></div>
+      <p id="tkMsg" class="tk-msg"></p>
+    </div>
+    <div id="viewer" hidden>
+      <div class="tk-warn">畫面上的浮水印是你的暱稱和登入時間。題目只給裁判看，<b>請勿截圖、拍照、轉傳</b>，外流可以查到是誰。</div>
+      <div class="tk-bar"><span class="who" id="tkWho"></span><button type="button" id="tkOut">登出</button></div>
+      <p id="tkNote" class="tk-msg ok"></p>
+      <div class="tk-jump" id="tkJump"></div>
+      <div id="tkPages"></div>
+    </div>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var STAFF_KEY = "jbc1213-staff-login";   // 工作人員專區登入後存的（同網域、只在這個分頁）
+  var TK_KEY = "jbc1213-tasks";            // 這一頁拿到的通行碼
+  var get = function (k) { try { return JSON.parse(sessionStorage.getItem(k) || "null"); } catch (e) { return null; } };
+  var put = function (k, v) { try { v ? sessionStorage.setItem(k, JSON.stringify(v)) : sessionStorage.removeItem(k); } catch (e) {} };
+  var post = function (req) {
+    return fetch(window.API_URL, { method: "POST", body: JSON.stringify(req) }).then(function (r) { return r.json(); });
+  };
+  var stamp = function (d) {
+    var p = function (n) { return String(n).padStart(2, "0"); };
+    return d.getFullYear() + "/" + p(d.getMonth() + 1) + "/" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  };
+  var session = null, gen = 0;
+
+  function showLogin(text, ok) {
+    $("viewer").hidden = true; $("loginBox").hidden = false; $("tkPages").innerHTML = ""; $("tkJump").innerHTML = "";
+    $("tkMsg").textContent = text || ""; $("tkMsg").className = "tk-msg " + (ok ? "ok" : "err");
+  }
+
+  function login(nick, pw, auto) {
+    if (!nick || !pw) { showLogin("請輸入暱稱和手機號碼（或密碼）"); return; }
+    if (!auto) { $("tkMsg").textContent = "登入中…"; $("tkMsg").className = "tk-msg ok"; }
+    post({ action: "tasks", nickname: nick, phone: pw }).then(function (r) {
+      if (!r.ok) { put(TK_KEY, null); showLogin(r.message || "登入失敗"); return; }
+      session = { token: r.token, nick: r.nickname, pages: r.pages, note: r.message || "", at: Date.now(), exp: Date.now() + (r.hours || 6) * 3600 * 1000 };
+      put(TK_KEY, session); $("tkPw").value = "";
+      showViewer();
+    }).catch(function () { showLogin("登入失敗，請檢查網路後再試一次"); });
+  }
+
+  function drawWatermark(ctx, w, h, text) {
+    ctx.save();
+    ctx.translate(w / 2, h / 2); ctx.rotate(-Math.PI / 7);
+    var fs = Math.round(w / 34);
+    ctx.font = "bold " + fs + "px 'Microsoft JhengHei','PingFang TC','Noto Sans TC',sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillStyle = "rgba(200,30,30,0.16)";
+    var stepX = ctx.measureText(text).width + fs * 3, stepY = fs * 5, span = Math.hypot(w, h);
+    for (var y = -span / 2, row = 0; y < span / 2; y += stepY, row++)
+      for (var x = -span / 2 + (row % 2 ? stepX / 2 : 0); x < span / 2; x += stepX) ctx.fillText(text, x, y);
+    ctx.restore();
+  }
+
+  function loadPage(n, my) {
+    return post({ action: "taskpage", token: session.token, page: n }).then(function (r) {
+      if (my !== gen) return;
+      if (!r.ok) {
+        if (r.expired) { put(TK_KEY, null); session = null; gen++; showLogin(r.message || "登入已過期，請重新登入"); }
+        else { var b = $("pg" + n); if (b && b.querySelector(".ph")) b.querySelector(".ph").textContent = r.message || "這一頁讀取失敗，請重新整理"; }
+        return;
+      }
+      return new Promise(function (done) {
+        var img = new Image();
+        img.onload = function () {
+          if (my !== gen) return done();
+          var c = document.createElement("canvas"); c.width = img.naturalWidth; c.height = img.naturalHeight;
+          var ctx = c.getContext("2d"); ctx.drawImage(img, 0, 0);
+          drawWatermark(ctx, c.width, c.height, session.nick + "　" + stamp(new Date(session.at)) + "　勿外流");
+          c.setAttribute("aria-label", "題目第 " + n + " 頁");
+          var box = $("pg" + n); if (box) { box.querySelector(".ph").replaceWith(c); }
+          done();
+        };
+        img.onerror = function () { done(); };
+        img.src = "data:" + (r.mime || "image/jpeg") + ";base64," + r.data;
+      });
+    }).catch(function () { var b = $("pg" + n); if (b) b.querySelector(".ph").textContent = "這一頁讀取失敗，請重新整理"; });
+  }
+
+  function showViewer() {
+    var my = ++gen;
+    $("loginBox").hidden = true; $("viewer").hidden = false;
+    $("tkWho").textContent = "已登入：" + session.nick;
+    $("tkNote").textContent = session.note;
+    var jump = "", pages = "";
+    for (var i = 1; i <= session.pages; i++) {
+      jump += '<a href="#pg' + i + '">' + i + "</a>";
+      pages += '<div class="tk-page" id="pg' + i + '"><h3>第 ' + i + " / " + session.pages + ' 頁</h3><div class="ph">讀取中…</div></div>';
+    }
+    $("tkJump").innerHTML = jump; $("tkPages").innerHTML = pages;
+    var next = 1, workers = [];
+    var run = function () { if (my !== gen || !session || next > session.pages) return Promise.resolve(); return loadPage(next++, my).then(run); };
+    for (var k = 0; k < 3; k++) workers.push(run());   // 一次讀 3 頁
+  }
+
+  $("tkGo").onclick = function () { login($("tkNick").value.trim(), $("tkPw").value.trim()); };
+  $("tkPw").onkeydown = function (e) { if (e.key === "Enter") $("tkGo").onclick(); };
+  $("tkOut").onclick = function () { put(TK_KEY, null); session = null; gen++; showLogin("已登出", true); };
+  document.addEventListener("contextmenu", function (e) { if (e.target.tagName === "CANVAS") e.preventDefault(); });
+
+  var saved = get(TK_KEY), staff = get(STAFF_KEY);
+  if (saved && saved.token && saved.exp > Date.now()) { session = saved; showViewer(); }
+  else if (staff && staff.nick && staff.phone) { showLogin("登入中…", true); $("tkNick").value = staff.nick; login(staff.nick, staff.phone, true); }
+  else showLogin("");
+})();
+</script>
+</body>
+</html>

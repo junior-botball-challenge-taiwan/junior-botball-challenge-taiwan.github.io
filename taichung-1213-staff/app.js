@@ -456,7 +456,9 @@
       : me.mobile ? '<div class="row-head"><span class="num star">★</span><div class="row-title"><span class="title">' + ARRANGE_NAME + '</span><span class="short">' + ARRANGE_JOB.map(esc).join("；") + "（測驗考共同題）</span></div></div>"
       : '<div class="row-head"><span class="num star">…</span><div class="row-title"><span class="title">大會安排中</span><span class="short">你可以自己認領空缺崗位，或加入機動人員組；可以先考共同須知題</span></div></div>';
     const flash = claimMsg ? '<p class="row-msg ' + (claimMsg.ok ? "ok" : "err") + '">' + esc(claimMsg.text) + "</p>" : "";
-    box.innerHTML = '<p class="hello">👋 ' + esc(me.nickname) + (r ? "，這是大會幫你排好的崗位" : me.mobile ? "，你在機動人員組" : "，你還沒有崗位") + "</p>" + friendTag(me.nickname) + flash + head + claimBoxHTML() +
+    // 11/26 賽事主辦：裁判看今年題目（題目在後台，不在網站上；要和 Code.gs 的 TASKS_ROLE_RE 一致）
+    const tasksBtn = me.mobile || /^(R|J|S|L|Y)/.test(me.code || "") ? '<div class="quizbox"><a class="bigbtn" href="tasks.html">看今年題目（裁判訓練圖文版）→</a><p class="row-hint">只給裁判看，畫面有你的暱稱浮水印，請勿截圖、拍照、轉傳。</p></div>' : "";
+    box.innerHTML = '<p class="hello">👋 ' + esc(me.nickname) + (r ? "，這是大會幫你排好的崗位" : me.mobile ? "，你在機動人員組" : "，你還沒有崗位") + "</p>" + friendTag(me.nickname) + flash + head + claimBoxHTML() + tasksBtn +
       '<div class="quizbox">' + (tracks.length > 1 ? '<p class="qline"><b>你的崗位要考 ' + tracks.length + " 種測驗，兩種都要及格</b>（" + tracks.map((t) => esc(TRACK_LABEL[t] || t)).join("＋") + "，各自交卷）</p>" : "") +
       tracks.map(quizOne).join("") +
       '<p class="row-hint">測驗已在 11/20 歸零，之前考過的也請照新崗位再考一次；80 分及格、可以重考，以最高分為準。交卷時再輸入一次手機號碼確認本人。</p></div>' +
