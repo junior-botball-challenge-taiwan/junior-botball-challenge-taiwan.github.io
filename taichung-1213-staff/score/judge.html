@@ -113,7 +113,10 @@
   function jbcView(s, ids) {
     let cur = V.team[auth.station];
     if (ids.indexOf(cur) < 0) cur = ids[0];
-    $("bar").innerHTML = '<div class="teamtabs">' + ids.map((id) => '<button type="button" class="' + (id === cur ? "on" : "") + '" data-tm="' + id + '"><b>' + esc(id) + "</b>" + esc(UI.team(id).name) + "<small>" + esc(tabInfo(s, id)) + "</small></button>").join("") + "</div>";
+    // 頁籤上顯示這隊的倒數，看別隊時也知道誰快到時間（11/27 賽事主辦）
+    const tcd = (id) => { const k = (D.groups[R.gkOf(id)].kind === "task" ? "task:" : "mys:") + id, end = UI.TM[k]; if (!end) return ""; const left = (end - Date.now()) / 1000;
+      return '<span class="cd tabcd' + (left <= 0 ? " late" : "") + '" data-cd="' + esc(k) + '">' + (left > 0 ? Math.floor(Math.ceil(left) / 60) + ":" + String(Math.ceil(left) % 60).padStart(2, "0") : "時間到") + "</span>"; };
+    $("bar").innerHTML = '<div class="teamtabs">' + ids.map((id) => '<button type="button" class="' + (id === cur ? "on" : "") + '" data-tm="' + id + '"><b>' + esc(id) + tcd(id) + "</b>" + esc(UI.team(id).name) + "<small>" + esc(tabInfo(s, id)) + "</small></button>").join("") + "</div>";
     return UI.jbcCardHTML(s, cur, { station: auth.station, now: new Date() });
   }
   function subView(s) {

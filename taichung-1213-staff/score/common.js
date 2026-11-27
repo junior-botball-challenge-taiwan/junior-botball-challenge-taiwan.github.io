@@ -129,6 +129,15 @@ window.JBC_UI = (function () {
 
   // ====================== 計時器（5 分鐘挑戰、30 秒相撲…）======================
   const TM = {};                      // key → 結束時間
+  // 倒數和還沒送出的勾選存在手機裡，重新整理、分頁被關掉再開都不會不見（11/27 賽事主辦）
+  const KEEP = "jbc1213-keep" + (/[?&]demo=1/.test(location.search) ? "-demo" : "");
+  let keepLast = "";
+  try { const k = JSON.parse(localStorage.getItem(KEEP) || "{}"); Object.assign(TM, k.tm || {}); keepLast = localStorage.getItem(KEEP) || ""; } catch (e) {}
+  Object.keys(TM).forEach((k) => { if (!k.endsWith("#beeped") && TM[k] < Date.now() - 3600 * 1000) { delete TM[k]; delete TM[k + "#beeped"]; } });
+  function keepSave() {
+    try { const s = JSON.stringify({ tm: TM, my: MY }); if (s !== keepLast) { localStorage.setItem(KEEP, s); keepLast = s; } } catch (e) {}
+  }
+  const tmLabel = (k) => { const p = k.split(":"); if (p[0] !== "mys" && p[0] !== "task") return ""; const t = team(p[1]); return p[1] + (t && t.name ? " " + t.name : ""); };
   let actx = null;
   function beep(times) {
     try { if (navigator.vibrate) navigator.vibrate(times > 1 ? [300, 150, 300] : 400); } catch (e) {}
@@ -157,11 +166,17 @@ window.JBC_UI = (function () {
       el.textContent = left > 0 ? mmss(left) : "時間到";
       el.classList.toggle("late", left <= 0);
     });
-    Object.keys(TM).forEach((k) => { if (TM[k] && TM[k] <= Date.now() && !TM[k + "#beeped"]) { TM[k + "#beeped"] = 1; beep(3); } });
+    Object.keys(TM).forEach((k) => {
+      if (k.endsWith("#beeped") || !TM[k] || TM[k] > Date.now() || TM[k + "#beeped"]) return;
+      TM[k + "#beeped"] = 1; beep(3);
+      const who = tmLabel(k); if (who) toast("⏰ " + who + " 時間到", false);
+    });
+    keepSave();
   }, 250);
 
   // ====================== 裁判輸入：JBC 一隊的卡片 ======================
   const MY = {};                      // 隊號 → 神秘題輸入中的 {s, c:[], edit:key}
+  try { Object.assign(MY, JSON.parse(localStorage.getItem(KEEP) || "{}").my || {}); } catch (e) {}
   function nextMysKey(st, id, prefix) {
     let n = 0;
     R.mysAttempts(st, id).forEach((a) => { const t = a.key.split(":")[2].split("."); if (t[0] === prefix) n = Math.max(n, Number(t[1]) || 0); });

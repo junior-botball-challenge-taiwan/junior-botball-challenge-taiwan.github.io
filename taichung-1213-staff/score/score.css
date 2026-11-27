@@ -303,6 +303,9 @@ button.huge { width: 100%; padding: 22px 8px; font-size: 21px; margin: 8px 0; }
 .teamtabs button small { display: block; color: var(--mute); }
 .teamtabs button.on { background: var(--navy); color: #fff; border-color: var(--navy); }
 .teamtabs button.on small { color: #c9d3de; }
+.teamtabs .tabcd { float: right; font: 700 15px Arial, sans-serif; color: var(--navy); min-width: 0; }
+.teamtabs button.on .tabcd { color: #fff; }
+.teamtabs .tabcd.late, .teamtabs button.on .tabcd.late { color: var(--err); background: #fff; border-radius: 4px; padding: 0 4px; animation: blink 1s infinite; }
 .warnlist { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 4px; }
 .warnlist li { padding: 6px 10px; border-radius: 8px; background: var(--soft); font-size: 14px; }
 .warnlist li.err { background: var(--rbg); color: var(--err); font-weight: 700; }
