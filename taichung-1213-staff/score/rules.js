@@ -2,7 +2,7 @@
 // 資料狀態 state：{ key: { kind, payload, by, src, time } }
 //   cfg                          {mmax, am, pm, gate, lineTries, round, top5Only, items:[{t,p}], open:{am,pm}}   計分台設定
 //   basic:<隊號>:<1|2>           {done, at}            基礎變化題 1、2 完成（新秀／進階／高手）
-//   mys:<隊號>:<輸入者>.<n>      {s, c:[子項], at, void} 神秘題一次挑戰（輸入者＝崗位代號，例 A05.3；同一隊不同手機不會撞號）
+//   mys:<隊號>:<輸入者>.<n>      {s, c:[勾的項目], u, f, at, void} 神秘題一趟（c 照 MYS_SHEETS 評分表、s＝mysCalc 算出；u＝被拿起、f＝犯規 0 分）（輸入者＝崗位代號，例 A05.3；同一隊不同手機不會撞號）
 //   task:<隊號>:<題號>           {t:["S"|"F", …]}      啟蒙／探索：每題 2 次機會，S 成功、F 失敗
 //   draw:<組>                    {lots:{籤號:隊號}}    相撲抽籤（只給 fixedDraw 不是 true 的組用）；11/5 晚賽事主辦定「不抽籤、籤號＝隊伍編號順序」→ 各組 fixedDraw:true，用 data.js 的 lotTeams
 //   sumo:<組>:<輪>:<台>          {r:[每局…]}           相撲預賽一場（11/7 起三回合全打、每贏一回合 1 分）：R 紅勝、B 藍勝、TR/TB 時間到紅/藍較輕、T0 同重、XR/XB 對手缺賽或逾時
@@ -24,6 +24,56 @@
   const RANK_ZH = ["", "第一名", "第二名", "第三名", "第四名", "第五名"];
   const EDU = "臺中市政府教育局", ALLY = "臺灣機器人教育聯盟", ASIA = "Botball亞洲組委會";
   const FINAL_NAME = { SF1: "準決賽 ①（1 vs 4）", SF2: "準決賽 ②（2 vs 3）", P3: "季殿軍戰", F: "冠亞軍戰" };
+
+  // ---------- 神秘題評分表（2026-11-27，照 2027台中站_裁判訓練_題目圖文版_20261126.pdf；題號定案 11/26）----------
+  // 組別代號第 2 碼：X 新秀、J 進階、G 高手（國小／國中／高中共用同一套）。裁判只勾「看到完成的項目」，前後條件由系統套用。
+  //   need：這些項目都完成才給；any：其中至少 1 項完成才給；auto：不用勾，條件成立就給；live：當場打勾；pos：跟機器人位置有關（被拿起就不給）
+  const MYS_SHEETS = {
+    X: { name: "新秀神秘題「三庫巡迴」", items: [
+      { t: "① 任務罐從綠色車庫虛線（左邊）進去，結束時整個進入綠色車庫、直立", p: 20 },
+      { t: "② EVA 方塊從黃色車庫虛線（右邊）進去，結束時整個進入黃色車庫", p: 20, need: [0] },
+      { t: "③ 機器人驅動輪從藍色車庫虛線（左上）進去並停住", p: 20, need: [0, 1], live: true },
+      { t: "④ 機器人全程沒碰到障礙罐（含推著、夾著、甩出去的道具撞到它）", p: 20, need: [0, 1] },
+      { t: "⑤ 先整個離開啟動區，結束時完全進入啟動區（沒壓任何一條線）、自己停住", p: 20, need: [0, 1, 2], pos: true }] },
+    J: { name: "進階神秘題「分揀」", items: [
+      { t: "① 易開罐從綠色車庫虛線（左邊）進去，結束時整個進入綠色車庫、直立", p: 20 },
+      { t: "② EVA 方塊從藍色車庫虛線（左上）進去，結束時整個進入藍色車庫", p: 20 },
+      { t: "③ ①② 都完成（兩個都分對）", p: 20, need: [0, 1], auto: true },
+      { t: "④ 結束時驅動輪從右邊虛線進入黃色車庫、自己停住", p: 20, any: [0, 1], pos: true },
+      { t: "⑤ 碰到任何道具之前，先停在一開始沒放道具的圓圈（投影蓋住圓心、停住）", p: 20, any: [0, 1], live: true }] },
+    G: { name: "高手神秘題「疊罐」", items: [
+      { t: "① 罐 A 從藍色車庫虛線（左上）那側被帶出，整個離開藍色車庫", p: 20, live: true },
+      { t: "② 結束時罐 A 完全進入啟動區、直立", p: 20, need: [0] },
+      { t: "③ 結束時罐 B 開口朝上平穩疊在底罐 C 頂上，兩罐直立；罐 B 只碰底罐 C", p: 20 },
+      { t: "④ 結束時底罐 C 仍蓋住原圓圈中心", p: 20, need: [2] },
+      { t: "⑤ 結束時驅動輪從虛線進入綠色車庫、自己停住", p: 20, need: [0, 2], pos: true }] },
+  };
+  const CIRCLED = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩"];
+  function mysSheet(gk) { const m = /^[EJH]([XJG])$/.exec(String(gk || "")); return m ? MYS_SHEETS[m[1]] : null; }
+  // c：裁判勾的項目索引；o.u＝機器人被拿起／抓回結束；o.f＝犯規（這趟 0 分）
+  // 回傳 { s, rows:[{i, t, p, on, got, why}] }；沒有評分表的組別回傳 null
+  function mysCalc(gk, c, o) {
+    const sh = mysSheet(gk); if (!sh) return null;
+    o = o || {};
+    const on = new Set((Array.isArray(c) ? c : []).map(Number));
+    const got = [];
+    const rows = sh.items.map((it, i) => {
+      const lab = (a) => a.map((k) => CIRCLED[k]).join("");
+      let ok = it.auto ? true : on.has(i), why = "";
+      if (ok && it.need && !it.need.every((k) => got[k])) { ok = false; why = lab(it.need) + (it.need.length > 1 ? " 都完成才給" : " 完成才給"); }
+      if (ok && it.any && !it.any.some((k) => got[k])) { ok = false; why = lab(it.any) + " 至少完成 1 項才給"; }
+      if (ok && it.pos && o.u) { ok = false; why = "機器人被拿起，位置項目不給"; }
+      if (ok && o.f) { ok = false; why = "犯規，這趟 0 分"; }
+      got[i] = ok;
+      return { i, t: it.t, p: it.p, on: it.auto ? null : on.has(i), auto: !!it.auto, live: !!it.live, pos: !!it.pos, got: ok, why: it.auto || on.has(i) ? why : "" };
+    });
+    return { s: rows.reduce((s, r) => s + (r.got ? r.p : 0), 0), rows };
+  }
+  // 這一趟拿到哪幾項，例「①②④」；沒有評分表或沒勾＝""
+  function mysGotLabel(gk, p) {
+    const x = p && Array.isArray(p.c) ? mysCalc(gk, p.c, p) : null;
+    return x ? x.rows.filter((r) => r.got).map((r) => CIRCLED[r.i]).join("") : "";
+  }
 
   const pay = (st, k) => (st[k] && st[k].payload) || null;
   function cfgOf(st) {
@@ -463,7 +513,7 @@
     return { "獲獎名單.csv": csv(aw), "完整成績.csv": csv(full), "證書名冊.csv": csv(cert) };
   }
 
-  const API = { DEFAULT_CFG, SUMO_PTS, LINE_MAX_SEC, RANK_ZH, EDU, ALLY, ASIA, FINAL_NAME, cfgOf, gkOf, teamById, isAbsent, missOf, toMin, mysOpenMin, mysOpen,
+  const API = { DEFAULT_CFG, SUMO_PTS, LINE_MAX_SEC, RANK_ZH, EDU, ALLY, ASIA, FINAL_NAME, MYS_SHEETS, CIRCLED, mysSheet, mysCalc, mysGotLabel, cfgOf, gkOf, teamById, isAbsent, missOf, toMin, mysOpenMin, mysOpen,
     basicDone, mysAttempts, mysScores, mysCmp, rankBy, mysRanking, taskOf, taskTable, tally, boDone, boOutcome, rrDone, rrOutcome, matchKey, matchInfo, weightOf, drawOf, lotTeam, drawDone, schedule,
     sumoStandings, tiesNeedingWeight, arenaQueue, finals, sumoRanking, lineEval, lineCmp, lineRanking, cut, groupAwards, certOf, worldOk,
     warnings, summary, rankOf, exportCSV, csv };

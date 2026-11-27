@@ -182,9 +182,11 @@ window.JBC_UI = (function () {
     }).join("") + "</div>";
     h += '<p class="note">' + (nb >= 2 ? "✓ 2 題都完成＝未來工程師" : "完成 " + nb + " 題（2 題都完成＝未來工程師，0–1 題＝探索工程師）") + "</p>";
     // ② 神秘題
-    h += '<p class="steph"><b>②</b>神秘題（滿分 ' + cfg.mmax + " 分，每次 5 分鐘、不限次數）</p>";
+    const sheet = R.mysSheet(gk);
+    h += '<p class="steph"><b>②</b>' + (sheet ? esc(sheet.name) + "（滿分 100 分；5 分鐘內可跑好幾趟，每一趟各送一筆）" : "神秘題（滿分 " + cfg.mmax + " 分，每次 5 分鐘、不限次數）") + "</p>";
     const at = R.mysAttempts(st, id);
-    if (at.length) h += '<div class="allm">' + at.map((a, i) => '<div class="lrow att' + (a.p.void ? " void" : "") + '"><span class="rnd">第 ' + (i + 1) + ' 次</span><span class="lt"><b class="big">' + esc(a.p.s) + "</b> 分" +
+    if (at.length) h += '<div class="allm">' + at.map((a, i) => '<div class="lrow att' + (a.p.void ? " void" : "") + '"><span class="rnd">第 ' + (i + 1) + ' 趟</span><span class="lt"><b class="big">' + esc(a.p.s) + "</b> 分" +
+      (sheet ? ' <small class="mute">' + (a.p.f ? "犯規" : R.mysGotLabel(gk, a.p) || "沒有得分項目") + (a.p.u ? "・被拿起" : "") + "</small>" : "") +
       (a.p.void ? ' <span class="tag">已作廢</span>' : "") + (st[a.key].pending ? ' <span class="tag warn">待上傳</span>' : "") + '</span><small class="mute">' + hhmm(a.p.at || a.time) + " " + esc(a.by || "") + "</small>" +
       (o.admin || canEditMys(a.key, o) ? '<button type="button" class="ghost small" data-act="m-edit" data-key="' + a.key + '">修改</button><button type="button" class="ghost small" data-act="m-void" data-key="' + a.key + '">' + (a.p.void ? "恢復" : "作廢") + "</button>" : "") + "</div>").join("") + "</div>";
     const open = R.mysOpen(cfg, g.session, o.now || new Date());
@@ -194,6 +196,21 @@ window.JBC_UI = (function () {
     else {
       const d = my || { s: "", c: [] };
       const n = d.edit ? at.findIndex((a) => a.key === d.edit) + 1 : at.length + 1;
+      if (sheet) {
+        const x = R.mysCalc(gk, d.c, d);
+        h += '<div class="mysin">' + timerHTML("mys:" + id, 300, "開始 5 分鐘（第一次按啟動時按）") +
+          '<p class="note">勾「你看到完成」的項目就好，前後條件系統會自動套用。⏱＝過程中發生就馬上勾。</p><div class="items">' +
+          x.rows.map((r) => r.auto
+            ? '<div class="mi auto' + (r.got ? " got" : "") + '"><span class="mk">' + (r.got ? "✓" : "—") + "</span><span>" + esc(r.t) + ' <small class="mute">自動判定・' + r.p + " 分</small>" + (r.why ? '<small class="why">✘ 不給：' + esc(r.why) + "</small>" : "") + "</span></div>"
+            : '<label class="mi' + (r.got ? " got" : r.on ? " no" : "") + '"><input type="checkbox" data-act="m-item" data-i="' + r.i + '"' + (r.on ? " checked" : "") + "><span>" + (r.live ? "⏱ " : "") + esc(r.t) +
+              ' <small class="mute">' + r.p + " 分</small>" + (r.why ? '<small class="why">✘ 不給：' + esc(r.why) + "</small>" : "") + "</span></label>").join("") +
+          "</div>" +
+          '<div class="items flags"><label class="mi flag' + (d.u ? " no" : "") + '"><input type="checkbox" data-act="m-u"' + (d.u ? " checked" : "") + "><span>機器人被隊員拿起／抓回才結束（停住、回啟動區、停車庫的項目不給）</span></label>" +
+          '<label class="mi flag' + (d.f ? " no" : "") + '"><input type="checkbox" data-act="m-f"' + (d.f ? " checked" : "") + "><span>犯規：隊員碰到道具、搖桌子、故意留零件 → 這趟 0 分</span></label></div>" +
+          '<p class="mysum">' + (d.edit ? "修改第 " + n + " 趟" : "第 " + n + " 趟") + '：<b class="big">' + x.s + "</b> 分</p>" +
+          '<div class="foot">' + (d.edit || d.c.length || d.u || d.f ? '<button type="button" class="ghost small" data-act="m-cancel">清除重來</button>' : "") +
+          '<button type="button" data-act="m-send">' + (d.edit ? "送出修改" : "送出第 " + n + " 趟成績") + "</button></div></div>";
+      } else
       h += '<div class="mysin">' + timerHTML("mys:" + id, 300, "開始 5 分鐘") +
         (cfg.items.length ? '<div class="items">' + cfg.items.map((x, i) => '<label class="check"><input type="checkbox" data-act="m-item" data-i="' + i + '"' + (d.c.indexOf(i) >= 0 ? " checked" : "") + "> " + esc(x.t) + ' <small class="mute">' + x.p + " 分</small></label>").join("") + "</div>" : "") +
         '<label class="lbl inline">' + (d.edit ? "修改第 " + n + " 次的分數" : "第 " + n + " 次挑戰的分數") + '<input type="number" inputmode="decimal" min="0" max="' + cfg.mmax + '" step="any" data-act="m-s" value="' + esc(d.s) + '" placeholder="0–' + cfg.mmax + '"></label>' +
@@ -351,7 +368,7 @@ window.JBC_UI = (function () {
         return;
       }
       // 神秘題
-      if (act === "m-edit") { const a = st[b.dataset.key].payload; MY[id] = { s: String(a.s), c: (a.c || []).slice(), edit: b.dataset.key }; ctx.render(); return; }
+      if (act === "m-edit") { const a = st[b.dataset.key].payload; MY[id] = { s: String(a.s), c: (a.c || []).slice(), u: !!a.u, f: !!a.f, edit: b.dataset.key }; ctx.render(); return; }
       if (act === "m-void") {
         const a = st[b.dataset.key].payload;
         if (!confirm(a.void ? "恢復這次成績（" + a.s + " 分）？" : "作廢這次成績（" + a.s + " 分）？作廢後不列入排名。")) return;
@@ -360,15 +377,20 @@ window.JBC_UI = (function () {
       }
       if (act === "m-cancel") { delete MY[id]; ctx.render(); return; }
       if (act === "m-send") {
-        const d = MY[id], cfg = R.cfgOf(st), s = Number(d && d.s);
-        if (!d || d.s === "" || !(s >= 0 && s <= cfg.mmax)) { toast("分數要在 0–" + cfg.mmax + " 之間", false); return; }
+        const gk = R.gkOf(id), sheet = R.mysSheet(gk);
+        const d = sheet ? (MY[id] = Object.assign({ s: "", c: [] }, MY[id])) : MY[id], cfg = R.cfgOf(st);
+        const x = sheet ? R.mysCalc(gk, d.c, d) : null;
+        const s = x ? x.s : Number(d && d.s);
+        if (!x && (!d || d.s === "" || !(s >= 0 && s <= cfg.mmax))) { toast("分數要在 0–" + cfg.mmax + " 之間", false); return; }
         const k = d.edit || nextMysKey(st, id, stationId());
         const old = d.edit ? st[d.edit].payload : null;
-        if (!confirm(id + " " + team(id).name + "\n神秘題 " + s + " 分\n\n請選手確認後按「確定」送出")) return;
+        const detail = x ? "\n" + (d.f ? "犯規，這趟 0 分" : x.rows.map((r) => (r.got ? "✓ " : "✘ ") + r.t.slice(0, 18) + (r.got ? "　+" + r.p : "")).join("\n")) + (d.u ? "\n（被拿起結束）" : "") : "";
+        if (!confirm(id + " " + team(id).name + "\n神秘題 " + s + " 分" + detail + "\n\n請選手確認後按「確定」送出")) return;
         const payload = { s, at: old ? old.at || new Date().toISOString() : new Date().toISOString() };
-        if (d.c.length) payload.c = d.c.slice();
+        if (x) { payload.c = d.c.slice(); if (d.u) payload.u = true; if (d.f) payload.f = true; }
+        else if (d.c.length) payload.c = d.c.slice();
         if (old && old.void) payload.void = true;
-        delete TM["mys:" + id];
+        if (!sheet) delete TM["mys:" + id];   // 有評分表：5 分鐘內可以再跑一趟，計時不重設（11/26 理事長）
         after(ctx.save([{ key: k, payload }]), () => { delete MY[id]; });
         return;
       }
@@ -451,7 +473,14 @@ window.JBC_UI = (function () {
         const cfg = R.cfgOf(st), d = MY[id] = Object.assign({ s: "", c: [] }, MY[id]);
         const i = Number(el.dataset.i);
         d.c = el.checked ? Array.from(new Set(d.c.concat(i))).sort((a, b) => a - b) : d.c.filter((x) => x !== i);
-        d.s = String(Math.max(0, Math.min(cfg.mmax, d.c.reduce((s, k) => s + (Number((cfg.items[k] || {}).p) || 0), 0))));
+        const x = R.mysCalc(R.gkOf(id), d.c, d);
+        d.s = x ? String(x.s) : String(Math.max(0, Math.min(cfg.mmax, d.c.reduce((s, k) => s + (Number((cfg.items[k] || {}).p) || 0), 0))));
+        ctx.render();
+      } else if (act === "m-u" || act === "m-f") {
+        const d = MY[id] = Object.assign({ s: "", c: [] }, MY[id]);
+        d[act === "m-u" ? "u" : "f"] = el.checked;
+        const x = R.mysCalc(R.gkOf(id), d.c, d);
+        d.s = x ? String(x.s) : d.s;
         ctx.render();
       } else if (act === "le-t") {
         LE.t[Number(el.dataset.k)] = el.value === "" ? 0 : Number(el.value);

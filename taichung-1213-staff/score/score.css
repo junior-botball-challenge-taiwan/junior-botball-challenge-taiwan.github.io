@@ -121,6 +121,15 @@ button.go { background: var(--ok); } button.stop { background: var(--red); }
 .lap { display: grid; grid-template-columns: 64px 1fr 80px; gap: 8px; align-items: center; }
 .eval { background: var(--soft); border-radius: 8px; padding: 8px 10px; margin: 8px 0; font-weight: 700; }
 .items { display: grid; gap: 6px; margin: 8px 0; }
+/* 神秘題評分表（2026-11-27）：一項一格，勾了有給＝綠、勾了不給＝紅 */
+.items .mi { display: grid; grid-template-columns: 28px 1fr; gap: 6px; align-items: start; padding: 9px 8px; border: 1px solid var(--line); border-radius: 10px; line-height: 1.45; }
+.items .mi input { width: 22px; height: 22px; margin: 1px 0 0; }
+.items .mi .mk { font-weight: 700; text-align: center; color: var(--mute); }
+.items .mi.got { background: var(--okbg); border-color: var(--ok); } .items .mi.got .mk { color: var(--ok); }
+.items .mi.no { background: var(--rbg); border-color: var(--err); }
+.items .mi .why { display: block; color: var(--err); font-weight: 700; margin-top: 2px; }
+.items.flags .mi { border-style: dashed; }
+.mysum { text-align: right; margin: 6px 0; } .mysum .big { font-size: 30px; font-family: Arial, sans-serif; }
 .item { display: grid; grid-template-columns: 1fr 48px 40px 48px; gap: 6px; align-items: center; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
 .item .il { font-size: 14px; }
 .item .cv { text-align: center; font-family: Arial, sans-serif; font-size: 20px; }

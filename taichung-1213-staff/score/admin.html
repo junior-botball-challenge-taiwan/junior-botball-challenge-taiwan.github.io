@@ -205,7 +205,7 @@
       '<label class="check"><input type="checkbox" id="c_top5"' + (c.top5Only ? " checked" : "") + "> 神秘題前五名（教育局）不再重複拿聯盟優勝／佳作</label>" +
       '<label class="check"><input type="checkbox" id="c_openam"' + (c.open.am ? " checked" : "") + "> 上午神秘題提前開放（不等時間）</label>" +
       '<label class="check"><input type="checkbox" id="c_openpm"' + (c.open.pm ? " checked" : "") + "> 下午神秘題提前開放（不等時間）</label>" +
-      '<h3>神秘題子項（當天公布題目後再填，可不填）</h3><p class="note">填了之後，裁判可以勾子項自動加總分數（仍可直接改數字）。</p><div id="items">' + items + '</div><button type="button" class="ghost small" id="itAdd">＋ 加一個子項</button>' +
+      '<h3>神秘題子項（不用填）</h3><p class="note">11/27 起新秀／進階／高手三份評分表已內建在系統裡（照裁判訓練題目圖文版），裁判勾項目、系統自動套用前後條件算分；這裡的子項只給沒有內建評分表的組別用。</p><div id="items">' + items + '</div><button type="button" class="ghost small" id="itAdd">＋ 加一個子項</button>' +
       '<div class="foot"><button type="button" id="cfgSave">儲存設定</button></div></div>' +
       '<h2>賽前清除</h2><div class="card"><p class="note">測試完、比賽開始前，把所有成績清掉（保留設定）。Apps Script 版會先把整份「計分資料」複製成備份分頁；開賽後（12/13 09:00 起）就不能清除。</p><button type="button" id="resetBtn" class="ghost">清除全部成績</button></div>';
   }

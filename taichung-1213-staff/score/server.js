@@ -55,6 +55,10 @@
         const mmax = Number(R.cfgOf(st).mmax) || 100;
         if (!isNum(p.s, 0, mmax)) return "神秘題分數要在 0–" + mmax + " 之間";
         if (p.c != null && !(Array.isArray(p.c) && p.c.length <= 20 && p.c.every((x) => isInt(x, 0, 19)))) return "神秘題子項錯誤";
+        if ((p.u != null && typeof p.u !== "boolean") || (p.f != null && typeof p.f !== "boolean")) return "神秘題資料錯誤";
+        // 有內建評分表的組別：勾了項目，分數一定要等於系統算的（防止手算錯、舊版網頁送錯）
+        const calc = p.c != null ? R.mysCalc(R.gkOf(parts[1]), p.c, p) : null;
+        if (calc && calc.s !== p.s) return "神秘題分數跟勾選項目對不上（應為 " + calc.s + " 分），請重新整理網頁再輸入";
         return (p.at == null || isStr(p.at, 40)) && (p.void == null || typeof p.void === "boolean") ? "" : "神秘題資料錯誤";
       }
       case "task": {
@@ -146,6 +150,7 @@
         if (!station) return fail("請重新選擇崗位");
         if (ADMIN_ONLY[kind] || p === null) return fail("只有計分台可以修改");
         if (!allowed(D, st, station, kind, parts, cur)) return fail("這不是你負責的隊伍／場地");
+        if (kind === "mys" && R.mysSheet(R.gkOf(parts[1])) && !Array.isArray(p.c)) return fail("神秘題要勾評分項目，請重新整理網頁再輸入");
         if (kind === "final") {
           if (cur && cur.payload && cur.payload.adminRounds) return fail("計分台已修改這場，請找計分台");
           p = Object.assign({}, cur ? cur.payload : {}, { rounds: p.rounds || [] });   // 裁判只送局數，對戰隊伍與台號沿用
