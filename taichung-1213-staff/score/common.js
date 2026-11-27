@@ -390,7 +390,7 @@ window.JBC_UI = (function () {
         if (x) { payload.c = d.c.slice(); if (d.u) payload.u = true; if (d.f) payload.f = true; }
         else if (d.c.length) payload.c = d.c.slice();
         if (old && old.void) payload.void = true;
-        if (!sheet) delete TM["mys:" + id];   // 有評分表：5 分鐘內可以再跑一趟，計時不重設（11/26 理事長）
+        if (!sheet) delete TM["mys:" + id];   // 有評分表：5 分鐘內可以再跑一趟，計時不重設（11/26 賽事主辦）
         after(ctx.save([{ key: k, payload }]), () => { delete MY[id]; });
         return;
       }
